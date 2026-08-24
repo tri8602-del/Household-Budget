@@ -204,7 +204,7 @@ const colors=['#4F8EF7','#F4A300','#C65CEB','#35AFA0','#E85D75','#7A6FF0','#55A6
 const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],bonusIncomes:[],bills:[],categories:[],transactions:[],categoryCarry:{},rolloverDecisions:{},lastMonth:null};
 let data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
 data.categories=(data.categories||[]).map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));
-let currentView='dashboard', analyticsRange='month', setupCats=[];
+let currentView='dashboard', analyticsRange='month', setupCats=[], setupIncomes=[];
 function money(n){return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(Number(n)||0)}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function save(){localStorage.setItem(KEY,JSON.stringify(data));render();toast('Saved')}
@@ -842,6 +842,34 @@ function addExpense(event){
  closeModal();
  showToast('Expense added');
  return false;
+}
+function setupAddIncome(){
+ const list=document.getElementById('setupIncomeList');
+ if(!list)return;
+ const card=document.createElement('div');
+ card.className='card';
+ card.style.margin='12px 0';
+ card.innerHTML=`<div class="formgrid">
+   <div><label>Name</label><input class="siName" placeholder="Matthew"></div>
+   <div><label>Net paycheck</label><input class="siAmount" type="number" step="0.01" min="0" placeholder="0.00"></div>
+ </div>
+ <label>Pay schedule</label>
+ <select class="siCadence" onchange="setupToggleIncome(this)">
+   <option value="weekly">Weekly</option>
+   <option value="biweekly" selected>Biweekly</option>
+   <option value="monthly">Monthly</option>
+   <option value="twiceMonthly">Twice a month — specific dates</option>
+   <option value="midMonthEnd">Mid-month + month-end</option>
+   <option value="quarterly">Quarterly</option>
+ </select>
+ <div class="siDateWrap"><label>One known payday</label><input class="siDate" type="date"></div>
+ <div class="siSpecial hidden">
+   <label>Middle-of-month payday</label>
+   <input class="siMid" type="number" min="1" max="28" value="15">
+   <div class="muted" style="font-size:12px;margin-top:4px">Weekend dates move to the Friday before.</div>
+ </div>
+ <div class="actions"><button type="button" class="btn ghost" onclick="this.closest('.card').remove()">Remove</button></div>`;
+ list.appendChild(card);
 }
 function setupToggleIncome(sel){const c=sel.closest('.card');const special=c.querySelector('.siSpecial'),date=c.querySelector('.siDateWrap');const on=sel.value==='midMonthEnd';special.classList.toggle('hidden',!on);date.classList.toggle('hidden',on)}
 function collectSetupIncomes(){setupIncomes=[];document.querySelectorAll('#setupIncomeList > .card').forEach(c=>{const name=c.querySelector('.siName').value.trim(),amount=+c.querySelector('.siAmount').value||0,cadence=c.querySelector('.siCadence').value,date=c.querySelector('.siDate')?.value||'',mid=+(c.querySelector('.siMid')?.value||15);if(name&&amount&&(cadence==='midMonthEnd'||date))setupIncomes.push({name,amount,cadence,firstPayDate:date,midMonthDay:mid,secondPayDay:15})})}
