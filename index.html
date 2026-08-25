@@ -502,10 +502,33 @@ function renderBudget(){
  document.getElementById('flowIncome').textContent=money(monthlyIncome());document.getElementById('flowBills').textContent=money(monthlyBills());document.getElementById('flowSavings').textContent=money(data.savingsGoal||0);
  document.getElementById('budgetAvailable').textContent=money(available);document.getElementById('budgetAllocated').textContent=money(allocated);document.getElementById('budgetUnallocated').textContent=money(remaining);
  document.getElementById('budgetWarning').innerHTML=remaining<0?`<div class="warning">⚠️ Your categories are ${money(Math.abs(remaining))} over the money available after bills and savings.</div>`:`<div class="good">✓ ${money(remaining)} remains unallocated.</div>`;
- document.getElementById('budgetMatrix').innerHTML=(data.categories||[]).map((c,i)=>{const m=monthlyCategoryBudget(c),w=weekly(c);return `<tr><td><button type="button" class="budgetCategoryName" onclick="openCategoryDetail('${esc(c.name)}')"><span class="categoryIcon" style="color:${c.color}">${budgetIconSvg(c.icon||'money',22)}</span> ${esc(c.name)}</button></td><td><select onchange="changeAllocationType(${i},this.value)"><option value="monthly" ${c.allocationMode!=='weekly'?'selected':''}>Monthly</option><option value="weekly" ${c.allocationMode==='weekly'?'selected':''}>Weekly</option></select></td><td class="num">${money(m)}</td><td class="num">${money(w)}</td><td><button type="button" class="editLink" onclick="openCategoryDetail('${esc(c.name)}')">Details</button></td></tr>`}).join('')||'<tr><td colspan="5" class="empty">Add categories to begin.</td></tr>';
+ document.getElementById('budgetMatrix').innerHTML=(data.categories||[]).map((c,i)=>{const m=monthlyCategoryBudget(c),w=weekly(c);const basis=c.type==='percent'?`${Number(c.percent||0).toFixed(2)}% of available`:c.allocationMode==='weekly'?'Weekly dollars':'Monthly dollars';return `<tr><td><button type="button" class="budgetCategoryName" onclick="openCategoryDetail('${esc(c.name)}')"><span class="categoryIcon" style="color:${c.color}">${budgetIconSvg(c.icon||'money',22)}</span> ${esc(c.name)}</button></td><td><span class="muted" style="font-size:12px">${esc(basis)}</span></td><td class="num">${money(m)}</td><td class="num">${money(w)}</td><td style="white-space:nowrap"><button type="button" class="editLink" onclick="openCategoryAllocation(${i})">Edit</button> <button type="button" class="editLink" onclick="openCategoryDetail('${esc(c.name)}')">Details</button></td></tr>`}).join('')||'<tr><td colspan="5" class="empty">Add categories to begin.</td></tr>';
 }
 function changeAllocationType(i,mode){data.categories[i].allocationMode=mode;localStorage.setItem(KEY,JSON.stringify(data));renderBudget()}
 function matrixAmount(i,val){const v=+val||0,c=data.categories[i];c.allocationMode=c.allocationMode||'monthly';c.type='fixed';c.percent=0;const days=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate();c.budget=c.allocationMode==='weekly'?v*days/7:v;localStorage.setItem(KEY,JSON.stringify(data));renderBudget()}
+function openCategoryAllocation(i){
+ const c=data.categories[i]; if(!c)return;
+ const basis=c.type==='percent'?'percent':'dollars';
+ const dollarMode=c.allocationMode||'monthly';
+ const value=basis==='percent'?(c.percent||0):(dollarMode==='weekly'?weekly(c):monthlyCategoryBudget(c));
+ const title=`Edit ${c.name} allocation`;
+ const body=`<label>Allocation method</label><select id="allocBasis" onchange="toggleAllocationFields()"><option value="dollars" ${basis==='dollars'?'selected':''}>Dollar amount</option><option value="percent" ${basis==='percent'?'selected':''}>Percentage of available for categories</option></select><div id="dollarFields" class="${basis==='percent'?'hidden':''}"><label>Dollar schedule</label><select id="allocMode"><option value="monthly" ${dollarMode==='monthly'?'selected':''}>Monthly</option><option value="weekly" ${dollarMode==='weekly'?'selected':''}>Weekly</option></select><label>Amount</label><input id="allocAmount" type="number" step="0.01" min="0" value="${Number(value)||0}"></div><div id="percentFields" class="${basis==='percent'?'':'hidden'}"><label>Percent of available for categories</label><input id="allocPercent" type="number" step="0.01" min="0" max="100" value="${Number(c.percent)||0}"><div class="muted" style="font-size:12px;margin-top:5px">Current available for categories: ${money(monthlyAvailable())}</div></div><div class="actions"><button type="button" class="btn ghost" onclick="closeModal()">Cancel</button><button type="button" class="btn" onclick="saveCategoryAllocation(${i})">Save allocation</button></div>`;
+ openCustomModal(title,body);
+}
+function toggleAllocationFields(){const percent=document.getElementById('allocBasis').value==='percent';document.getElementById('dollarFields').classList.toggle('hidden',percent);document.getElementById('percentFields').classList.toggle('hidden',!percent)}
+function saveCategoryAllocation(i){
+ const c=data.categories[i];if(!c)return;
+ const basis=document.getElementById('allocBasis').value;
+ if(basis==='percent'){
+   c.type='percent';c.percent=Math.max(0,Math.min(100,+document.getElementById('allocPercent').value||0));c.allocationMode='monthly';c.budget=0;
+ }else{
+   c.type='fixed';c.percent=0;c.allocationMode=document.getElementById('allocMode').value;
+   const v=Math.max(0,+document.getElementById('allocAmount').value||0);
+   const days=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate();
+   c.budget=c.allocationMode==='weekly'?v*days/7:v;
+ }
+ save();closeModal();showToast('Allocation updated');renderBudget();
+}
 
 function renderBills(){
  const bills=data.bills||[];document.getElementById('billTotalValue').textContent=money(monthlyBills());
