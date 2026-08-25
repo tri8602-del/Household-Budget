@@ -723,8 +723,12 @@ function renderAnalytics(){
    chart+=`<div class="xlabel">${esc(period.label)}</div></div>`;
  });
  if(analyticsRange==='week'){
-   const weeklyBudget=allocated[0]||0,weeklyRollover=(data.categories||[]).reduce((sum,c)=>sum+weekCarry(c,ps[0].start),0),weeklyAvailable=weeklyBudget+weeklyRollover,weeklyHeight=scaleMax?Math.min(100,weeklyAvailable/scaleMax*100):0;
-   chart+=`<div class="weekAllocation" data-label="${esc(money(weeklyAvailable))}" style="bottom:${weeklyHeight}%"></div>`;
+   const weeklyBudget=allocated[0]||0,weeklyRollover=(data.categories||[]).reduce((sum,c)=>sum+weekCarry(c,ps[0].start),0),weeklyAvailable=weeklyBudget+weeklyRollover;
+   // In the daily (7-day) view, the allocation line represents the amount
+   // available to spend per day if the household wants to average evenly
+   // across the week.
+   const dailyAvailable=weeklyAvailable/7,dailyHeight=scaleMax?Math.min(100,dailyAvailable/scaleMax*100):0;
+   chart+=`<div class="weekAllocation" data-label="${esc(money(dailyAvailable))}/day" style="bottom:${dailyHeight}%"></div>`;
  }
  chart+='</div></div><div class="chartScaleNote"><span>Bars = spending</span><span>━ Allocation</span></div>';
  document.getElementById('analyticsChart').innerHTML=chart;
