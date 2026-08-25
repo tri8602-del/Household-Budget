@@ -44,11 +44,8 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 <div class="homeCashBox"><div class="label">Money coming in · this month</div><div id="homeIncomeTotal" class="value">$0</div><div class="note">All income combined</div></div>
 <div class="homeCashBox"><div class="label">Money going to bills · this month</div><div id="homeBillsTotal" class="value">$0</div><div class="note">All bills combined</div></div>
 </div>
-<div class="card"><div class="homeHeader"><div><div class="sectionTitle">Safe to spend</div><div class="muted" style="font-size:13px;margin-top:3px">This week · Monday–Sunday</div></div></div><div id="categoryList" class="homeGrid"></div></div>
-<div class="homeCashSummary" style="margin-top:12px">
-<button type="button" class="homeCashBox calcClickable" onclick="openOverallCalculation('week')"><div class="label">Overall · this week</div><div id="homeWeekOverUnder" class="value">$0</div><div class="note">Combined category allocation vs spending · tap for calculation</div></button>
-<div class="homeCashBox calcClickable" onclick="openOverallCalculation('month')"><div class="label">Overall · this month</div><div id="homeMonthOverUnder" class="value">$0</div><div class="note">Combined category allocation vs spending · tap for calculation</div></div>
-</div>
+<div class="card"><div class="homeHeader"><div><div class="sectionTitle">Safe to spend</div><div id="safeToSpendDateLabel" class="muted" style="font-size:13px;margin-top:3px"></div></div><div class="range homeRange"><button data-safe="week" onclick="setDashboardSafeRange('week')">Week</button><button data-safe="month" onclick="setDashboardSafeRange('month')">Month</button></div></div><div id="categoryList" class="homeGrid"></div></div>
+<div class="card homeOverallCard calcClickable" onclick="openOverallCalculation(dashboardSafeRange)"><div class="row"><div><div id="homeOverallLabel" class="sectionTitle">Overall safe to spend · this week</div><div class="muted" style="font-size:12px;margin-top:3px">Household-wide · includes unallocated money</div></div><div class="homeOverallAmount" id="homeOverallSafe">$0</div></div><div id="homeOverallNote" class="note" style="margin-top:7px">Tap for the calculation</div></div>
 </main>
 
 <main id="view-budget" class="hidden">
@@ -104,7 +101,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 
 <script>
 const KEY='householdBudgetAlpha_v1';
-const APP_VERSION='V52';
+const APP_VERSION='V53';
 const colors=['#4F8EF7','#F4A300','#C65CEB','#35AFA0','#E85D75','#7A6FF0','#55A630','#F28482'];
 const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],bonusIncomes:[],bills:[],categories:[],transactions:[],categoryCarry:{},rolloverDecisions:{},lastMonth:null,people:['Shared','Lindsay','Matthew']};
 let data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
@@ -310,13 +307,40 @@ function weeksInMonthByMonday(m){
  return ps.length||1;
 }
 
+function householdDailyAllowance(d=new Date()){
+ const days=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
+ return monthlyAvailable(d)/days;
+}
+function householdWeekAllocation(d=new Date()){
+ const s=startWeek(d),e=addDays(s,6); let total=0;
+ for(let x=new Date(s);x<=e;x=addDays(x,1)){
+   if(x.getMonth()===d.getMonth()&&x.getFullYear()===d.getFullYear()) total+=householdDailyAllowance(x);
+ }
+ return total;
+}
+function householdSpentBetween(a,b){
+ return (data.transactions||[]).reduce((sum,t)=>{const x=dateOnly(t.date);return x>=a&&x<=b?sum+(Number(t.amount)||0):sum},0);
+}
 function overallWeekBalance(d=new Date()){
- return (data.categories||[]).reduce((sum,c)=>sum+weekAvailable(c,d)-spentForWeek(c,d),0);
+ const s=startWeek(d),e=addDays(s,6),ms=monthStart(d),currentWeekStart=s>ms?s:ms;
+ const priorEnd=addDays(s,-1);
+ const priorSpent=priorEnd>=ms?householdSpentBetween(ms,priorEnd):0;
+ const priorAllocation=priorEnd>=ms?householdDailyAllowance(ms)*(Math.max(0,Math.round((priorEnd-ms)/86400000)+1)):0;
+ const currentAllocation=householdWeekAllocation(d);
+ const currentSpent=householdSpentBetween(s,e);
+ return currentAllocation+(priorAllocation-priorSpent)-currentSpent;
 }
 function overallMonthBalance(m=new Date()){
- const allocated=(data.categories||[]).reduce((sum,c)=>sum+monthlyCategoryBudget(c,m),0);
- const spent=txForMonth(m).reduce((sum,t)=>sum+(Number(t.amount)||0),0);
- return allocated-spent;
+ return monthlyAvailable(m)-categoryMonthSpendTotal(m);
+}
+function categoryMonthSpendTotal(m=new Date()){
+ return txForMonth(m).reduce((sum,t)=>sum+(Number(t.amount)||0),0);
+}
+function monthSafeToSpend(c,m=new Date()){
+ return monthlyCategoryBudget(c,m)-categoryMonthSpend(c,m);
+}
+function dashboardSafeValue(c,range,d=new Date()){
+ return range==='month'?monthSafeToSpend(c,d):weekBalance(c,d);
 }
 function renderOverallBalance(elId,balance){
  const el=document.getElementById(elId); if(!el)return;
@@ -325,21 +349,16 @@ function renderOverallBalance(elId,balance){
  el.textContent=`${abs} ${balance>=0?'under':'over'}`;
 }
 function overallWeekBreakdown(d=new Date()){
- const rows=(data.categories||[]).map(c=>{
-   const allocation=weeklyBudgetForWeek(c,d);
-   const rollover=weekCarry(c,d);
-   const spent=spentForWeek(c,d);
-   return {name:c.name,allocation,rollover,spent,balance:allocation+rollover-spent};
- });
- return {rows,allocation:rows.reduce((s,r)=>s+r.allocation,0),rollover:rows.reduce((s,r)=>s+r.rollover,0),spent:rows.reduce((s,r)=>s+r.spent,0)};
+ const s=startWeek(d),e=addDays(s,6),ms=monthStart(d),priorEnd=addDays(s,-1);
+ const priorSpent=priorEnd>=ms?householdSpentBetween(ms,priorEnd):0;
+ let priorAllocation=0;
+ if(priorEnd>=ms){for(let x=new Date(ms);x<=priorEnd;x=addDays(x,1))priorAllocation+=householdDailyAllowance(x)}
+ const currentAllocation=householdWeekAllocation(d),currentSpent=householdSpentBetween(s,e);
+ return {weekStart:s,weekEnd:e,priorAllocation,priorSpent,currentAllocation,currentSpent,balance:currentAllocation+priorAllocation-priorSpent-currentSpent};
 }
 function overallMonthBreakdown(m=new Date()){
- const rows=(data.categories||[]).map(c=>{
-   const allocation=monthlyCategoryBudget(c,m);
-   const spent=categoryMonthSpend(c,m);
-   return {name:c.name,allocation,spent,balance:allocation-spent};
- });
- return {rows,allocation:rows.reduce((s,r)=>s+r.allocation,0),spent:rows.reduce((s,r)=>s+r.spent,0)};
+ const available=monthlyAvailable(m),spent=categoryMonthSpendTotal(m);
+ return {income:monthlyIncome(m),bills:monthlyBills(),savings:+data.savingsGoal||0,available,spent,balance:available-spent};
 }
 function openOverallCalculation(range){
  const modal=document.getElementById('overallCalcModal'),body=document.getElementById('overallCalcModalBody');
@@ -347,39 +366,44 @@ function openOverallCalculation(range){
  const d=new Date();
  if(range==='week'){
    const x=overallWeekBreakdown(d);
-   const weekStart=startWeek(d),weekEnd=addDays(weekStart,6);
-   body.innerHTML=`<div class="categoryDetailModalSub">Current week · ${weekStart.toLocaleDateString('en-US',{month:'short',day:'numeric'})}–${weekEnd.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>
-   <div class="calcBreakdown"><h4>Overall formula</h4>
-     <div class="calcLine"><span>Base weekly category allocation</span><strong>${money(x.allocation)}</strong></div>
-     <div class="calcLine"><span>Rollover from prior weeks</span><strong>${money(x.rollover)}</strong></div>
-     <div class="calcLine"><span>Total available for categories this week</span><strong>${money(x.allocation+x.rollover)}</strong></div>
-     <div class="calcLine"><span>Spent this week</span><strong>− ${money(x.spent)}</strong></div>
-     <div class="calcTotal">Result: ${money(Math.abs(x.allocation+x.rollover-x.spent))} ${(x.allocation+x.rollover-x.spent)>=0?'under':'over'}</div>
+   const fmt=o=>o.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+   body.innerHTML=`<div class="categoryDetailModalSub">${fmt(x.weekStart)}–${fmt(x.weekEnd)}</div>
+   <div class="calcBreakdown"><h4>Household safe-to-spend formula</h4>
+     <div class="calcLine"><span>Unspent household budget carried into this week</span><strong>${money(x.priorAllocation-x.priorSpent)}</strong></div>
+     <div class="calcLine"><span>This week's household allowance</span><strong>+ ${money(x.currentAllocation)}</strong></div>
+     <div class="calcLine"><span>Spent this week</span><strong>− ${money(x.currentSpent)}</strong></div>
+     <div class="calcTotal">Result: ${money(Math.abs(x.balance))} ${x.balance>=0?'safe to spend':'over budget'}</div>
    </div>
-   <div class="calcMuted" style="margin-top:10px">Each category's safe-to-spend number is calculated separately, including that category's rollover. The total above is simply the sum of those category calculations.</div>`;
+   <div class="calcMuted" style="margin-top:10px">This calculation uses the household's available-for-categories money, including money that has not been assigned to a category. It is designed to answer the bigger question: “Can we spend more without spending more than we bring in?”</div>`;
  }else{
    const x=overallMonthBreakdown(d);
    body.innerHTML=`<div class="categoryDetailModalSub">${d.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</div>
-   <div class="calcBreakdown"><h4>Overall formula</h4>
-     <div class="calcLine"><span>Total category allocations</span><strong>${money(x.allocation)}</strong></div>
-     <div class="calcLine"><span>Total spending this month</span><strong>− ${money(x.spent)}</strong></div>
-     <div class="calcTotal">Result: ${money(Math.abs(x.allocation-x.spent))} ${(x.allocation-x.spent)>=0?'under':'over'}</div>
+   <div class="calcBreakdown"><h4>Household safe-to-spend formula</h4>
+     <div class="calcLine"><span>Income</span><strong>${money(x.income)}</strong></div>
+     <div class="calcLine"><span>Bills</span><strong>− ${money(x.bills)}</strong></div>
+     <div class="calcLine"><span>Savings goal</span><strong>− ${money(x.savings)}</strong></div>
+     <div class="calcLine"><span>Available for all spending categories</span><strong>${money(x.available)}</strong></div>
+     <div class="calcLine"><span>Spent this month</span><strong>− ${money(x.spent)}</strong></div>
+     <div class="calcTotal">Result: ${money(Math.abs(x.balance))} ${x.balance>=0?'safe to spend':'over budget'}</div>
    </div>
-   <div class="calcBreakdown"><h4>By category</h4>${x.rows.map(r=>`<div class="calcLine"><span>${esc(r.name)}</span><strong>${money(r.balance)} ${r.balance>=0?'under':'over'}</strong></div>`).join('')}</div>
-   <div class="calcMuted" style="margin-top:10px">Month view compares the month's category allocations with the month's spending. It does not use the current week's safe-to-spend figure.</div>`;
+   <div class="calcMuted" style="margin-top:10px">This is intentionally independent of category allocations. Unallocated money is still available, because the household goal is to stay within total income after bills and savings.</div>`;
  }
  modal.classList.remove('hidden');
 }
 function closeOverallCalculation(){const m=document.getElementById('overallCalcModal');if(m)m.classList.add('hidden')}
+function setDashboardSafeRange(range){dashboardSafeRange=range==='month'?'month':'week';renderDashboard()}
 function renderDashboard(){
- const cats=data.categories||[];
- const weekBalanceTotal=overallWeekBalance(new Date());
- const monthBalanceTotal=overallMonthBalance(new Date());
- document.getElementById('homeIncomeTotal').textContent=money(monthlyIncome(new Date()));
+ const cats=data.categories||[],d=new Date();
+ document.getElementById('homeIncomeTotal').textContent=money(monthlyIncome(d));
  document.getElementById('homeBillsTotal').textContent=money(monthlyBills());
- renderOverallBalance('homeWeekOverUnder',weekBalanceTotal);
- renderOverallBalance('homeMonthOverUnder',monthBalanceTotal);
- document.getElementById('categoryList').innerHTML=cats.length?cats.map(c=>{const v=safe(c);return `<button type="button" class="homeCat" onclick="openCategoryDetail('${esc(c.name)}')"><div class="homeCatTop"><span class="categoryIcon" style="color:${c.color}">${budgetIconSvg(c.icon||'money',21)}</span><span class="homeCatName">${esc(c.name)}</span></div><div class="homeCatAmount ${v>=0?'positive':'negative'}">${money(v)}</div><div class="homeCatMeta">safe to spend · tap for calculation</div></button>`}).join(''):'<div class="empty" style="grid-column:1/-1">Add categories on the Budget page.</div>';
+ const ws=startWeek(d),we=addDays(ws,6),fmt=o=>o.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+ document.getElementById('safeToSpendDateLabel').textContent=dashboardSafeRange==='week'?`This week · ${fmt(ws)}–${fmt(we)}`:`This month · ${d.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`;
+ document.querySelectorAll('.homeRange button').forEach(b=>b.classList.toggle('active',b.dataset.safe===dashboardSafeRange));
+ document.getElementById('categoryList').innerHTML=cats.length?cats.map(c=>{const v=dashboardSafeValue(c,dashboardSafeRange,d);return `<button type="button" class="homeCat" onclick="openCategoryDetail('${esc(c.name)}')"><div class="homeCatTop"><span class="categoryIcon" style="color:${c.color}">${budgetIconSvg(c.icon||'money',21)}</span><span class="homeCatName">${esc(c.name)}</span></div><div class="homeCatAmount ${v>=0?'positive':'negative'}">${money(v)}</div><div class="homeCatMeta">safe to spend · tap for calculation</div></button>`}).join(''):'<div class="empty" style="grid-column:1/-1">Add categories on the Budget page.</div>';
+ const overall=dashboardSafeRange==='week'?overallWeekBalance(d):overallMonthBalance(d);
+ const oa=document.getElementById('homeOverallSafe');oa.className=`homeOverallAmount ${overall>=0?'positive':'negative'}`;oa.textContent=`${money(Math.abs(overall))} ${overall>=0?'under':'over'}`;
+ document.getElementById('homeOverallLabel').textContent=`Overall safe to spend · this ${dashboardSafeRange}`;
+ document.getElementById('homeOverallNote').textContent=overall>=0?'Household-wide headroom before exceeding income after bills and savings · tap for calculation':'Household-wide spending is over the available budget · tap for calculation';
 }
 
 function monthPeriods(base=new Date()){
@@ -406,6 +430,7 @@ function periods(range,base=new Date()){
 }
 function inP(t,p){const d=dateOnly(t.date);return d>=p.start&&d<=new Date(p.end.getFullYear(),p.end.getMonth(),p.end.getDate(),23,59)}
 let expenseCategoryFilter='',expenseSearch='';
+let dashboardSafeRange='week';
 function setExpenseCategoryFilter(v){expenseCategoryFilter=v||'';renderAnalytics()}
 function setExpenseSearch(v){expenseSearch=(v||'').trim().toLowerCase();renderAnalytics()}
 function renderExpenseCategoryFilter(){const el=document.getElementById('expenseCategoryFilter');if(!el)return;const current=expenseCategoryFilter;el.innerHTML='<option value="">All categories</option>'+(data.categories||[]).map(c=>`<option value="${esc(c.name)}" ${c.name===current?'selected':''}>${esc(c.name)}</option>`).join('');if(current&&!data.categories.some(c=>c.name===current))expenseCategoryFilter=''}
@@ -547,20 +572,23 @@ function renderAnalytics(){
  document.getElementById('analyticsLabel').textContent=analyticsRange==='week'?`${ps[0].start.toLocaleDateString()} – ${ps[6].start.toLocaleDateString()}`:analyticsRange==='month'?base.toLocaleDateString('en-US',{month:'long',year:'numeric'}):String(base.getFullYear());
  document.getElementById('analyticsTotal').textContent=money(total);
  renderExpenseCategoryFilter();
- const max=Math.max(1,...totals,...allocated),scaleMax=Math.ceil(max/4)*4;
+ const rolloverTotals=ps.map(p=>(analyticsRange==='year'?0:(data.categories||[]).reduce((sum,c)=>sum+weekCarry(c,p.start),0))); const max=Math.max(1,...totals,...allocated,...allocated.map((v,i)=>v+rolloverTotals[i])),scaleMax=Math.ceil(max/4)*4;
  let chart='<div class="chartWrap"><div class="yScale">';[1,.75,.5,.25,0].forEach(v=>chart+=`<span style="bottom:${v*100}%">${money(scaleMax*v)}</span>`);chart+='</div><div class="chart">';
  [.25,.5,.75,1].forEach(v=>chart+=`<div class="gridLine" style="bottom:${v*100}%"></div>`);
  ps.forEach((period,i)=>{
    const tot=totals[i]||0,budget=allocated[i]||0,barHeight=scaleMax?Math.min(100,tot/scaleMax*100):0,budgetHeight=scaleMax?Math.min(100,budget/scaleMax*100):0;
    chart+=`<div class="barGroup"><div class="stack" style="height:${barHeight}%">${(data.categories||[]).map((c,j)=>vals[i][j]>0?`<div class="seg" style="height:${tot?vals[i][j]/tot*100:0}%;background:${c.color}"></div>`:'').join('')}</div>`;
+   const rollover = analyticsRange==='year' ? 0 : (analyticsRange==='month' ? (data.categories||[]).reduce((sum,c)=>sum+weekCarry(c,period.start),0) : (data.categories||[]).reduce((sum,c)=>sum+weekCarry(c,period.start),0));
+   const budgetWithRollover = budget + rollover;
+   const budgetWithRolloverHeight=scaleMax?Math.min(100,budgetWithRollover/scaleMax*100):0;
    if(analyticsRange!=='week'){
-     chart+=`<div class="budgetMarker" data-label="${esc(money(budget))}" style="bottom:${budgetHeight}%"></div>`;
+     chart+=`<div class="budgetMarker" data-label="${esc(money(budgetWithRollover))}" style="bottom:${budgetWithRolloverHeight}%"></div>`;
    }
    chart+=`<div class="xlabel">${esc(period.label)}</div></div>`;
  });
  if(analyticsRange==='week'){
-   const weeklyBudget=allocated[0]||0,weeklyHeight=scaleMax?Math.min(100,weeklyBudget/scaleMax*100):0;
-   chart+=`<div class="weekAllocation" data-label="${esc(money(weeklyBudget))}" style="bottom:${weeklyHeight}%"></div>`;
+   const weeklyBudget=allocated[0]||0,weeklyRollover=(data.categories||[]).reduce((sum,c)=>sum+weekCarry(c,ps[0].start),0),weeklyAvailable=weeklyBudget+weeklyRollover,weeklyHeight=scaleMax?Math.min(100,weeklyAvailable/scaleMax*100):0;
+   chart+=`<div class="weekAllocation" data-label="${esc(money(weeklyAvailable))}" style="bottom:${weeklyHeight}%"></div>`;
  }
  chart+='</div></div><div class="chartScaleNote"><span>Bars = spending</span><span>━ Allocation</span></div>';
  document.getElementById('analyticsChart').innerHTML=chart;
