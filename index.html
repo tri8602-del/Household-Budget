@@ -15,7 +15,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 .range{display:flex;background:#eef1ee;border-radius:12px;padding:3px}.range button{border:0;background:transparent;color:var(--muted);padding:8px 13px;border-radius:9px;font-weight:800}.range button.active{background:#fff;color:var(--ink);box-shadow:0 1px 5px rgba(0,0,0,.08)}
 .chartWrap{position:relative;padding-left:54px}.yScale{position:absolute;left:0;top:0;bottom:34px;width:48px;color:var(--muted);font-size:10px}.yScale span{position:absolute;right:6px;transform:translateY(50%)}.chart{height:290px;display:flex;align-items:flex-end;gap:6px;border-bottom:1px solid var(--line);padding:8px 4px 30px;box-sizing:border-box;position:relative;margin-top:18px;overflow:visible}.gridLine{position:absolute;left:0;right:0;border-top:1px dashed #dfe4df;pointer-events:none}.barGroup{height:100%;flex:1;display:flex;align-items:flex-end;justify-content:center;position:relative}.stack{width:min(48px,80%);display:flex;flex-direction:column;justify-content:flex-end;border-radius:7px 7px 2px 2px;overflow:hidden;position:relative;z-index:2}.seg{width:100%}.xlabel{position:absolute;bottom:-24px;font-size:11px;color:var(--muted);white-space:nowrap}.budgetMarker{position:absolute;left:10%;right:10%;height:0;border-top:3px solid var(--accent);z-index:5;pointer-events:none}.budgetMarker::after{content:attr(data-label);position:absolute;right:0;top:-18px;font-size:9px;color:var(--accent);background:var(--card);padding:0 3px}.weekAllocation{position:absolute;left:0;right:0;height:0;border-top:3px solid var(--accent);z-index:6;pointer-events:none}.weekAllocation::after{content:attr(data-label);position:absolute;right:2px;top:-19px;font-size:9px;color:var(--accent);background:var(--card);padding:0 3px}
 .chartScaleNote{display:flex;justify-content:center;gap:18px;font-size:11px;color:var(--muted);margin-top:8px}.categoryDetailOverlay{max-height:70vh;overflow:auto}.categoryCalc{border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:12px;background:#fafbfa}.categoryCalcHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.categoryCalcFormula{font-size:15px;font-weight:800;line-height:1.45;margin-top:7px}.categoryCalcExpenses{margin-top:10px;border-top:1px solid var(--line);padding-top:9px}.categoryCalcExpense{display:flex;justify-content:space-between;gap:10px;padding:6px 0;font-size:12px}.categoryCalcResult{margin-top:8px;font-weight:900}.categoryDetailModalTitle{display:flex;align-items:center;gap:9px}.categoryDetailModalSub{font-size:12px;color:var(--muted);margin-top:3px}.categoryDetailClose{margin-left:auto}.categoryDetailControls{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-top:12px}.categoryDetailControls>div{flex:1;min-width:180px}.categoryDetailControls .monthCtl{max-width:180px}.detailSummary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}.detailStat{background:#fafbfa;border:1px solid var(--line);border-radius:14px;padding:12px}.detailStat .label{font-size:11px;color:var(--muted);font-weight:750}.detailStat .value{font-size:20px;font-weight:900;margin-top:4px}.detailStat .value.good{background:transparent;padding:0;margin-top:4px}.detailStat .value.bad{background:transparent;padding:0;margin-top:4px}.detailWeek{border:1px solid var(--line);border-radius:15px;margin-top:12px;overflow:hidden}.detailWeekHead{background:#fafbfa;padding:12px 14px}.detailWeekHead .over{font-weight:850}.detailExpenses{padding:0 14px}.detailExpense{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid var(--line)}.detailExpenseMain{min-width:0}.detailExpenseName{font-weight:800;overflow-wrap:anywhere}.detailExpenseMeta{font-size:11px;color:var(--muted);margin-top:3px}.detailExpenseAmount{font-weight:850;white-space:nowrap}.detailWeekEmpty{padding:12px 0;color:var(--muted);font-size:12px}.detailMonthTitle{margin-top:18px;font-size:15px;font-weight:900}@media(max-width:650px){.detailSummary{grid-template-columns:1fr 1fr}.detailExpense{align-items:flex-start}.detailExpense .editLink{display:inline-block;margin-left:7px}}.legendHint{width:100%;font-size:11px;color:var(--muted);margin-bottom:2px}.legend{display:flex;flex-wrap:wrap;gap:9px 15px;margin-top:17px}.legendItem{font-size:12px;display:flex;gap:6px;align-items:center}.bigTotal{font-size:40px;font-weight:900;margin-top:5px}.personGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.personCard{background:#fafbfa;border:1px solid var(--line);border-radius:15px;padding:14px}.personAmount{font-size:24px;font-weight:900;margin-top:4px}
-.homeOverallGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.homeOverallBox{border:1px solid var(--line);background:#fafbfa;border-radius:16px;padding:14px;text-align:left;cursor:pointer}.homeOverallBox:hover{background:#f5f8f5}.homeOverallLabel{font-size:13px;color:var(--muted);font-weight:800}.homeOverallAmount{font-size:25px;font-weight:900;margin-top:5px}.homeOverallSub{font-size:11px;color:var(--muted);margin-top:4px}.homeAction{display:flex;justify-content:flex-start;margin:0 0 12px}.homeCashSummary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.homeCashBox{background:#f7f9f7;border:1px solid var(--line);border-radius:15px;padding:13px}.homeCashBox .label{font-size:11px;color:var(--muted);font-weight:750}.homeCashBox .value{font-size:21px;font-weight:900;margin-top:4px}.homeCashBox .note{font-size:10px;color:var(--muted);margin-top:3px}@media(max-width:560px){.homeCashSummary{grid-template-columns:1fr 1fr}}.homeAction .btn{min-width:150px}.homeHeader{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.homeGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.homeCat{border:1px solid var(--line);background:#fafbfa;border-radius:15px;padding:13px;min-width:0;cursor:pointer}.homeCat:hover{background:#f5f8f5}.homeCatTop{display:flex;align-items:center;gap:8px;min-width:0}.homeCatName{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.homeCatAmount{font-size:22px;font-weight:900;margin-top:7px}.homeCatMeta{font-size:11px;color:var(--muted);margin-top:2px}.budgetCategoryName{border:0;background:transparent;padding:0;color:inherit;font-weight:800;text-align:left;cursor:pointer}.budgetCategoryName:hover{color:var(--accent);text-decoration:underline}.budgetDetailHint{font-size:12px;color:var(--muted);margin-top:4px}.spendingListCard{margin-top:14px}.calcClickable{cursor:pointer}.calcClickable:hover{background:#f3f7f4}.calcHint{font-size:10px;color:var(--muted);margin-top:3px}.overallCalc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.overallCalcBox{background:#fafbfa;border:1px solid var(--line);border-radius:14px;padding:13px}.overallCalcBox .label{font-size:11px;color:var(--muted);font-weight:750}.overallCalcBox .formula{font-size:15px;font-weight:850;line-height:1.5;margin-top:7px}.overallCalcBox .result{font-size:18px;font-weight:900;margin-top:6px}.calcBreakdown{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fafbfa;margin-top:12px}.calcBreakdown h4{margin:0 0 8px;font-size:15px}.calcLine{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}.calcLine:last-child{border-bottom:0}.calcLine strong{white-space:nowrap}.calcTotal{font-size:15px;font-weight:900;padding-top:9px}.calcMuted{font-size:12px;color:var(--muted);line-height:1.45}@media(max-width:650px){.overallCalc{grid-template-columns:1fr}}.spendingListHeader{display:flex;align-items:center;justify-content:space-between;gap:10px}.spendingSearch{display:grid;grid-template-columns:1fr 220px;gap:10px;margin-top:12px}@media(max-width:650px){.homeGrid{grid-template-columns:1fr 1fr}.spendingSearch{grid-template-columns:1fr}.homeCatAmount{font-size:20px}}
+.homeOverallGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.homeOverallBox{border:1px solid var(--line);background:#fafbfa;border-radius:16px;padding:14px;text-align:left;cursor:pointer}.homeOverallBox:hover{background:#f5f8f5}.homeOverallLabel{font-size:13px;color:var(--muted);font-weight:800}.homeOverallAmount{font-size:25px;font-weight:900;margin-top:5px}.homeOverallSub{font-size:11px;color:var(--muted);margin-top:4px}.homeAction{display:flex;justify-content:flex-start;margin:0 0 12px}.homeCashSummary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.homeCashBox{background:#f7f9f7;border:1px solid var(--line);border-radius:15px;padding:13px}.homeCashBox .label{font-size:11px;color:var(--muted);font-weight:750}.homeCashBox .value{font-size:21px;font-weight:900;margin-top:4px}.homeCashBox .note{font-size:10px;color:var(--muted);margin-top:3px}@media(max-width:560px){.homeCashSummary{grid-template-columns:1fr 1fr}}.homeAction .btn{min-width:150px}.homeHeader{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.safeWeekNav{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:9px}.safeWeekNav button{border:0;background:var(--accent2);color:var(--accent);border-radius:9px;padding:6px 9px;font-size:11px;font-weight:800}.safeWeekNav .today{background:#eef1ee;color:var(--ink)}.homeGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.homeCat{border:1px solid var(--line);background:#fafbfa;border-radius:15px;padding:13px;min-width:0;cursor:pointer}.homeCat:hover{background:#f5f8f5}.homeCatTop{display:flex;align-items:center;gap:8px;min-width:0}.homeCatName{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.homeCatAmount{font-size:22px;font-weight:900;margin-top:7px}.homeCatMeta{font-size:11px;color:var(--muted);margin-top:2px}.budgetCategoryName{border:0;background:transparent;padding:0;color:inherit;font-weight:800;text-align:left;cursor:pointer}.budgetCategoryName:hover{color:var(--accent);text-decoration:underline}.budgetDetailHint{font-size:12px;color:var(--muted);margin-top:4px}.spendingListCard{margin-top:14px}.calcClickable{cursor:pointer}.calcClickable:hover{background:#f3f7f4}.calcHint{font-size:10px;color:var(--muted);margin-top:3px}.overallCalc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.overallCalcBox{background:#fafbfa;border:1px solid var(--line);border-radius:14px;padding:13px}.overallCalcBox .label{font-size:11px;color:var(--muted);font-weight:750}.overallCalcBox .formula{font-size:15px;font-weight:850;line-height:1.5;margin-top:7px}.overallCalcBox .result{font-size:18px;font-weight:900;margin-top:6px}.calcBreakdown{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fafbfa;margin-top:12px}.calcBreakdown h4{margin:0 0 8px;font-size:15px}.calcLine{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}.calcLine:last-child{border-bottom:0}.calcLine strong{white-space:nowrap}.calcTotal{font-size:15px;font-weight:900;padding-top:9px}.calcMuted{font-size:12px;color:var(--muted);line-height:1.45}@media(max-width:650px){.overallCalc{grid-template-columns:1fr}}.spendingListHeader{display:flex;align-items:center;justify-content:space-between;gap:10px}.spendingSearch{display:grid;grid-template-columns:1fr 220px;gap:10px;margin-top:12px}@media(max-width:650px){.homeGrid{grid-template-columns:1fr 1fr}.spendingSearch{grid-template-columns:1fr}.homeCatAmount{font-size:20px}}
 .formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}label{display:block;font-weight:750;font-size:13px;margin:12px 0 6px}input,select{width:100%;padding:11px 12px;border:1px solid #d9ded9;border-radius:11px;background:#fff;color:var(--ink)}input[type=color]{padding:4px;height:42px}.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.modalWrap{position:fixed;inset:0;background:rgba(20,25,22,.42);display:none;align-items:flex-end;justify-content:center;z-index:20}.modalWrap.open{display:flex}.modal{position:fixed;inset:0;background:rgba(20,25,22,.42);display:flex;align-items:center;justify-content:center;padding:20px;z-index:40}.modal.hidden{display:none!important}.modalCard,.modalBox{background:white;width:min(760px,100%);max-height:88vh;overflow:auto;border-radius:24px;padding:22px;box-shadow:0 18px 60px rgba(20,25,22,.22)}.modalTitle{font-size:20px;font-weight:900}.close{float:right;border:0;background:#eef1ee;border-radius:10px;width:36px;height:36px}.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#202522;color:white;padding:11px 15px;border-radius:12px;display:none;z-index:30;font-weight:750}.setup{max-width:700px;margin:7vh auto}.setup h1{font-size:36px;margin:0 0 8px}.setup p{color:var(--muted);line-height:1.5}.setupStep{display:none}.setupStep.active{display:block}.dots{display:flex;gap:6px;margin:20px 0}.dot{width:28px;height:5px;border-radius:5px;background:#dfe4df}.dot.active{background:var(--accent)}.backupBox{background:#f6f8f6;border-radius:14px;padding:13px;font-size:13px}.hidden{display:none!important}
 .iconPicker{display:grid;grid-template-columns:repeat(7,minmax(38px,1fr));gap:7px;margin-top:8px;max-height:330px;overflow:auto;padding:2px}.iconChoice{height:44px;border:1px solid var(--line);background:#fff;border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer}.iconChoice svg{width:22px;height:22px}.iconChoice.selected{border:2px solid var(--accent);color:var(--accent);background:var(--accent2)}.reorderBtns{display:flex;gap:5px;margin-top:8px}.reorderBtns button{border:1px solid var(--line);background:#fff;border-radius:9px;width:36px;height:32px;font-weight:900;color:var(--muted)}.reorderBtns button:disabled{opacity:.35}.categoryIcon{display:inline-flex;vertical-align:middle;align-items:center;justify-content:center}.categoryIcon svg{display:block}.billTotal{background:var(--accent2);color:var(--accent);border-radius:16px;padding:16px;margin-top:16px}.billTotal .label{font-size:13px;font-weight:750}.billTotal .value{font-size:32px;font-weight:900;margin-top:3px}.billTotal .note{font-size:12px;margin-top:3px}.txActions{display:flex;gap:6px;align-items:center}.editLink{border:0;background:var(--accent2);color:var(--accent);border-radius:9px;padding:7px 9px;font-size:12px;font-weight:800}.miniGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.searchRow{display:grid;grid-template-columns:1fr 220px;gap:10px;margin-top:12px}.searchBox{position:relative}.searchBox input{padding-left:38px}.searchIcon{position:absolute;left:13px;top:11px;color:var(--muted);font-size:17px}.filterSummary{font-size:12px;color:var(--muted);margin-top:8px}
 @media(max-width:560px){.personGrid,.formgrid,.heroGrid,.budgetFlow,.searchRow{grid-template-columns:1fr}.heroNumber{font-size:43px}.app{padding-left:12px;padding-right:12px}.card{padding:17px;border-radius:19px}.iconPicker{grid-template-columns:repeat(6,minmax(38px,1fr))}}
@@ -24,7 +24,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 <body>
 
 <div id="setupScreen" class="setup hidden"><div class="card">
-<div class="eyebrow">HOUSEHOLD BUDGET · V55</div><h1>Let's set up your budget.</h1>
+<div class="eyebrow">HOUSEHOLD BUDGET · V56</div><h1>Let's set up your budget.</h1>
 <p>This app stores your household data on this device. Export a backup before changing devices or browsers.</p>
 <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div>
 <div id="setup1" class="setupStep active"><h2>1. Add your income</h2><p>Add everyone's recurring income here.</p><div id="setupIncomeList"></div><button class="btn secondary" onclick="setupAddIncome()">＋ Add income</button><div class="actions"><button class="btn" onclick="setupNext(2)">Next</button></div></div>
@@ -40,10 +40,10 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 
 <main id="view-dashboard">
 <div class="homeAction"><button class="btn" onclick="openExpense()">＋ Add expense</button></div>
-<div class="card"><div class="homeHeader"><div><div class="sectionTitle">Safe to spend</div><div id="safeToSpendDateLabel" class="muted" style="font-size:13px;margin-top:3px"></div></div><div class="range homeRange"><button data-safe="week" onclick="setDashboardSafeRange('week')">Week</button><button data-safe="month" onclick="setDashboardSafeRange('month')">Month</button></div></div><div id="categoryList" class="homeGrid"></div></div>
+<div class="card"><div class="homeHeader"><div><div class="sectionTitle">Safe to spend</div><div id="safeToSpendDateLabel" class="muted" style="font-size:13px;margin-top:3px"></div><div id="safeWeekNav" class="safeWeekNav hidden"><button type="button" onclick="shiftDashboardWeek(-1)">← Previous</button><button type="button" class="today" onclick="goDashboardToday()">Today</button><button type="button" onclick="shiftDashboardWeek(1)">Next →</button></div></div><div class="range homeRange"><button data-safe="week" onclick="setDashboardSafeRange('week')">Week</button><button data-safe="month" onclick="setDashboardSafeRange('month')">Month</button></div></div><div id="categoryList" class="homeGrid"></div></div>
 <div class="homeOverallGrid">
   <button type="button" class="homeOverallBox calcClickable" onclick="openOverallCalculation('week')">
-    <div class="homeOverallLabel">Overall · this week</div>
+    <div class="homeOverallLabel" id="homeOverallWeekLabel">Overall · this week</div>
     <div class="homeOverallAmount" id="homeOverallWeek">$0 under</div>
     <div class="homeOverallSub">Household-wide · tap for calculation</div>
   </button>
@@ -355,14 +355,17 @@ function categoryMonthSpendTotal(m=new Date()){
 function monthSafeToSpend(c,m=new Date()){
  return monthlyCategoryBudget(c,m)-categoryMonthSpend(c,m);
 }
+function dashboardWeekDate(){const d=new Date();d.setDate(d.getDate()+dashboardWeekOffset*7);return d}
+function setDashboardSafeRange(range){dashboardSafeRange=range==='month'?'month':'week';renderDashboard()}
+function shiftDashboardWeek(delta){dashboardWeekOffset+=Number(delta)||0;dashboardSafeRange='week';renderDashboard()}
+function goDashboardToday(){dashboardWeekOffset=0;dashboardSafeRange='week';renderDashboard()}
 function dashboardSafeValue(c,range,d=new Date()){
  const monthRemaining=monthSafeToSpend(c,d);
  if(range==='month') return monthRemaining;
- // A week cannot show more money as safe to spend than remains for the
- // category for the whole month. If the category is already over for the
- // month, the weekly card must reflect that overage instead of showing a
- // positive weekly allowance.
- return Math.min(weekBalance(c,d), monthRemaining);
+ // For week view, show the category's actual weekly rollover balance, capped at
+ // the amount still available for that category for the whole month. This keeps
+ // a category from appearing spendable after it has already gone over its month.
+ return Math.min(weekBalanceForDate(c,d), monthRemaining);
 }
 function renderOverallBalance(elId,balance){
  const el=document.getElementById(elId); if(!el)return;
@@ -370,57 +373,80 @@ function renderOverallBalance(elId,balance){
  el.className=`value ${balance>=0?'positive':'negative'}`;
  el.textContent=`${abs} ${balance>=0?'under':'over'}`;
 }
+function categoryWeekStateForDate(c,d=new Date()){
+ const target=startWeek(d);
+ const current=startWeek(new Date());
+ // Existing stored carry values are authoritative for weeks already calculated.
+ const stored=weekCarry(c,target);
+ if(data.categoryWeekCarry?.[c.name]?.[weekKey(target)]!==undefined) return {carry:stored,allocation:weeklyBudgetForWeek(c,target),spent:spentForWeek(c,target),balance:stored+weeklyBudgetForWeek(c,target)-spentForWeek(c,target)};
+ // For future weeks, roll forward from the current week's state.
+ let seedWeek=new Date(current);
+ let carry=weekCarry(c,seedWeek);
+ if(data.categoryWeekCarry?.[c.name]?.[weekKey(seedWeek)]===undefined) carry=0;
+ if(target.getTime()<seedWeek.getTime()){
+   // Fall back to the normal month-detail rollover calculation for past weeks.
+   const periods=monthPeriods(target);
+   const ms=monthStart(target), me=monthEnd(target);
+   let best=0;
+   for(const p of periods){
+     if(p.start.getTime()>target.getTime()) break;
+     const from=p.start>ms?p.start:ms,to=p.end<me?p.end:me;
+     let alloc=0; if(from<=to) for(let x=new Date(from);x<=to;x=addDays(x,1)){const days=new Date(x.getFullYear(),x.getMonth()+1,0).getDate();alloc+=monthlyCategoryBudget(c,x)/days;}
+     const spent=categoryWeekSpendInMonth(c,p,target);
+     best=alloc+best-spent;
+     if(p.start.getTime()===target.getTime()) return {carry:best-alloc,allocation:alloc,spent,balance:best};
+   }
+ }
+ let w=new Date(seedWeek);
+ while(w.getTime()<target.getTime()){
+   const alloc=weeklyBudgetForWeek(c,w),spent=spentForWeek(c,w);
+   carry=carry+alloc-spent;
+   w=addDays(w,7);
+ }
+ const allocation=weeklyBudgetForWeek(c,target),spent=spentForWeek(c,target),balance=carry+allocation-spent;
+ return {carry,allocation,spent,balance};
+}
+function weekBalanceForDate(c,d=new Date()){return categoryWeekStateForDate(c,d).balance}
+function overallWeekBalance(d=new Date()){
+ const cats=data.categories||[];
+ return cats.reduce((sum,c)=>sum+dashboardSafeValue(c,'week',d),0);
+}
+function overallMonthBalance(m=new Date()){
+ const cats=data.categories||[];
+ return cats.reduce((sum,c)=>sum+dashboardSafeValue(c,'month',m),0);
+}
 function overallWeekBreakdown(d=new Date()){
- const s=startWeek(d),e=addDays(s,6),ms=monthStart(d),priorEnd=addDays(s,-1);
- const priorSpent=priorEnd>=ms?householdSpentBetween(ms,priorEnd):0;
- let priorAllocation=0;
- if(priorEnd>=ms){for(let x=new Date(ms);x<=priorEnd;x=addDays(x,1))priorAllocation+=householdDailyAllowance(x)}
- const currentAllocation=householdWeekAllocation(d),currentSpent=householdSpentBetween(s,e);
- return {weekStart:s,weekEnd:e,priorAllocation,priorSpent,currentAllocation,currentSpent,balance:currentAllocation+priorAllocation-priorSpent-currentSpent};
+ const cats=data.categories||[];
+ return {weekStart:startWeek(d),weekEnd:addDays(startWeek(d),6),items:cats.map(c=>({name:c.name,value:dashboardSafeValue(c,'week',d)})),balance:overallWeekBalance(d)};
 }
 function overallMonthBreakdown(m=new Date()){
- const available=monthlyAvailable(m),spent=categoryMonthSpendTotal(m);
- return {income:monthlyIncome(m),bills:monthlyBills(),savings:+data.savingsGoal||0,available,spent,balance:available-spent};
+ const cats=data.categories||[];
+ return {month:m,items:cats.map(c=>({name:c.name,value:dashboardSafeValue(c,'month',m)})),balance:overallMonthBalance(m)};
 }
 function openOverallCalculation(range){
  const modal=document.getElementById('overallCalcModal'),body=document.getElementById('overallCalcModalBody');
  if(!modal||!body)return;
- const d=new Date();
- if(range==='week'){
-   const x=overallWeekBreakdown(d);
-   const fmt=o=>o.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-   body.innerHTML=`<div class="categoryDetailModalSub">${fmt(x.weekStart)}–${fmt(x.weekEnd)}</div>
-   <div class="calcBreakdown"><h4>Household safe-to-spend formula</h4>
-     <div class="calcLine"><span>Unspent household budget carried into this week</span><strong>${money(x.priorAllocation-x.priorSpent)}</strong></div>
-     <div class="calcLine"><span>This week's household allowance</span><strong>+ ${money(x.currentAllocation)}</strong></div>
-     <div class="calcLine"><span>Spent this week</span><strong>− ${money(x.currentSpent)}</strong></div>
-     <div class="calcTotal">Result: ${money(Math.abs(x.balance))} ${x.balance>=0?'safe to spend':'over budget'}</div>
-   </div>
-   <div class="calcMuted" style="margin-top:10px">This calculation uses the household's available-for-categories money, including money that has not been assigned to a category. It is designed to answer the bigger question: “Can we spend more without spending more than we bring in?”</div>`;
- }else{
-   const x=overallMonthBreakdown(d);
-   body.innerHTML=`<div class="categoryDetailModalSub">${d.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</div>
-   <div class="calcBreakdown"><h4>Household safe-to-spend formula</h4>
-     <div class="calcLine"><span>Income</span><strong>${money(x.income)}</strong></div>
-     <div class="calcLine"><span>Bills</span><strong>− ${money(x.bills)}</strong></div>
-     <div class="calcLine"><span>Savings goal</span><strong>− ${money(x.savings)}</strong></div>
-     <div class="calcLine"><span>Available for all spending categories</span><strong>${money(x.available)}</strong></div>
-     <div class="calcLine"><span>Spent this month</span><strong>− ${money(x.spent)}</strong></div>
-     <div class="calcTotal">Result: ${money(Math.abs(x.balance))} ${x.balance>=0?'safe to spend':'over budget'}</div>
-   </div>
-   <div class="calcMuted" style="margin-top:10px">This is intentionally independent of category allocations. Unallocated money is still available, because the household goal is to stay within total income after bills and savings.</div>`;
- }
+ const d=range==='week'?dashboardWeekDate():new Date();
+ const x=range==='week'?overallWeekBreakdown(d):overallMonthBreakdown(d);
+ const fmt=o=>o.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+ body.innerHTML=`<div class="categoryDetailModalSub">${range==='week'?`${fmt(x.weekStart)}–${fmt(x.weekEnd)}`:d.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</div>
+ <div class="calcBreakdown"><h4>${range==='week'?'Category safe-to-spend combined':'Category safe-to-spend combined'}</h4>
+ ${x.items.map(i=>`<div class="calcLine"><span>${esc(i.name)}</span><strong class="${i.value>=0?'positive':'negative'}">${i.value>=0?'+ ': '− '}${money(Math.abs(i.value))}</strong></div>`).join('')}
+ <div class="calcTotal">Result: ${money(Math.abs(x.balance))} ${x.balance>=0?'under':'over'}</div>
+ </div>
+ <div class="calcMuted" style="margin-top:10px">This is the combined total of the category safe-to-spend amounts shown on the dashboard. Positive amounts are money still available; negative amounts are category overages.</div>`;
  modal.classList.remove('hidden');
 }
 function closeOverallCalculation(){const m=document.getElementById('overallCalcModal');if(m)m.classList.add('hidden')}
-function setDashboardSafeRange(range){dashboardSafeRange=range==='month'?'month':'week';renderDashboard()}
 function renderDashboard(){
- const cats=data.categories||[],d=new Date();
+ const cats=data.categories||[],d=dashboardSafeRange==='week'?dashboardWeekDate():new Date();
  const ws=startWeek(d),we=addDays(ws,6),fmt=o=>o.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+ const nav=document.getElementById('safeWeekNav'); if(nav)nav.classList.toggle('hidden',dashboardSafeRange!=='week');
  document.getElementById('safeToSpendDateLabel').textContent=dashboardSafeRange==='week'?`This week · ${fmt(ws)}–${fmt(we)}`:`This month · ${d.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`;
  document.querySelectorAll('.homeRange button').forEach(b=>b.classList.toggle('active',b.dataset.safe===dashboardSafeRange));
- document.getElementById('categoryList').innerHTML=cats.length?cats.map(c=>{const v=dashboardSafeValue(c,dashboardSafeRange,d);return `<button type="button" class="homeCat" onclick="openCategoryDashboardCalculation('${esc(c.name)}')"><div class="homeCatTop"><span class="categoryIcon" style="color:${c.color}">${budgetIconSvg(c.icon||'money',21)}</span><span class="homeCatName">${esc(c.name)}</span></div><div class="homeCatAmount ${v>=0?'positive':'negative'}">${money(v)}</div><div class="homeCatMeta">safe to spend · tap for calculation</div></button>`}).join(''):'<div class="empty" style="grid-column:1/-1">Add categories on the Budget page.</div>';
- const week=overallWeekBalance(d),month=overallMonthBalance(d);
+ document.getElementById('categoryList').innerHTML=cats.length?cats.map(c=>{const v=dashboardSafeValue(c,dashboardSafeRange,d);return `<button type="button" class="homeCat" onclick="openCategoryDashboardCalculation(${JSON.stringify(c.name)})"><div class="homeCatTop"><span class="categoryIcon" style="color:${c.color}">${budgetIconSvg(c.icon||'money',21)}</span><span class="homeCatName">${esc(c.name)}</span></div><div class="homeCatAmount ${v>=0?'positive':'negative'}">${money(v)}</div><div class="homeCatMeta">safe to spend · tap for calculation</div></button>`}).join(''):'<div class="empty" style="grid-column:1/-1">Add categories on the Budget page.</div>';
+ const week=overallWeekBalance(d),month=overallMonthBalance(new Date());
+ const weekLabel=document.getElementById('homeOverallWeekLabel');if(weekLabel)weekLabel.textContent=dashboardSafeRange==='week'?`Overall · ${fmt(ws)}–${fmt(we)}`:'Overall · this week';
  const renderOverall=(id,balance)=>{const el=document.getElementById(id);if(!el)return;el.className=`homeOverallAmount ${balance>=0?'positive':'negative'}`;el.textContent=`${money(Math.abs(balance))} ${balance>=0?'under':'over'}`};
  renderOverall('homeOverallWeek',week);
  renderOverall('homeOverallMonth',month);
@@ -450,6 +476,7 @@ function periods(range,base=new Date()){
 function inP(t,p){const d=dateOnly(t.date);return d>=p.start&&d<=new Date(p.end.getFullYear(),p.end.getMonth(),p.end.getDate(),23,59)}
 let expenseCategoryFilter='',expenseSearch='';
 let dashboardSafeRange='week';
+let dashboardWeekOffset=0;
 function setExpenseCategoryFilter(v){expenseCategoryFilter=v||'';renderAnalytics()}
 function setExpenseSearch(v){expenseSearch=(v||'').trim().toLowerCase();renderAnalytics()}
 function renderExpenseCategoryFilter(){const el=document.getElementById('expenseCategoryFilter');if(!el)return;const current=expenseCategoryFilter;el.innerHTML='<option value="">All categories</option>'+(data.categories||[]).map(c=>`<option value="${esc(c.name)}" ${c.name===current?'selected':''}>${esc(c.name)}</option>`).join('');if(current&&!data.categories.some(c=>c.name===current))expenseCategoryFilter=''}
@@ -521,28 +548,28 @@ function openCategoryDashboardCalculation(name){
  const c=(data.categories||[]).find(x=>x.name===name);
  const modal=document.getElementById('categoryCalcModal'),body=document.getElementById('categoryCalcModalBody');
  if(!c||!modal||!body)return;
- const d=new Date();
+ const d=dashboardSafeRange==='week'?dashboardWeekDate():new Date();
  const fmt=o=>o.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
- const week=weekBalance(c,d), month=monthSafeToSpend(c,d);
- const capped=Math.min(week,month);
- const carryVal=weekCarry(c,d), alloc=weeklyBudgetForWeek(c,d), spent=spentForWeek(c,d);
- const periodLabel=dashboardSafeRange==='week' ? `${fmt(startWeek(d))}–${fmt(addDays(startWeek(d),6))}` : d.toLocaleDateString('en-US',{month:'long',year:'numeric'});
- const restrictionNote=(dashboardSafeRange==='week' && month<week) ? 'Because the category is already more over/less available for the month than the current week\'s balance, the dashboard uses the more restrictive monthly amount. This prevents a category from showing money as safe to spend when the month is already over budget.' : '';
- body.innerHTML=`<div class="categoryDetailModalSub">${esc(c.name)} · ${periodLabel}</div>
- <div class="calcBreakdown" style="margin-top:12px">
-   <h4>${dashboardSafeRange==='week'?'This week':'This month'} safe-to-spend calculation</h4>
-   ${dashboardSafeRange==='week'
-    ? `<div class="calcLine"><span>Weekly allocation</span><strong>${money(alloc)}</strong></div>
-       <div class="calcLine"><span>Rollover / prior overage</span><strong>${carryVal>=0?'+ ': '− '}${money(Math.abs(carryVal))}</strong></div>
-       <div class="calcLine"><span>Spent this week</span><strong>− ${money(spent)}</strong></div>
-       <div class="calcLine"><span>Weekly balance</span><strong>${money(Math.abs(week))} ${week>=0?'available':'over'}</strong></div>
-       <div class="calcLine"><span>Remaining for the whole month</span><strong>${money(Math.abs(month))} ${month>=0?'available':'over'}</strong></div>
-       <div class="calcTotal">Dashboard result: ${money(Math.abs(capped))} ${capped>=0?'safe to spend':'over'}</div>`
-    : `<div class="calcLine"><span>Monthly allocation</span><strong>${money(monthlyCategoryBudget(c,d))}</strong></div>
-       <div class="calcLine"><span>Spent this month</span><strong>− ${money(categoryMonthSpend(c,d))}</strong></div>
-       <div class="calcTotal">Result: ${money(Math.abs(month))} ${month>=0?'safe to spend':'over'}</div>`}
- </div>
- <div class="calcMuted" style="margin-top:10px">${restrictionNote}</div>`;
+ const month=monthSafeToSpend(c,d);
+ if(dashboardSafeRange==='week'){
+   const st=categoryWeekStateForDate(c,d), capped=Math.min(st.balance,month);
+   body.innerHTML=`<div class="categoryDetailModalSub">${esc(c.name)} · ${fmt(startWeek(d))}–${fmt(addDays(startWeek(d),6))}</div>
+   <div class="calcBreakdown" style="margin-top:12px"><h4>This week safe-to-spend calculation</h4>
+     <div class="calcLine"><span>Weekly allocation</span><strong>${money(st.allocation)}</strong></div>
+     <div class="calcLine"><span>Rollover / prior overage</span><strong>${st.carry>=0?'+ ': '− '}${money(Math.abs(st.carry))}</strong></div>
+     <div class="calcLine"><span>Spent this week</span><strong>− ${money(st.spent)}</strong></div>
+     <div class="calcLine"><span>Weekly balance</span><strong>${money(Math.abs(st.balance))} ${st.balance>=0?'available':'over'}</strong></div>
+     <div class="calcLine"><span>Remaining for whole month</span><strong>${money(Math.abs(month))} ${month>=0?'available':'over'}</strong></div>
+     <div class="calcTotal">Dashboard result: ${money(Math.abs(capped))} ${capped>=0?'safe to spend':'over'}</div>
+   </div>`;
+ }else{
+   body.innerHTML=`<div class="categoryDetailModalSub">${esc(c.name)} · ${d.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</div>
+   <div class="calcBreakdown" style="margin-top:12px"><h4>This month safe-to-spend calculation</h4>
+     <div class="calcLine"><span>Monthly allocation</span><strong>${money(monthlyCategoryBudget(c,d))}</strong></div>
+     <div class="calcLine"><span>Spent this month</span><strong>− ${money(categoryMonthSpend(c,d))}</strong></div>
+     <div class="calcTotal">Result: ${money(Math.abs(month))} ${month>=0?'safe to spend':'over'}</div>
+   </div>`;
+ }
  modal.classList.remove('hidden');
 }
 function closeCategoryDashboardCalculation(){const m=document.getElementById('categoryCalcModal');if(m)m.classList.add('hidden')}
