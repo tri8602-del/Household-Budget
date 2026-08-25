@@ -73,12 +73,12 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
   <button type="button" class="homeOverallBox calcClickable" onclick="openOverallCalculation('week')">
     <div class="homeOverallLabel" id="homeOverallWeekLabel">Overall · this week</div>
     <div class="homeOverallAmount" id="homeOverallWeek">$0 under</div>
-    <div class="homeOverallSub">Household-wide · tap for calculation</div>
+    <div class="homeOverallSub">All household spending combined · tap for calculation</div>
   </button>
   <button type="button" class="homeOverallBox calcClickable" onclick="openOverallCalculation('month')">
     <div class="homeOverallLabel">Overall · this month</div>
     <div class="homeOverallAmount" id="homeOverallMonth">$0 under</div>
-    <div class="homeOverallSub">Household-wide · tap for calculation</div>
+    <div class="homeOverallSub">All household spending combined · tap for calculation</div>
   </button>
 </div>
 </main>
@@ -462,8 +462,16 @@ function categoryWeekStateForDate(c,d=new Date()){
 }
 function weekBalanceForDate(c,d=new Date()){return categoryWeekStateForDate(c,d).balance}
 function overallWeekBalance(d=new Date()){
- const cats=data.categories||[];
- return cats.reduce((sum,c)=>sum+dashboardSafeValue(c,'week',d),0);
+ // Household-wide result: category over/under amounts are informational only.
+ // Unused household capacity from earlier weeks can cover current-week spending,
+ // but only an actual household deficit affects the household result.
+ const s=startWeek(d),e=addDays(s,6),ms=monthStart(d);
+ const priorEnd=addDays(s,-1);
+ const priorSpent=priorEnd>=ms?householdSpentBetween(ms,priorEnd):0;
+ const priorAllocation=priorEnd>=ms?householdDailyAllowance(ms)*(Math.max(0,Math.round((priorEnd-ms)/86400000)+1)):0;
+ const currentAllocation=householdWeekAllocation(d);
+ const currentSpent=householdSpentBetween(s,e);
+ return currentAllocation+(priorAllocation-priorSpent)-currentSpent;
 }
 function overallMonthBalance(m=new Date()){
  return monthlyAvailable(m)-categoryMonthSpendTotal(m);
