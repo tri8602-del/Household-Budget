@@ -469,14 +469,23 @@ function overallMonthBalance(m=new Date()){
  return monthlyAvailable(m)-categoryMonthSpendTotal(m);
 }
 function overallWeekBreakdown(d=new Date()){
+ const s=startWeek(d),e=addDays(s,6),ms=monthStart(d);
+ const priorEnd=addDays(s,-1);
+ const priorSpent=priorEnd>=ms?householdSpentBetween(ms,priorEnd):0;
+ const priorAllocation=priorEnd>=ms?householdDailyAllowance(ms)*(Math.max(0,Math.round((priorEnd-ms)/86400000)+1)):0;
+ const currentAllocation=householdWeekAllocation(d);
+ const currentSpent=householdSpentBetween(s,e);
+ const carried=Math.max(0,priorAllocation-priorSpent);
+ const balance=currentAllocation+carried-currentSpent;
  const cats=data.categories||[];
- return {weekStart:startWeek(d),weekEnd:addDays(startWeek(d),6),items:cats.map(c=>({name:c.name,value:dashboardSafeValue(c,'week',d)})),balance:overallWeekBalance(d)};
+ return {weekStart:s,weekEnd:e,currentAllocation,carried,currentSpent,items:cats.map(c=>({name:c.name,value:dashboardSafeValue(c,'week',d)})),balance};
 }
 function overallMonthBreakdown(m=new Date()){
  const cats=data.categories||[];
  const allocated=cats.reduce((sum,c)=>sum+monthlyCategoryBudget(c,m),0);
  const unallocated=Math.max(0,monthlyAvailable(m)-allocated);
- return {month:m,items:cats.map(c=>({name:c.name,value:dashboardSafeValue(c,'month',m)})),allocated,unallocated,priorDebt:householdDebtAtStart(m),balance:overallMonthBalance(m)};
+ const priorDebt=householdDebtAtStart(m);
+ return {month:m,items:cats.map(c=>({name:c.name,value:dashboardSafeValue(c,'month',m)})),allocated,unallocated,priorDebt,balance:overallMonthBalance(m)};
 }
 function openOverallCalculation(range){
  const modal=document.getElementById('overallCalcModal'),body=document.getElementById('overallCalcModalBody');
@@ -484,13 +493,32 @@ function openOverallCalculation(range){
  const d=range==='week'?dashboardWeekDate():new Date();
  const x=range==='week'?overallWeekBreakdown(d):overallMonthBreakdown(d);
  const fmt=o=>o.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
- body.innerHTML=`<div class="categoryDetailModalSub">${range==='week'?`${fmt(x.weekStart)}–${fmt(x.weekEnd)}`:d.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</div>
- <div class="calcBreakdown"><h4>Category safe-to-spend combined</h4>
- ${x.items.map(i=>`<div class="calcLine"><span>${esc(i.name)}</span><strong class="${i.value>=0?'positive':'negative'}">${i.value>=0?'+ ': '− '}${money(Math.abs(i.value))}</strong></div>`).join('')}
- ${range==='month'?`<div class="calcLine"><span>Unallocated household cushion</span><strong class="positive">+ ${money(x.unallocated)}</strong></div>${x.priorDebt?`<div class="calcLine"><span>Prior household deficit</span><strong class="negative">− ${money(x.priorDebt)}</strong></div>`:''}`:''}
- <div class="calcTotal">Result: ${money(Math.abs(x.balance))} ${x.balance>=0?'under':'over'}</div>
- </div>
- <div class="calcMuted" style="margin-top:10px">Positive category balances never roll into the next month. A household deficit can reduce the next month's spending capacity; a good month first repairs that deficit, and only money left after recovery becomes extra savings.</div>`;
+ if(range==='week'){
+   body.innerHTML=`<div class="categoryDetailModalSub">${fmt(x.weekStart)}–${fmt(x.weekEnd)}</div>
+   <div class="calcBreakdown"><h4>Household-wide weekly calculation</h4>
+     <div class="calcLine"><span>This week's household allocation</span><strong>${money(x.currentAllocation)}</strong></div>
+     ${x.carried?`<div class="calcLine"><span>Unused household capacity from earlier this month</span><strong>+ ${money(x.carried)}</strong></div>`:''}
+     <div class="calcLine"><span>Spent this week</span><strong>− ${money(x.currentSpent)}</strong></div>
+     <div class="calcTotal ${x.balance>=0?'positive':'negative'}">Result: ${money(Math.abs(x.balance))} ${x.balance>=0?'under':'over'}</div>
+   </div>
+   <div class="calcBreakdown" style="margin-top:12px"><h4>Category balances (informational)</h4>
+     ${x.items.map(i=>`<div class="calcLine"><span>${esc(i.name)}</span><strong class="${i.value>=0?'positive':'negative'}">${i.value>=0?'+ ':'− '}${money(Math.abs(i.value))}</strong></div>`).join('')}
+   </div>
+   <div class="calcMuted" style="margin-top:10px">The household result is based on total household spending capacity and total household spending. Category balances can be individually over or under without changing the household result unless the household as a whole exceeds its available money.</div>`;
+ }else{
+   body.innerHTML=`<div class="categoryDetailModalSub">${d.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</div>
+   <div class="calcBreakdown"><h4>Household-wide monthly calculation</h4>
+     <div class="calcLine"><span>Available after bills and savings</span><strong>${money(monthlyAvailable(d))}</strong></div>
+     <div class="calcLine"><span>Spent this month</span><strong>− ${money(categoryMonthSpendTotal(d))}</strong></div>
+     <div class="calcTotal ${x.balance>=0?'positive':'negative'}">Result: ${money(Math.abs(x.balance))} ${x.balance>=0?'under':'over'}</div>
+     ${x.priorDebt?`<div class="calcLine"><span>Prior household deficit reducing this month's capacity</span><strong>− ${money(x.priorDebt)}</strong></div>`:''}
+   </div>
+   <div class="calcBreakdown" style="margin-top:12px"><h4>Category balances (informational)</h4>
+     ${x.items.map(i=>`<div class="calcLine"><span>${esc(i.name)}</span><strong class="${i.value>=0?'positive':'negative'}">${i.value>=0?'+ ':'− '}${money(Math.abs(i.value))}</strong></div>`).join('')}
+     ${x.unallocated?`<div class="calcLine"><span>Unallocated household cushion</span><strong class="positive">+ ${money(x.unallocated)}</strong></div>`:''}
+   </div>
+   <div class="calcMuted" style="margin-top:10px">Positive category balances reset at month-end. A household deficit is the only amount that can reduce the next month's spending capacity.</div>`;
+ }
  modal.classList.remove('hidden');
 }
 function closeOverallCalculation(){const m=document.getElementById('overallCalcModal');if(m)m.classList.add('hidden')}
@@ -533,6 +561,8 @@ function inP(t,p){const d=dateOnly(t.date);return d>=p.start&&d<=new Date(p.end.
 let expenseCategoryFilter='',expenseSearch='';
 let dashboardSafeRange='week';
 let analyticsMonthDate=monthKey();
+let analyticsWeekOffset=0;
+let analyticsYearOffset=0;
 let dashboardWeekOffset=0;
 function setExpenseCategoryFilter(v){expenseCategoryFilter=v||'';renderAnalytics()}
 function setExpenseSearch(v){expenseSearch=(v||'').trim().toLowerCase();renderAnalytics()}
@@ -701,7 +731,8 @@ function setCategoryDetail(name){categoryDetailName=name||'';if(document.getElem
 function setCategoryDetailMonth(v){if(v)categoryDetailMonth=v;renderCategoryDetail()}
 
 function renderAnalytics(){
- const base=analyticsRange==='month'?new Date(`${analyticsMonthDate}-01T12:00:00`):new Date();
+ const today=new Date();
+ const base=analyticsRange==='month'?new Date(`${analyticsMonthDate}-01T12:00:00`):analyticsRange==='week'?addDays(startWeek(today),analyticsWeekOffset*7):new Date(today.getFullYear()+analyticsYearOffset,0,1,12);
  const ps=periods(analyticsRange,base),tx=data.transactions||[],visibleTx=tx.filter(matchesExpense);
  const vals=ps.map(p=>(data.categories||[]).map(c=>visibleTx.filter(t=>t.category===c.name&&inP(t,p)).reduce((sum,t)=>sum+t.amount,0)));
  const totals=vals.map(a=>a.reduce((x,y)=>x+y,0));
@@ -716,9 +747,10 @@ function renderAnalytics(){
    return (data.categories||[]).reduce((sum,c)=>sum+weeklyBudgetForWeek(c,p.start),0);
  });
  const total=visibleTx.filter(t=>ps.some(p=>inP(t,p))).reduce((sum,t)=>sum+t.amount,0);
- document.getElementById('analyticsLabel').textContent=analyticsRange==='week'?`${ps[0].start.toLocaleDateString()} – ${ps[6].start.toLocaleDateString()}`:analyticsRange==='month'?base.toLocaleDateString('en-US',{month:'long',year:'numeric'}):String(base.getFullYear());
+ document.getElementById('analyticsLabel').textContent=analyticsRange==='week'?`${ps[0].start.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} – ${ps[6].start.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`:analyticsRange==='month'?base.toLocaleDateString('en-US',{month:'long',year:'numeric'}):String(base.getFullYear());
  const nav=document.getElementById('analyticsMonthNav');
- if(nav)nav.classList.toggle('hidden',analyticsRange!=='month');
+ if(nav){nav.classList.remove('hidden');nav.querySelector('.today').textContent=analyticsRange==='year'?'This year':'Today';}
+
  renderExpenseCategoryFilter();
  const max=Math.max(1,...totals,...allocated),scaleMax=Math.ceil(max/4)*4;
  let chart='<div class="chartWrap"><div class="yScale">';[1,.75,.5,.25,0].forEach(v=>chart+=`<span style="bottom:${v*100}%">${money(scaleMax*v)}</span>`);chart+='</div><div class="chart">';
@@ -750,10 +782,18 @@ function renderAnalytics(){
  document.getElementById('allTransactions').innerHTML=sorted.length?sorted.map(t=>`<div class="item"><div class="row"><div><div class="itemTitle">${esc(t.note||t.category)}</div><div class="sub">${esc(t.category)} · ${esc(t.who||'Shared')} · ${dateOnly(t.date).toLocaleDateString()}</div></div><div class="txActions"><b>${money(t.amount)}</b><button class="editLink" onclick="openModal('editExpenseById','${esc(String(t.id))}')">Edit</button></div></div></div>`).join(''):'<div class="empty">No spending matches your filters.</div>';
 }
 function shiftAnalyticsMonth(delta){
- analyticsMonthDate=monthKey(addMonths(new Date(`${analyticsMonthDate}-01T12:00:00`),delta));
+ delta=Number(delta)||0;
+ if(analyticsRange==='week'){analyticsWeekOffset+=delta;}
+ else if(analyticsRange==='month'){analyticsMonthDate=monthKey(addMonths(new Date(`${analyticsMonthDate}-01T12:00:00`),delta));}
+ else {analyticsYearOffset+=delta;}
  renderAnalytics();
 }
-function goAnalyticsToday(){analyticsMonthDate=monthKey(new Date());renderAnalytics()}
+function goAnalyticsToday(){
+ analyticsMonthDate=monthKey(new Date());
+ analyticsWeekOffset=0;
+ analyticsYearOffset=0;
+ renderAnalytics();
+}
 function openAnalyticsBarModal(index){
  if(analyticsRange!=='month')return;
  const base=new Date(`${analyticsMonthDate}-01T12:00:00`),ps=periods('month',base),p=ps[index];
