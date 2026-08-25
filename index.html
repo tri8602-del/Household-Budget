@@ -89,7 +89,7 @@ const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],bonusIncom
 let data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
 data.incomes=data.incomes||[];data.bonusIncomes=data.bonusIncomes||[];data.bills=data.bills||[];data.transactions=data.transactions||[];data.categories=data.categories||[];
 data.categories=data.categories.map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));
-data.people=Array.from(new Set((data.people||['Shared','Lindsay','Matthew']).filter(Boolean)));if(!data.people.includes('Shared'))data.people.unshift('Shared');
+data.categoryWeekCarry=data.categoryWeekCarry||{};data.people=Array.from(new Set((data.people||['Shared','Lindsay','Matthew']).filter(Boolean)));if(!data.people.includes('Shared'))data.people.unshift('Shared');
 
 const iconSvgs={
 money:'<circle cx="12" cy="12" r="8"/><path d="M12 7v10M15 9.5c-.7-1-1.8-1.5-3-1.5-1.7 0-3 1-3 2.3 0 3.2 6 1.2 6 4.2 0 1.3-1.3 2.5-3 2.5-1.2 0-2.4-.5-3.1-1.5"/>',
@@ -180,10 +180,35 @@ function paydayDates(i,m=new Date()){
 function monthlyIncome(m=new Date()){return (data.incomes||[]).reduce((s,i)=>s+i.amount*paydayDates(i,m).length,0)+(data.bonusIncomes||[]).filter(b=>b.month===monthKey(m)).reduce((s,b)=>s+b.amount,0)}
 function monthlyCategoryBudget(c,m=new Date()){return c.type==='percent'?monthlyIncome(m)*(c.percent||0)/100:(c.budget||0)}
 function txForMonth(m=new Date()){return (data.transactions||[]).filter(t=>{const d=dateOnly(t.date);return d.getMonth()===m.getMonth()&&d.getFullYear()===m.getFullYear()})}
+function weekKey(d=new Date()){const s=startWeek(d);return s.toISOString().slice(0,10)}
+function weekCarry(c,d=new Date()){return +(data.categoryWeekCarry?.[c.name]?.[weekKey(d)]||0)}
+function weekAvailable(c,d=new Date()){return weeklyBudgetForWeek(c,d)+weekCarry(c,d)}
+function weekBalance(c,d=new Date()){return weekAvailable(c,d)-spentForWeek(c,d)}
+function ensureWeeklyRollover(){
+ data.categoryWeekCarry=data.categoryWeekCarry||{};
+ const starts=(data.transactions||[]).map(t=>startWeek(dateOnly(t.date))).filter(Boolean);
+ if(!starts.length)return;
+ const current=startWeek(new Date());
+ const earliest=new Date(Math.min(...starts.map(x=>x.getTime())));
+ (data.categories||[]).forEach(c=>{
+   data.categoryWeekCarry[c.name]=data.categoryWeekCarry[c.name]||{};
+   let w=new Date(earliest);
+   while(w<current){
+     const next=addDays(w,7), nk=weekKey(next);
+     if(data.categoryWeekCarry[c.name][nk]===undefined){
+       const balance=weeklyBudgetForWeek(c,w)+weekCarry(c,w)-spentForWeek(c,w);
+       data.categoryWeekCarry[c.name][nk]=+balance.toFixed(2);
+     }
+     w=next;
+   }
+ });
+ localStorage.setItem(KEY,JSON.stringify(data));
+}
 function weeklyBudgetForWeek(c,d=new Date()){const s=startWeek(d),e=addDays(s,6);let total=0;for(let x=new Date(s);x<=e;x=addDays(x,1)){total+=monthlyCategoryBudget(c,x)/new Date(x.getFullYear(),x.getMonth()+1,0).getDate()}return total}
 function spentForWeek(c,d=new Date()){const s=startWeek(d),e=addDays(s,6);return (data.transactions||[]).filter(t=>t.category===c.name).reduce((sum,t)=>{const x=dateOnly(t.date);return sum+(x>=s&&x<=e?t.amount:0)},0)}
 function carry(c,m=new Date()){return +(data.categoryCarry?.[c.name]?.[monthKey(m)]||0)}
-function safe(c,d=new Date()){return carry(c,d)+weeklyBudgetForWeek(c,d)-spentForWeek(c,d)}
+function safe(c,d=new Date()){return weekBalance(c,d)}
+function status(c,d=new Date()){const diff=weekBalance(c,d);return Math.abs(diff)<.005?['Right on budget','under']:diff>0?[`Under budget by ${money(diff)}`,'under']:[`Over budget by ${money(Math.abs(diff))}`,'over']}
 function monthlyBills(){return (data.bills||[]).reduce((s,b)=>s+(b.frequency==='annual'?b.amount/12:b.amount),0)}
 function monthlyAvailable(){return monthlyIncome()-monthlyBills()-(+data.savingsGoal||0)}
 function budgetAllocated(){return (data.categories||[]).reduce((s,c)=>s+monthlyCategoryBudget(c),0)}
@@ -290,7 +315,7 @@ function renderCategoryDetail(){
  const m=new Date(categoryDetailMonth+'-01T12:00:00');
  const c=cats.find(x=>x.name===categoryDetailName)||cats[0];
  const monthSpent=categoryMonthSpend(c,m),monthAllocated=monthlyCategoryBudget(c,m),monthOver=monthAllocated-monthSpent;
- const currentWeek=startWeek(new Date()),currentWeekSpent=spentForWeek(c,currentWeek),currentWeekAllocated=weeklyBudgetForWeek(c,currentWeek),currentWeekOver=currentWeekAllocated-currentWeekSpent;
+ const currentWeek=startWeek(new Date()),currentWeekSpent=spentForWeek(c,currentWeek),currentWeekBase=weeklyBudgetForWeek(c,currentWeek),currentWeekCarry=weekCarry(c,currentWeek),currentWeekAllocated=currentWeekBase+currentWeekCarry,currentWeekOver=currentWeekAllocated-currentWeekSpent;
  document.getElementById('categoryDetailSummary').innerHTML=`
  <div class="detailSummary">
   <div class="detailStat"><div class="label">Month spent</div><div class="value">${money(monthSpent)}</div></div>
@@ -298,14 +323,14 @@ function renderCategoryDetail(){
   <div class="detailStat"><div class="label">Month over / under</div><div class="value ${detailMoneyClass(monthOver)}">${money(Math.abs(monthOver))} ${monthOver>=0?'under':'over'}</div></div>
   <div class="detailStat"><div class="label">Current week over / under</div><div class="value ${detailMoneyClass(currentWeekOver)}">${money(Math.abs(currentWeekOver))} ${currentWeekOver>=0?'under':'over'}</div></div>
  </div>
- <div class="muted" style="font-size:12px;margin-top:9px">${esc(c.name)} · Current week: ${currentWeek.toLocaleDateString('en-US',{month:'short',day:'numeric'})}–${addDays(currentWeek,6).toLocaleDateString('en-US',{month:'short',day:'numeric'})} · ${money(currentWeekSpent)} spent of ${money(currentWeekAllocated)} allocated</div>`;
+ <div class="muted" style="font-size:12px;margin-top:9px">${esc(c.name)} · Current week: ${currentWeek.toLocaleDateString('en-US',{month:'short',day:'numeric'})}–${addDays(currentWeek,6).toLocaleDateString('en-US',{month:'short',day:'numeric'})} · ${money(currentWeekSpent)} spent of ${money(currentWeekBase)} new + ${money(currentWeekCarry)} rollover = ${money(currentWeekAllocated)} available</div>`;
  const ps=monthPeriods(m);
  document.getElementById('categoryDetailWeeks').innerHTML=`<div class="detailMonthTitle">Weekly breakdown</div>`+ps.map(p=>{
-   const allocated=categoryAllocationInMonthPortion(c,p,m),spent=categoryWeekSpendInMonth(c,p,m),over=allocated-spent;
+   const baseAllocated=categoryAllocationInMonthPortion(c,p,m),roll=weekCarry(c,p.start),allocated=baseAllocated+roll,spent=categoryWeekSpendInMonth(c,p,m),over=allocated-spent;
    const ms=monthStart(m),me=monthEnd(m);
    const tx=(data.transactions||[]).filter(t=>t.category===c.name).filter(t=>{const d=dateOnly(t.date);return d>=p.start&&d<=p.end&&d>=ms&&d<=me}).sort((a,b)=>a.date.localeCompare(b.date));
    return `<div class="detailWeek">
-    <div class="detailWeekHead"><div class="row"><div><strong>${esc(formatWeekLabel(p,m))}</strong><div class="muted" style="font-size:11px;margin-top:3px">${money(spent)} spent · ${money(allocated)} allocated</div></div><div class="over ${over>=0?'positive':'negative'}">${money(Math.abs(over))} ${over>=0?'under':'over'}</div></div></div>
+    <div class="detailWeekHead"><div class="row"><div><strong>${esc(formatWeekLabel(p,m))}</strong><div class="muted" style="font-size:11px;margin-top:3px">${money(spent)} spent · ${money(baseAllocated)} new + ${money(roll)} rollover = ${money(allocated)} available</div></div><div class="over ${over>=0?'positive':'negative'}">${money(Math.abs(over))} ${over>=0?'under':'over'}</div></div></div>
     <div class="detailExpenses">${tx.length?tx.map(t=>`<div class="detailExpense"><div class="detailExpenseMain"><div class="detailExpenseName">${esc(t.note||c.name)}</div><div class="detailExpenseMeta">${dateOnly(t.date).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})} · ${esc(t.who||'Shared')}</div></div><div class="detailExpenseAmount">${money(t.amount)} <button class="editLink" onclick="openModal('editExpenseById','${esc(String(t.id))}')">Edit</button></div></div>`).join(''):'<div class="detailWeekEmpty">No expenses in this week.</div>'}</div>
    </div>`;
  }).join('');
@@ -319,7 +344,8 @@ function renderAnalytics(){
  const totals=vals.map(a=>a.reduce((x,y)=>x+y,0));
  const allocated=ps.map(p=>{
    if(analyticsRange==='year')return (data.categories||[]).reduce((sum,c)=>sum+monthlyCategoryBudget(c,p.start),0);
-   return (data.categories||[]).reduce((sum,c)=>sum+weeklyBudgetForWeek(c,p.start),0);
+   if(analyticsRange==='month')return (data.categories||[]).reduce((sum,c)=>sum+weeklyBudgetForWeek(c,p.start)+weekCarry(c,p.start),0);
+   return (data.categories||[]).reduce((sum,c)=>sum+weeklyBudgetForWeek(c,p.start)+weekCarry(c,p.start),0);
  });
  const total=visibleTx.filter(t=>ps.some(p=>inP(t,p))).reduce((sum,t)=>sum+t.amount,0);
  document.getElementById('analyticsLabel').textContent=analyticsRange==='week'?`${ps[0].start.toLocaleDateString()} – ${ps[6].start.toLocaleDateString()}`:analyticsRange==='month'?base.toLocaleDateString('en-US',{month:'long',year:'numeric'}):String(base.getFullYear());
@@ -440,7 +466,7 @@ function renderIncome(){
 function saveCategorySettings(){data.categories.forEach((c,i)=>{const n=document.getElementById('cn'+i),col=document.getElementById('cc'+i),ic=document.getElementById('ci'+i);if(n?.value.trim())c.name=n.value.trim();if(col?.value)c.color=col.value;if(ic?.value)c.icon=ic.value});localStorage.setItem(KEY,JSON.stringify(data));closeModal();render();showToast('Category changes saved')}
 function saveSettings(){data.savingsGoal=+document.getElementById('settingsSavings').value||0;save();showToast('Settings saved')}
 function showView(v){currentView=v;document.querySelectorAll('main[id^="view-"]').forEach(x=>x.classList.toggle('hidden',x.id!=='view-'+v));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));if(v==='budget')renderBudget();if(v==='bills')renderBills();if(v==='income')renderIncome();if(v==='spending')renderAnalytics();if(v==='dashboard')renderDashboard()}
-function render(){if(!data.setupComplete)return;document.getElementById('app').classList.remove('hidden');document.getElementById('setupScreen').classList.add('hidden');document.getElementById('settingsSavings').value=data.savingsGoal||0;renderDashboard();renderBudget();renderBills();renderIncome();renderAnalytics();showView(currentView)}
+function render(){if(!data.setupComplete)return;ensureWeeklyRollover();document.getElementById('app').classList.remove('hidden');document.getElementById('setupScreen').classList.add('hidden');document.getElementById('settingsSavings').value=data.savingsGoal||0;renderDashboard();renderBudget();renderBills();renderIncome();renderAnalytics();showView(currentView)}
 function exportData(){const backup={app:'Household Budget',version:1,exportedAt:new Date().toISOString(),data};const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'}),filename='household-budget-backup-'+dateValue()+'.json';const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup exported')}
 function importData(event){const f=event.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.data||!Array.isArray(x.data.incomes)||!Array.isArray(x.data.categories))throw Error();data={...structuredClone(blank),...x.data,setupComplete:true};data.categories=(data.categories||[]).map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));data.people=Array.from(new Set((data.people||['Shared','Lindsay','Matthew']).filter(Boolean)));if(!data.people.includes('Shared'))data.people.unshift('Shared');ensureIds();localStorage.setItem(KEY,JSON.stringify(data));event.target.value='';render();showToast('Backup imported')}catch(e){showToast('That backup could not be imported')}};r.readAsText(f)}
 function resetAll(){if(confirm('Clear all household budget data from this device?')){localStorage.removeItem(KEY);location.reload()}}
