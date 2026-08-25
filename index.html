@@ -24,7 +24,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 <body>
 
 <div id="setupScreen" class="setup hidden"><div class="card">
-<div class="eyebrow">HOUSEHOLD BUDGET · V56</div><h1>Let's set up your budget.</h1>
+<div class="eyebrow">HOUSEHOLD BUDGET · V60</div><h1>Let's set up your budget.</h1>
 <p>This app stores your household data on this device. Export a backup before changing devices or browsers.</p>
 <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div>
 <div id="setup1" class="setupStep active"><h2>1. Add your income</h2><p>Add everyone's recurring income here.</p><div id="setupIncomeList"></div><button class="btn secondary" onclick="setupAddIncome()">＋ Add income</button><div class="actions"><button class="btn" onclick="setupNext(2)">Next</button></div></div>
@@ -120,7 +120,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 
 <script>
 const KEY='householdBudgetAlpha_v1';
-const APP_VERSION='V59';
+const APP_VERSION='V60';
 const colors=['#4F8EF7','#F4A300','#C65CEB','#35AFA0','#E85D75','#7A6FF0','#55A630','#F28482'];
 const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],bonusIncomes:[],bills:[],categories:[],transactions:[],categoryCarry:{},rolloverDecisions:{},lastMonth:null,people:['Shared','Lindsay','Matthew']};
 let data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
@@ -708,7 +708,7 @@ function renderAnalytics(){
  document.getElementById('analyticsLabel').textContent=analyticsRange==='week'?`${ps[0].start.toLocaleDateString()} – ${ps[6].start.toLocaleDateString()}`:analyticsRange==='month'?base.toLocaleDateString('en-US',{month:'long',year:'numeric'}):String(base.getFullYear());
  document.getElementById('analyticsTotal').textContent=money(total);
  renderExpenseCategoryFilter();
- const rolloverTotals=ps.map(p=>(analyticsRange==='year'?0:(data.categories||[]).reduce((sum,c)=>sum+weekCarry(c,p.start),0))); const max=Math.max(1,...totals,...allocated,...allocated.map((v,i)=>v+rolloverTotals[i])),scaleMax=Math.ceil(max/4)*4;
+ const max=Math.max(1,...totals,...allocated),scaleMax=Math.ceil(max/4)*4;
  let chart='<div class="chartWrap"><div class="yScale">';[1,.75,.5,.25,0].forEach(v=>chart+=`<span style="bottom:${v*100}%">${money(scaleMax*v)}</span>`);chart+='</div><div class="chart">';
  [.25,.5,.75,1].forEach(v=>chart+=`<div class="gridLine" style="bottom:${v*100}%"></div>`);
  ps.forEach((period,i)=>{
