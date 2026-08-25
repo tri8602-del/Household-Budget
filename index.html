@@ -38,6 +38,25 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 <button data-view="dashboard" class="active" onclick="showView('dashboard')">Home</button><button data-view="spending" onclick="showView('spending')">Spending</button><button data-view="budget" onclick="showView('budget')">Budget</button><button data-view="income" onclick="showView('income')">Income</button><button data-view="bills" onclick="showView('bills')">Bills</button><button data-view="settings" onclick="showView('settings')">Settings</button>
 </div>
 
+<div id="overallCalcModal" class="modal hidden">
+  <div class="modalCard">
+    <div class="categoryDetailModalTitle">
+      <span class="sectionTitle">Overall calculation</span>
+      <button type="button" class="btn secondary categoryDetailClose" onclick="closeOverallCalculation()">Close</button>
+    </div>
+    <div id="overallCalcModalBody"></div>
+  </div>
+</div>
+<div id="categoryCalcModal" class="modal hidden">
+  <div class="modalCard">
+    <div class="categoryDetailModalTitle">
+      <span class="sectionTitle">Category calculation</span>
+      <button type="button" class="btn secondary categoryDetailClose" onclick="closeCategoryDashboardCalculation()">Close</button>
+    </div>
+    <div id="categoryCalcModalBody"></div>
+  </div>
+</div>
+
 <main id="view-dashboard">
 <div class="homeAction"><button class="btn" onclick="openExpense()">＋ Add expense</button></div>
 <div class="card"><div class="homeHeader"><div><div class="sectionTitle">Safe to spend</div><div id="safeToSpendDateLabel" class="muted" style="font-size:13px;margin-top:3px"></div><div id="safeWeekNav" class="safeWeekNav hidden"><button type="button" onclick="shiftDashboardWeek(-1)">← Previous</button><button type="button" class="today" onclick="goDashboardToday()">Today</button><button type="button" onclick="shiftDashboardWeek(1)">Next →</button></div></div><div class="range homeRange"><button data-safe="week" onclick="setDashboardSafeRange('week')">Week</button><button data-safe="month" onclick="setDashboardSafeRange('month')">Month</button></div></div><div id="categoryList" class="homeGrid"></div></div>
@@ -66,24 +85,8 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 <div class="flowBox"><div class="label">Unallocated</div><div id="budgetUnallocated" class="value">$0</div></div>
 </div><div id="budgetWarning"></div></div>
 <div class="card"><div class="sectionTitle">Category allocations</div><div class="budgetDetailHint">Click a category's name or Details to see the weekly calculations, rollover, and expenses.</div><div style="overflow-x:auto"><table class="budgetTable"><thead><tr><th>Category</th><th>Allocation</th><th>Monthly</th><th>Weekly</th><th></th></tr></thead><tbody id="budgetMatrix"></tbody></table></div></div>
-<div id="overallCalcModal" class="modal hidden">
-  <div class="modalCard">
-    <div class="categoryDetailModalTitle">
-      <span class="sectionTitle">Overall calculation</span>
-      <button type="button" class="btn secondary categoryDetailClose" onclick="closeOverallCalculation()">Close</button>
-    </div>
-    <div id="overallCalcModalBody"></div>
-  </div>
-</div>
-<div id="categoryCalcModal" class="modal hidden">
-  <div class="modalCard">
-    <div class="categoryDetailModalTitle">
-      <span class="sectionTitle">Category calculation</span>
-      <button type="button" class="btn secondary categoryDetailClose" onclick="closeCategoryDashboardCalculation()">Close</button>
-    </div>
-    <div id="categoryCalcModalBody"></div>
-  </div>
-</div>
+
+
 <div id="categoryDetailModal" class="modal hidden">
   <div class="modalBox categoryDetailOverlay">
     <div class="categoryDetailModalTitle">
@@ -550,24 +553,35 @@ function openCategoryDashboardCalculation(name){
  if(!c||!modal||!body)return;
  const d=dashboardSafeRange==='week'?dashboardWeekDate():new Date();
  const fmt=o=>o.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
- const month=monthSafeToSpend(c,d);
+ const monthlyAllocation=monthlyCategoryBudget(c,d);
+ const monthlySpent=categoryMonthSpend(c,d);
+ const monthBalance=monthlyAllocation-monthlySpent;
  if(dashboardSafeRange==='week'){
-   const st=categoryWeekStateForDate(c,d), capped=Math.min(st.balance,month);
+   const st=categoryWeekStateForDate(c,d);
+   const weeklyBalance=st.balance;
+   // The dashboard cannot tell you to spend more than the category has left for the month.
+   const dashboardResult=Math.min(weeklyBalance,monthBalance);
    body.innerHTML=`<div class="categoryDetailModalSub">${esc(c.name)} · ${fmt(startWeek(d))}–${fmt(addDays(startWeek(d),6))}</div>
-   <div class="calcBreakdown" style="margin-top:12px"><h4>This week safe-to-spend calculation</h4>
+   <div class="calcBreakdown" style="margin-top:12px"><h4>How this week's safe-to-spend is calculated</h4>
      <div class="calcLine"><span>Weekly allocation</span><strong>${money(st.allocation)}</strong></div>
-     <div class="calcLine"><span>Rollover / prior overage</span><strong>${st.carry>=0?'+ ': '− '}${money(Math.abs(st.carry))}</strong></div>
+     <div class="calcLine"><span>${st.carry>=0?'Rollover from prior weeks':'Prior overage carried forward'}</span><strong>${st.carry>=0?'+ ': '− '}${money(Math.abs(st.carry))}</strong></div>
+     <div class="calcLine"><span>Available before spending</span><strong>${money(st.allocation+st.carry)}</strong></div>
      <div class="calcLine"><span>Spent this week</span><strong>− ${money(st.spent)}</strong></div>
-     <div class="calcLine"><span>Weekly balance</span><strong>${money(Math.abs(st.balance))} ${st.balance>=0?'available':'over'}</strong></div>
-     <div class="calcLine"><span>Remaining for whole month</span><strong>${money(Math.abs(month))} ${month>=0?'available':'over'}</strong></div>
-     <div class="calcTotal">Dashboard result: ${money(Math.abs(capped))} ${capped>=0?'safe to spend':'over'}</div>
-   </div>`;
+     <div class="calcLine"><span>This week's balance</span><strong>${money(Math.abs(weeklyBalance))} ${weeklyBalance>=0?'available':'over'}</strong></div>
+   </div>
+   <div class="calcBreakdown" style="margin-top:12px"><h4>Month check</h4>
+     <div class="calcLine"><span>Monthly allocation</span><strong>${money(monthlyAllocation)}</strong></div>
+     <div class="calcLine"><span>Spent this month</span><strong>− ${money(monthlySpent)}</strong></div>
+     <div class="calcLine"><span>Remaining for the month</span><strong>${money(Math.abs(monthBalance))} ${monthBalance>=0?'available':'over'}</strong></div>
+     <div class="calcTotal">Dashboard result: ${money(Math.abs(dashboardResult))} ${dashboardResult>=0?'safe to spend':'over'}</div>
+   </div>
+   <div class="calcMuted" style="margin-top:10px">The dashboard uses the smaller of the weekly balance and the amount still available for this category for the entire month. That prevents a category from showing money available this week after the category has already gone over its monthly budget.</div>`;
  }else{
    body.innerHTML=`<div class="categoryDetailModalSub">${esc(c.name)} · ${d.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</div>
-   <div class="calcBreakdown" style="margin-top:12px"><h4>This month safe-to-spend calculation</h4>
-     <div class="calcLine"><span>Monthly allocation</span><strong>${money(monthlyCategoryBudget(c,d))}</strong></div>
-     <div class="calcLine"><span>Spent this month</span><strong>− ${money(categoryMonthSpend(c,d))}</strong></div>
-     <div class="calcTotal">Result: ${money(Math.abs(month))} ${month>=0?'safe to spend':'over'}</div>
+   <div class="calcBreakdown" style="margin-top:12px"><h4>How this month's safe-to-spend is calculated</h4>
+     <div class="calcLine"><span>Monthly allocation</span><strong>${money(monthlyAllocation)}</strong></div>
+     <div class="calcLine"><span>Spent this month</span><strong>− ${money(monthlySpent)}</strong></div>
+     <div class="calcTotal">Result: ${money(Math.abs(monthBalance))} ${monthBalance>=0?'safe to spend':'over'}</div>
    </div>`;
  }
  modal.classList.remove('hidden');
