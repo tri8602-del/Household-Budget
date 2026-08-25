@@ -189,15 +189,34 @@ function paydayDates(i,m=new Date()){
  return out.sort((a,b)=>a-b)
 }
 function monthlyIncome(m=new Date()){
- const recurring=(data.incomes||[]).reduce((total,i)=>{
-   const amount=Number(i.amount)||0;
-   const dates=paydayDates(i,m);
-   return total+(amount*dates.length);
- },0);
- const bonuses=(data.bonusIncomes||[]).reduce((total,b)=>{
-   return total+(b.month===monthKey(m)?(Number(b.amount)||0):0);
- },0);
- return recurring+bonuses;
+  // Monthly income means every paycheck expected in the selected calendar month.
+  // In particular, a "midMonthEnd" schedule always has two paychecks in the month.
+  // We calculate from the schedule itself rather than relying on a displayed payday list.
+  const recurring=(data.incomes||[]).reduce((total,i)=>{
+    const amount=Number(i.amount)||0;
+    if(!amount) return total;
+    let count=0;
+    switch(i.cadence){
+      case 'midMonthEnd':
+      case 'twiceMonthly':
+        count=2;
+        break;
+      case 'monthly':
+        count=1;
+        break;
+      case 'weekly':
+      case 'biweekly':
+      case 'quarterly':
+        count=paydayDates(i,m).length;
+        break;
+      default:
+        count=paydayDates(i,m).length;
+    }
+    return total + amount*count;
+  },0);
+  const bonuses=(data.bonusIncomes||[]).reduce((total,b)=>
+    total+(b.month===monthKey(m)?(Number(b.amount)||0):0),0);
+  return recurring+bonuses;
 }
 function monthlyCategoryBudget(c,m=new Date()){return c.type==='percent'?monthlyIncome(m)*(c.percent||0)/100:(c.budget||0)}
 function txForMonth(m=new Date()){return (data.transactions||[]).filter(t=>{const d=dateOnly(t.date);return d.getMonth()===m.getMonth()&&d.getFullYear()===m.getFullYear()})}
