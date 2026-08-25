@@ -414,10 +414,16 @@ function setDashboardSafeRange(range){dashboardSafeRange=range==='month'?'month'
 function shiftDashboardWeek(delta){dashboardWeekOffset+=Number(delta)||0;dashboardSafeRange='week';renderDashboard()}
 function goDashboardToday(){dashboardWeekOffset=0;dashboardSafeRange='week';renderDashboard()}
 function dashboardPositionValue(c,range,d=new Date()){
- // Dashboard shows position, not a capped safe-to-spend amount.
- // Weekly = this week's actual category balance, including weekly rollover/overage.
- // Monthly = this month's actual category balance.
- return range==='month' ? monthSafeToSpend(c,d) : weekBalanceForDate(c,d);
+ // Dashboard shows the same position used by the category calculation modal.
+ // Weekly = the selected week's running balance after prior weekly rollovers/overages.
+ // Monthly = the category's month-end position.
+ if(range==='month') return monthSafeToSpend(c,d);
+ const target=startWeek(d);
+ const m=new Date(target.getFullYear(),target.getMonth(),1,12);
+ const calcs=categoryPeriodCalculations(c,m);
+ const match=calcs.find(x=>x.period.start.getTime()===target.getTime());
+ if(match) return +match.balance.toFixed(2);
+ return weekBalanceForDate(c,d);
 }
 function renderOverallBalance(elId,balance){
  const el=document.getElementById(elId); if(!el)return;
