@@ -181,42 +181,56 @@ ensureIds();
 
 function paydayDates(i,m=new Date()){
  const first=dateOnly(i.firstPayDate),start=monthStart(m),end=monthEnd(m),out=[];
- if(i.cadence==='weekly'||i.cadence==='biweekly'){const step=i.cadence==='weekly'?7:14;let d=new Date(first);if(d<start)d=addDays(d,Math.ceil((start-d)/86400000/step)*step);while(d<=end){if(d>=start)out.push(new Date(d));d=addDays(d,step)}}
- else if(i.cadence==='monthly')out.push(new Date(start.getFullYear(),start.getMonth(),Math.min(first.getDate(),end.getDate()),12));
- else if(i.cadence==='twiceMonthly'){out.push(new Date(start.getFullYear(),start.getMonth(),Math.min(first.getDate(),end.getDate()),12));out.push(new Date(start.getFullYear(),start.getMonth(),Math.min(i.secondPayDay||15,end.getDate()),12))}
- else if(i.cadence==='midMonthEnd'){const adj=d=>{const day=d.getDay();if(day===6)d.setDate(d.getDate()-1);if(day===0)d.setDate(d.getDate()-2);return d};out.push(adj(new Date(start.getFullYear(),start.getMonth(),Math.min(i.midMonthDay||15,end.getDate()),12)));out.push(adj(new Date(end.getFullYear(),end.getMonth(),end.getDate(),12)))}
- else if(i.cadence==='quarterly'){let d=new Date(first);while(d<start)d=addMonths(d,3);while(d<=end){if(d>=start)out.push(new Date(d));d=addMonths(d,3)}}
+ if(i.cadence==='weekly'||i.cadence==='biweekly'){
+   // A known payday anchors the repeating schedule. Count ALL occurrences that
+   // fall inside the selected month, including occurrences BEFORE the known date.
+   // This matters when the user enters a later payday (e.g. Aug 21) and there
+   // was another biweekly payday earlier in the same month (e.g. Aug 7).
+   const step=i.cadence==='weekly'?7:14;
+   let d=new Date(first);
+   while(d>start) d=addDays(d,-step);
+   while(d<=end){
+     if(d>=start) out.push(new Date(d));
+     d=addDays(d,step);
+   }
+ } else if(i.cadence==='monthly'){
+   out.push(new Date(start.getFullYear(),start.getMonth(),Math.min(first.getDate(),end.getDate()),12));
+ } else if(i.cadence==='twiceMonthly'){
+   out.push(new Date(start.getFullYear(),start.getMonth(),Math.min(first.getDate(),end.getDate()),12));
+   out.push(new Date(start.getFullYear(),start.getMonth(),Math.min(i.secondPayDay||15,end.getDate()),12));
+ } else if(i.cadence==='midMonthEnd'){
+   const adj=d=>{const day=d.getDay();if(day===6)d.setDate(d.getDate()-1);if(day===0)d.setDate(d.getDate()-2);return d};
+   out.push(adj(new Date(start.getFullYear(),start.getMonth(),Math.min(i.midMonthDay||15,end.getDate()),12)));
+   out.push(adj(new Date(end.getFullYear(),end.getMonth(),end.getDate(),12)));
+ } else if(i.cadence==='quarterly'){
+   let d=new Date(first);
+   while(d>start)d=addMonths(d,-3);
+   while(d<=end){if(d>=start)out.push(new Date(d));d=addMonths(d,3)}
+ }
  return out.sort((a,b)=>a-b)
 }
+
 function monthlyIncome(m=new Date()){
-  // Monthly income means every paycheck expected in the selected calendar month.
-  // In particular, a "midMonthEnd" schedule always has two paychecks in the month.
-  // We calculate from the schedule itself rather than relying on a displayed payday list.
+  // The budget is a MONTHLY plan, not a cash-balance timeline.
+  // Determine how many paychecks belong to the calendar month from each
+  // schedule's dates, then credit the FULL monthly income on day 1.
+  // Pay dates are still used to determine the count for weekly/biweekly income.
   const recurring=(data.incomes||[]).reduce((total,i)=>{
     const amount=Number(i.amount)||0;
     if(!amount) return total;
-    let count=0;
-    switch(i.cadence){
-      case 'midMonthEnd':
-      case 'twiceMonthly':
-        count=2;
-        break;
-      case 'monthly':
-        count=1;
-        break;
-      case 'weekly':
-      case 'biweekly':
-      case 'quarterly':
-        count=paydayDates(i,m).length;
-        break;
-      default:
-        count=paydayDates(i,m).length;
-    }
+    const count=paydayDates(i,m).length;
     return total + amount*count;
   },0);
   const bonuses=(data.bonusIncomes||[]).reduce((total,b)=>
     total+(b.month===monthKey(m)?(Number(b.amount)||0):0),0);
   return recurring+bonuses;
+}
+
+// Income and bills are intentionally NOT prorated by today's date or by the
+// day a paycheck/bill happens. For the budget, the full month's expected
+// income and the full month's bill total are available from day 1.
+function monthlyCashPlan(m=new Date()){
+  return {income:monthlyIncome(m),bills:monthlyBills()};
 }
 function monthlyCategoryBudget(c,m=new Date()){return c.type==='percent'?monthlyIncome(m)*(c.percent||0)/100:(c.budget||0)}
 function txForMonth(m=new Date()){return (data.transactions||[]).filter(t=>{const d=dateOnly(t.date);return d.getMonth()===m.getMonth()&&d.getFullYear()===m.getFullYear()})}
