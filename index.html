@@ -24,12 +24,12 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 <body>
 
 <div id="setupScreen" class="setup hidden"><div class="card">
-<div class="eyebrow">HOUSEHOLD BUDGET · V60</div><h1>Let's set up your budget.</h1>
+<div class="eyebrow">HOUSEHOLD BUDGET · V65</div><h1>Let's set up your budget.</h1>
 <p>This app stores your household data on this device. Export a backup before changing devices or browsers.</p>
 <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div>
-<div id="setup1" class="setupStep active"><h2>1. Add your income</h2><p>Add everyone's recurring income here.</p><div id="setupIncomeList"></div><button class="btn secondary" onclick="setupAddIncome()">＋ Add income</button><div class="actions"><button class="btn" onclick="setupNext(2)">Next</button></div></div>
+<div id="setup1" class="setupStep active"><h2>1. Add your income</h2><p>Add everyone's recurring income here.</p><div class="backupBox" style="margin-bottom:12px"><strong>Already have a budget?</strong><br>Restore an existing backup to continue where you left off.</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"><button type="button" class="btn secondary" onclick="document.getElementById('setupImportFile').click()">Restore Backup</button><input id="setupImportFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"></div><div id="setupIncomeList"></div><button class="btn secondary" onclick="setupAddIncome()">＋ Add income</button><div class="actions"><button class="btn" onclick="setupNext(2)">Next</button></div></div>
 <div id="setup2" class="setupStep"><h2>2. Add your spending categories</h2><p>These are the buckets that will get weekly allowances.</p><div id="setupCategories"></div><button class="btn secondary" onclick="setupAddCategory()">＋ Add category</button><div class="actions"><button class="btn ghost" onclick="setupNext(1)">Back</button><button class="btn" onclick="setupNext(3)">Next</button></div></div>
-<div id="setup3" class="setupStep"><h2>3. You're ready.</h2><p>Monthly bills, savings, and other details can be added from the app.</p><div class="backupBox">You can import an existing backup here if you are moving the app to a new device or Home Screen installation.</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button type="button" class="btn secondary" onclick="document.getElementById('setupImportFile').click()">Import existing backup</button><input id="setupImportFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"></div><div class="actions"><button class="btn ghost" onclick="setupNext(2)">Back</button><button class="btn" onclick="finishSetup()">Open my budget</button></div></div>
+<div id="setup3" class="setupStep"><h2>3. You're ready.</h2><p>Monthly bills, savings, and other details can be added from the app.</p><div class="actions"><button class="btn ghost" onclick="setupNext(2)">Back</button><button class="btn" onclick="finishSetup()">Open my budget</button></div></div>
 </div></div>
 
 <div id="app" class="app hidden">
@@ -68,7 +68,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 
 <main id="view-dashboard">
 <div class="homeAction"><button class="btn" onclick="openExpense()">＋ Add expense</button></div>
-<div class="card"><div class="homeHeader"><div><div class="sectionTitle">Safe to spend</div><div id="safeToSpendDateLabel" class="muted" style="font-size:13px;margin-top:3px"></div><div id="safeWeekNav" class="safeWeekNav hidden"><button type="button" onclick="shiftDashboardWeek(-1)">← Previous</button><button type="button" class="today" onclick="goDashboardToday()">Today</button><button type="button" onclick="shiftDashboardWeek(1)">Next →</button></div></div><div class="range homeRange"><button data-safe="week" onclick="setDashboardSafeRange('week')">Week</button><button data-safe="month" onclick="setDashboardSafeRange('month')">Month</button></div></div><div id="categoryList" class="homeGrid"></div></div>
+<div class="card"><div class="homeHeader"><div><div class="sectionTitle">Spending position</div><div id="safeToSpendDateLabel" class="muted" style="font-size:13px;margin-top:3px"></div><div id="safeWeekNav" class="safeWeekNav hidden"><button type="button" onclick="shiftDashboardWeek(-1)">← Previous</button><button type="button" class="today" onclick="goDashboardToday()">Today</button><button type="button" onclick="shiftDashboardWeek(1)">Next →</button></div></div><div class="range homeRange"><button data-safe="week" onclick="setDashboardSafeRange('week')">Week</button><button data-safe="month" onclick="setDashboardSafeRange('month')">Month</button></div></div><div id="categoryList" class="homeGrid"></div></div>
 <div class="homeOverallGrid">
   <button type="button" class="homeOverallBox calcClickable" onclick="openOverallCalculation('week')">
     <div class="homeOverallLabel" id="homeOverallWeekLabel">Overall · this week</div>
@@ -413,13 +413,11 @@ function dashboardWeekDate(){const d=new Date();d.setDate(d.getDate()+dashboardW
 function setDashboardSafeRange(range){dashboardSafeRange=range==='month'?'month':'week';renderDashboard()}
 function shiftDashboardWeek(delta){dashboardWeekOffset+=Number(delta)||0;dashboardSafeRange='week';renderDashboard()}
 function goDashboardToday(){dashboardWeekOffset=0;dashboardSafeRange='week';renderDashboard()}
-function dashboardSafeValue(c,range,d=new Date()){
- const monthRemaining=monthSafeToSpend(c,d);
- if(range==='month') return monthRemaining;
- // For week view, show the category's actual weekly rollover balance, capped at
- // the amount still available for that category for the whole month. This keeps
- // a category from appearing spendable after it has already gone over its month.
- return Math.min(weekBalanceForDate(c,d), monthRemaining);
+function dashboardPositionValue(c,range,d=new Date()){
+ // Dashboard shows position, not a capped safe-to-spend amount.
+ // Weekly = this week's actual category balance, including weekly rollover/overage.
+ // Monthly = this month's actual category balance.
+ return range==='month' ? monthSafeToSpend(c,d) : weekBalanceForDate(c,d);
 }
 function renderOverallBalance(elId,balance){
  const el=document.getElementById(elId); if(!el)return;
@@ -486,14 +484,14 @@ function overallWeekBreakdown(d=new Date()){
  const carried=Math.max(0,priorAllocation-priorSpent);
  const balance=currentAllocation+carried-currentSpent;
  const cats=data.categories||[];
- return {weekStart:s,weekEnd:e,currentAllocation,carried,currentSpent,items:cats.map(c=>({name:c.name,value:dashboardSafeValue(c,'week',d)})),balance};
+ return {weekStart:s,weekEnd:e,currentAllocation,carried,currentSpent,items:cats.map(c=>({name:c.name,value:dashboardPositionValue(c,'week',d)})),balance};
 }
 function overallMonthBreakdown(m=new Date()){
  const cats=data.categories||[];
  const allocated=cats.reduce((sum,c)=>sum+monthlyCategoryBudget(c,m),0);
  const unallocated=Math.max(0,monthlyAvailable(m)-allocated);
  const priorDebt=householdDebtAtStart(m);
- return {month:m,items:cats.map(c=>({name:c.name,value:dashboardSafeValue(c,'month',m)})),allocated,unallocated,priorDebt,balance:overallMonthBalance(m)};
+ return {month:m,items:cats.map(c=>({name:c.name,value:dashboardPositionValue(c,'month',m)})),allocated,unallocated,priorDebt,balance:overallMonthBalance(m)};
 }
 function openOverallCalculation(range){
  const modal=document.getElementById('overallCalcModal'),body=document.getElementById('overallCalcModalBody');
@@ -536,7 +534,7 @@ function renderDashboard(){
  const nav=document.getElementById('safeWeekNav'); if(nav)nav.classList.toggle('hidden',dashboardSafeRange!=='week');
  document.getElementById('safeToSpendDateLabel').textContent=dashboardSafeRange==='week'?`This week · ${fmt(ws)}–${fmt(we)}`:`This month · ${d.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`;
  document.querySelectorAll('.homeRange button').forEach(b=>b.classList.toggle('active',b.dataset.safe===dashboardSafeRange));
- document.getElementById('categoryList').innerHTML=cats.length?cats.map(c=>{const v=dashboardSafeValue(c,dashboardSafeRange,d);return `<button type="button" class="homeCat" data-category="${esc(c.name)}" onclick="openCategoryDashboardCalculation(this.dataset.category)"><div class="homeCatTop"><span class="categoryIcon" style="color:${c.color}">${budgetIconSvg(c.icon||'money',21)}</span><span class="homeCatName">${esc(c.name)}</span></div><div class="homeCatAmount ${v>=0?'positive':'negative'}">${money(v)}</div><div class="homeCatMeta">safe to spend · tap for calculation</div></button>`}).join(''):'<div class="empty" style="grid-column:1/-1">Add categories on the Budget page.</div>';
+ document.getElementById('categoryList').innerHTML=cats.length?cats.map(c=>{const v=dashboardPositionValue(c,dashboardSafeRange,d);return `<button type="button" class="homeCat" data-category="${esc(c.name)}" onclick="openCategoryDashboardCalculation(this.dataset.category)"><div class="homeCatTop"><span class="categoryIcon" style="color:${c.color}">${budgetIconSvg(c.icon||'money',21)}</span><span class="homeCatName">${esc(c.name)}</span></div><div class="homeCatAmount ${v>=0?'positive':'negative'}">${money(Math.abs(v))} ${v>=0?'under':'over'}</div><div class="homeCatMeta">${dashboardSafeRange==='week'?'Weekly position':'Monthly position'} · tap for calculation</div></button>`}).join(''):'<div class="empty" style="grid-column:1/-1">Add categories on the Budget page.</div>';
  const week=overallWeekBalance(d),month=overallMonthBalance(new Date());
  const weekLabel=document.getElementById('homeOverallWeekLabel');if(weekLabel)weekLabel.textContent=dashboardSafeRange==='week'?`Overall · ${fmt(ws)}–${fmt(we)}`:'Overall · this week';
  const renderOverall=(id,balance)=>{const el=document.getElementById(id);if(!el)return;el.className=`homeOverallAmount ${balance>=0?'positive':'negative'}`;el.textContent=`${money(Math.abs(balance))} ${balance>=0?'under':'over'}`};
@@ -653,9 +651,9 @@ function openCategoryDashboardCalculation(name){
    const st=categoryWeekStateForDate(c,d);
    const weeklyBalance=st.balance;
    // The dashboard cannot tell you to spend more than the category has left for the month.
-   const dashboardResult=Math.min(weeklyBalance,monthBalance);
+   const dashboardResult=weeklyBalance;
    body.innerHTML=`<div class="categoryDetailModalSub">${esc(c.name)} · ${fmt(startWeek(d))}–${fmt(addDays(startWeek(d),6))}</div>
-   <div class="calcBreakdown" style="margin-top:12px"><h4>How this week's safe-to-spend is calculated</h4>
+   <div class="calcBreakdown" style="margin-top:12px"><h4>How this week's position is calculated</h4>
      <div class="calcLine"><span>Weekly allocation</span><strong>${money(st.allocation)}</strong></div>
      <div class="calcLine"><span>${st.carry>=0?'Rollover from prior weeks':'Prior overage carried forward'}</span><strong>${st.carry>=0?'+ ': '− '}${money(Math.abs(st.carry))}</strong></div>
      <div class="calcLine"><span>Available before spending</span><strong>${money(st.allocation+st.carry)}</strong></div>
@@ -666,17 +664,17 @@ function openCategoryDashboardCalculation(name){
      <div class="calcLine"><span>Monthly allocation</span><strong>${money(monthlyAllocation)}</strong></div>
      <div class="calcLine"><span>Spent this month</span><strong>− ${money(monthlySpent)}</strong></div>
      <div class="calcLine"><span>Remaining for the month</span><strong>${money(Math.abs(monthBalance))} ${monthBalance>=0?'available':'over'}</strong></div>
-     <div class="calcTotal">Dashboard result: ${money(Math.abs(dashboardResult))} ${dashboardResult>=0?'safe to spend':'over'}</div>
+     <div class="calcTotal ${dashboardResult>=0?'positive':'negative'}">Dashboard position: ${money(Math.abs(dashboardResult))} ${dashboardResult>=0?'under':'over'}</div>
    </div>
-   <div class="calcMuted" style="margin-top:10px">The dashboard uses the smaller of the weekly balance and the amount still available for this category for the entire month. That prevents a category from showing money available this week after the category has already gone over its monthly budget.</div>`;
+   <div class="calcMuted" style="margin-top:10px">The dashboard shows the actual weekly position. It is not capped at zero and it does not use the month's remaining category balance to change the weekly position.</div>`;
  }else{
    body.innerHTML=`<div class="categoryDetailModalSub">${esc(c.name)} · ${d.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</div>
-   <div class="calcBreakdown" style="margin-top:12px"><h4>How this month's safe-to-spend is calculated</h4>
+   <div class="calcBreakdown" style="margin-top:12px"><h4>How this month's position is calculated</h4>
      <div class="calcLine"><span>Monthly allocation</span><strong>${money(monthlyAllocation)}</strong></div>
      <div class="calcLine"><span>Spent this month</span><strong>− ${money(monthlySpent)}</strong></div>
      <div class="calcLine"><span>Category balance</span><strong>${money(Math.abs(monthBalance))} ${monthBalance>=0?'available':'over'}</strong></div>
      ${householdDebt?`<div class="calcLine"><span>Household deficit carried into month</span><strong>− ${money(householdDebt)}</strong></div>`:''}
-     <div class="calcTotal">Result: ${money(Math.abs(monthBalance))} ${monthBalance>=0?'safe to spend':'over'}</div>
+     <div class="calcTotal">Dashboard position: ${money(Math.abs(monthBalance))} ${monthBalance>=0?'under':'over'}</div>
    </div>`;
  }
  modal.classList.remove('hidden');
@@ -709,7 +707,7 @@ function renderCategoryDetail(){
  const monthEndBalance=calcs.length?calcs[calcs.length-1].balance:startingRollover+monthAllocated-monthSpent;
  body.innerHTML=`
   <div class="categoryDetailModalSub">${esc(c.name)} · ${m.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</div>
-  <div class="calcMuted" style="margin-top:10px">The dashboard's <strong>safe to spend</strong> number is for the current week. The month-end figure below is the full-month calculation.</div>
+  <div class="calcMuted" style="margin-top:10px">The dashboard shows the category's spending position for the selected period. The month-end figure below is the full-month calculation.</div>
   <div class="detailSummary">
    <div class="detailStat"><div class="label">Allocated for month</div><div class="value">${money(monthAllocated)}</div></div>
    <div class="detailStat"><div class="label">Starting rollover</div><div class="value">${money(startingRollover)}</div></div>
