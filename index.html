@@ -120,7 +120,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 
 <script>
 const KEY='householdBudgetAlpha_v1';
-const APP_VERSION='V57';
+const APP_VERSION='V59';
 const colors=['#4F8EF7','#F4A300','#C65CEB','#35AFA0','#E85D75','#7A6FF0','#55A630','#F28482'];
 const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],bonusIncomes:[],bills:[],categories:[],transactions:[],categoryCarry:{},rolloverDecisions:{},lastMonth:null,people:['Shared','Lindsay','Matthew']};
 let data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
@@ -134,7 +134,17 @@ data.categories=data.categories.map((c,i)=>{
   }
   return out;
 });
-data.categoryWeekCarry=data.categoryWeekCarry||{};data.people=Array.from(new Set((data.people||['Shared','Lindsay','Matthew']).filter(Boolean)));if(!data.people.includes('Shared'))data.people.unshift('Shared');
+data.categoryWeekCarry=data.categoryWeekCarry||{};
+// V59 migration: weekly rollover never crosses a calendar-month boundary.
+// Clear any old cross-month carry values created by earlier versions.
+Object.keys(data.categoryWeekCarry).forEach(name=>{
+  const weeks=data.categoryWeekCarry[name]||{};
+  Object.keys(weeks).forEach(k=>{
+    const s=new Date(k+'T12:00:00'), prev=addDays(s,-7);
+    if(s.getMonth()!==prev.getMonth()||s.getFullYear()!==prev.getFullYear()) weeks[k]=0;
+  });
+});
+ data.people=Array.from(new Set((data.people||['Shared','Lindsay','Matthew']).filter(Boolean)));if(!data.people.includes('Shared'))data.people.unshift('Shared');
 
 const iconSvgs={
 money:'<circle cx="12" cy="12" r="8"/><path d="M12 7v10M15 9.5c-.7-1-1.8-1.5-3-1.5-1.7 0-3 1-3 2.3 0 3.2 6 1.2 6 4.2 0 1.3-1.3 2.5-3 2.5-1.2 0-2.4-.5-3.1-1.5"/>',
@@ -285,7 +295,34 @@ function fixedMonthlyBudget(c,m=new Date()){
  return Number(c.budget)||0;
 }
 function fixedCategoryTotal(m=new Date()){return (data.categories||[]).reduce((sum,c)=>sum+fixedMonthlyBudget(c,m),0)}
-function percentagePool(m=new Date()){return Math.max(0,monthlyAvailable(m)-fixedCategoryTotal(m))}
+function baseMonthlyAvailable(m=new Date()){return monthlyIncome(m)-monthlyBills()-(+data.savingsGoal||0)}
+function householdSpendingForMonth(m=new Date()){return txForMonth(m).reduce((sum,t)=>sum+(Number(t.amount)||0),0)}
+function monthKeyFromDate(d){return monthKey(d)}
+function previousMonth(m=new Date()){return addMonths(new Date(m.getFullYear(),m.getMonth(),1,12),-1)}
+function householdDebtAtStart(m=new Date()){
+  const target=new Date(m.getFullYear(),m.getMonth(),1,12);
+  const prev=previousMonth(target);
+  const earliestTx=(data.transactions||[]).map(t=>dateOnly(t.date)).sort((a,b)=>a-b)[0];
+  if(!earliestTx)return 0;
+  let cur=new Date(earliestTx.getFullYear(),earliestTx.getMonth(),1,12);
+  let debt=0;
+  while(cur<target){
+    const base=baseMonthlyAvailable(cur);
+    const spent=householdSpendingForMonth(cur);
+    debt=Math.max(0,+((debt+spent-base).toFixed(2)));
+    cur=addMonths(cur,1);
+  }
+  return debt;
+}
+function householdDebtAtEnd(m=new Date()){
+  const startDebt=householdDebtAtStart(m);
+  return Math.max(0,+((startDebt+householdSpendingForMonth(m)-baseMonthlyAvailable(m)).toFixed(2)));
+}
+function fixedCategoryTotalAfterDebt(m=new Date()){return (data.categories||[]).reduce((sum,c)=>sum+fixedMonthlyBudget(c,m),0)}
+function monthlyAvailable(m=new Date()){
+  return Math.max(0,baseMonthlyAvailable(m)-householdDebtAtStart(m));
+}
+function percentagePool(m=new Date()){return Math.max(0,monthlyAvailable(m)-fixedCategoryTotalAfterDebt(m))}
 function monthlyCategoryBudget(c,m=new Date()){return c.type==='percent'?percentagePool(m)*(Number(c.percent)||0)/100:fixedMonthlyBudget(c,m)}
 function txForMonth(m=new Date()){return (data.transactions||[]).filter(t=>{const d=dateOnly(t.date);return d.getMonth()===m.getMonth()&&d.getFullYear()===m.getFullYear()})}
 function weekKey(d=new Date()){const s=startWeek(d);return s.toISOString().slice(0,10)}
@@ -305,7 +342,12 @@ function ensureWeeklyRollover(){
      const next=addDays(w,7), nk=weekKey(next);
      if(data.categoryWeekCarry[c.name][nk]===undefined){
        const balance=weeklyBudgetForWeek(c,w)+weekCarry(c,w)-spentForWeek(c,w);
-       data.categoryWeekCarry[c.name][nk]=+balance.toFixed(2);
+       // Weekly rollover is only a within-month timing mechanism. Any
+       // positive balance is reset at the month boundary; a negative balance
+       // can reduce the next week, but the month itself is reconciled at the
+       // household level instead of carrying a category deficit forward.
+       const sameMonth=next.getMonth()===w.getMonth()&&next.getFullYear()===w.getFullYear();
+       data.categoryWeekCarry[c.name][nk]=sameMonth?+balance.toFixed(2):0;
      }
      w=next;
    }
@@ -415,8 +457,7 @@ function overallWeekBalance(d=new Date()){
  return cats.reduce((sum,c)=>sum+dashboardSafeValue(c,'week',d),0);
 }
 function overallMonthBalance(m=new Date()){
- const cats=data.categories||[];
- return cats.reduce((sum,c)=>sum+dashboardSafeValue(c,'month',m),0);
+ return monthlyAvailable(m)-categoryMonthSpendTotal(m);
 }
 function overallWeekBreakdown(d=new Date()){
  const cats=data.categories||[];
@@ -424,7 +465,9 @@ function overallWeekBreakdown(d=new Date()){
 }
 function overallMonthBreakdown(m=new Date()){
  const cats=data.categories||[];
- return {month:m,items:cats.map(c=>({name:c.name,value:dashboardSafeValue(c,'month',m)})),balance:overallMonthBalance(m)};
+ const allocated=cats.reduce((sum,c)=>sum+monthlyCategoryBudget(c,m),0);
+ const unallocated=Math.max(0,monthlyAvailable(m)-allocated);
+ return {month:m,items:cats.map(c=>({name:c.name,value:dashboardSafeValue(c,'month',m)})),allocated,unallocated,priorDebt:householdDebtAtStart(m),balance:overallMonthBalance(m)};
 }
 function openOverallCalculation(range){
  const modal=document.getElementById('overallCalcModal'),body=document.getElementById('overallCalcModalBody');
@@ -433,11 +476,12 @@ function openOverallCalculation(range){
  const x=range==='week'?overallWeekBreakdown(d):overallMonthBreakdown(d);
  const fmt=o=>o.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
  body.innerHTML=`<div class="categoryDetailModalSub">${range==='week'?`${fmt(x.weekStart)}–${fmt(x.weekEnd)}`:d.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</div>
- <div class="calcBreakdown"><h4>${range==='week'?'Category safe-to-spend combined':'Category safe-to-spend combined'}</h4>
+ <div class="calcBreakdown"><h4>Category safe-to-spend combined</h4>
  ${x.items.map(i=>`<div class="calcLine"><span>${esc(i.name)}</span><strong class="${i.value>=0?'positive':'negative'}">${i.value>=0?'+ ': '− '}${money(Math.abs(i.value))}</strong></div>`).join('')}
+ ${range==='month'?`<div class="calcLine"><span>Unallocated household cushion</span><strong class="positive">+ ${money(x.unallocated)}</strong></div>${x.priorDebt?`<div class="calcLine"><span>Prior household deficit</span><strong class="negative">− ${money(x.priorDebt)}</strong></div>`:''}`:''}
  <div class="calcTotal">Result: ${money(Math.abs(x.balance))} ${x.balance>=0?'under':'over'}</div>
  </div>
- <div class="calcMuted" style="margin-top:10px">This is the combined total of the category safe-to-spend amounts shown on the dashboard. Positive amounts are money still available; negative amounts are category overages.</div>`;
+ <div class="calcMuted" style="margin-top:10px">Positive category balances never roll into the next month. A household deficit can reduce the next month's spending capacity; a good month first repairs that deficit, and only money left after recovery becomes extra savings.</div>`;
  modal.classList.remove('hidden');
 }
 function closeOverallCalculation(){const m=document.getElementById('overallCalcModal');if(m)m.classList.add('hidden')}
@@ -556,6 +600,7 @@ function openCategoryDashboardCalculation(name){
  const monthlyAllocation=monthlyCategoryBudget(c,d);
  const monthlySpent=categoryMonthSpend(c,d);
  const monthBalance=monthlyAllocation-monthlySpent;
+ const householdDebt=householdDebtAtStart(d);
  if(dashboardSafeRange==='week'){
    const st=categoryWeekStateForDate(c,d);
    const weeklyBalance=st.balance;
@@ -581,6 +626,8 @@ function openCategoryDashboardCalculation(name){
    <div class="calcBreakdown" style="margin-top:12px"><h4>How this month's safe-to-spend is calculated</h4>
      <div class="calcLine"><span>Monthly allocation</span><strong>${money(monthlyAllocation)}</strong></div>
      <div class="calcLine"><span>Spent this month</span><strong>− ${money(monthlySpent)}</strong></div>
+     <div class="calcLine"><span>Category balance</span><strong>${money(Math.abs(monthBalance))} ${monthBalance>=0?'available':'over'}</strong></div>
+     ${householdDebt?`<div class="calcLine"><span>Household deficit carried into month</span><strong>− ${money(householdDebt)}</strong></div>`:''}
      <div class="calcTotal">Result: ${money(Math.abs(monthBalance))} ${monthBalance>=0?'safe to spend':'over'}</div>
    </div>`;
  }
@@ -694,7 +741,9 @@ function renderBudget(){
  const available=monthlyAvailable(),allocated=budgetAllocated(),remaining=available-allocated;
  document.getElementById('flowIncome').textContent=money(monthlyIncome());document.getElementById('flowBills').textContent=money(monthlyBills());document.getElementById('flowSavings').textContent=money(data.savingsGoal||0);
  document.getElementById('budgetAvailable').textContent=money(available);document.getElementById('budgetAllocated').textContent=money(allocated);document.getElementById('budgetUnallocated').textContent=money(remaining);
- document.getElementById('budgetWarning').innerHTML=remaining<0?`<div class="warning">⚠️ Your categories are ${money(Math.abs(remaining))} over the money available after bills and savings.</div>`:`<div class="good">✓ ${money(remaining)} remains unallocated.</div>`;
+ const priorDebt=householdDebtAtStart(new Date());
+ const debtEnd=householdDebtAtEnd(new Date());
+ document.getElementById('budgetWarning').innerHTML=remaining<0?`<div class="warning">⚠️ Your categories are ${money(Math.abs(remaining))} over the money available after bills and savings.</div>`:priorDebt?`<div class="warning">⚠️ ${money(priorDebt)} of prior household deficit is reducing this month's spending capacity. ${debtEnd>0?`${money(debtEnd)} would remain if this month ended at the current spending level.`:'This month can fully recover the deficit if spending stays within the available amount.'}</div>`:`<div class="good">✓ ${money(remaining)} remains unallocated. Unused category allocations do not roll into next month; they become extra savings.</div>`;
  document.getElementById('budgetMatrix').innerHTML=(data.categories||[]).map((c,i)=>{const m=monthlyCategoryBudget(c),w=weekly(c);const basis=c.type==='percent'?`${Number(c.percent||0).toFixed(2)}% of remaining`:c.allocationMode==='weekly'?'Fixed weekly':'Fixed monthly';return `<tr><td><button type="button" class="budgetCategoryName" onclick="openCategoryDetail('${esc(c.name)}')"><span class="categoryIcon" style="color:${c.color}">${budgetIconSvg(c.icon||'money',22)}</span> ${esc(c.name)}</button></td><td><span class="muted" style="font-size:12px">${esc(basis)}</span></td><td class="num">${money(m)}</td><td class="num">${money(w)}</td><td style="white-space:nowrap"><button type="button" class="editLink" onclick="openCategoryAllocation(${i})">Edit amount</button> <button type="button" class="editLink" onclick="openCategoryDetail('${esc(c.name)}')">Details</button></td></tr>`}).join('')||'<tr><td colspan="5" class="empty">Add categories to begin.</td></tr>';
 }
 function changeAllocationType(i,mode){data.categories[i].allocationMode=mode;localStorage.setItem(KEY,JSON.stringify(data));renderBudget()}
