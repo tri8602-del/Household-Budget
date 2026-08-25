@@ -182,16 +182,25 @@ ensureIds();
 function paydayDates(i,m=new Date()){
  const first=dateOnly(i.firstPayDate),start=monthStart(m),end=monthEnd(m),out=[];
  if(i.cadence==='weekly'||i.cadence==='biweekly'){
-   // A known payday anchors the repeating schedule. Count ALL occurrences that
-   // fall inside the selected month, including occurrences BEFORE the known date.
-   // This matters when the user enters a later payday (e.g. Aug 21) and there
-   // was another biweekly payday earlier in the same month (e.g. Aug 7).
+   // Use the known payday as an anchor for the repeating schedule. The
+   // calculation is deliberately mathematical rather than dependent on the
+   // current day, so a later known payday (e.g. Aug 21) still produces earlier
+   // paydays in the same month (e.g. Aug 7).
    const step=i.cadence==='weekly'?7:14;
-   let d=new Date(first);
-   while(d>start) d=addDays(d,-step);
+   const diffDays=Math.floor((start.getTime()-first.getTime())/86400000);
+   const k=Math.ceil(diffDays/step);
+   let d=addDays(first,k*step);
    while(d<=end){
      if(d>=start) out.push(new Date(d));
      d=addDays(d,step);
+   }
+   // A biweekly month can have 2 or 3 paydays, never 1. If the anchor is in
+   // this month and numerical/date parsing leaves only one occurrence, include
+   // the immediately preceding scheduled payday. This also makes the intended
+   // behavior explicit for a known payday entered late in the month.
+   if(i.cadence==='biweekly' && out.length===1){
+     const prev=addDays(out[0],-14);
+     if(prev>=start) out.unshift(prev);
    }
  } else if(i.cadence==='monthly'){
    out.push(new Date(start.getFullYear(),start.getMonth(),Math.min(first.getDate(),end.getDate()),12));
