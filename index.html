@@ -33,7 +33,16 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 .dashboardHero{padding:8px 2px 12px}.dashboardHeroTop{align-items:flex-end}.dashboardEyebrow{font-size:11px}.dashboardTitle{font-size:28px;margin:5px 0 5px}.dashboardSummaryGrid{gap:12px;margin-bottom:14px}.dashSummaryCard{display:flex;gap:12px;align-items:flex-start;padding:14px 15px;min-height:126px}.dashCardIcon{width:42px;height:42px;flex:0 0 42px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--accent2);color:var(--accent);font-weight:950;font-size:19px}.dashSummaryCardBudget .dashCardIcon{background:#eef4ff;color:#3477d8}.dashSummaryCardRemaining .dashCardIcon{background:#f3effc;color:#7452bd}.dashCardBody{min-width:0;flex:1}.dashSummaryValue{font-size:24px;margin-top:6px}.dashSummarySub{font-size:10px;margin-top:5px}.dashCardLink,.dashWideLink{border:0;background:var(--accent2);color:var(--accent);font-weight:800;border-radius:9px;padding:7px 10px;font-size:10px;margin-top:10px;width:100%;text-align:left}.dashCardLink span,.dashWideLink span{float:right;font-size:15px;line-height:10px}.dashboardMainGrid{grid-template-columns:minmax(0,1.35fr) minmax(290px,.9fr);gap:14px}.dashboardDonutLayout{grid-template-columns:minmax(190px,230px) 1fr;gap:18px}.dashboardDonut{width:220px;padding:22%}.dashboardDonutHole strong{font-size:20px}.dashboardDonutLegend{gap:7px}.dashboardLegendPosition{min-width:70px}.dashboardPositionCard{padding-bottom:6px}.miniToggle{display:flex;background:#edf2ef;border-radius:10px;padding:2px}.miniToggle button{border:0;background:transparent;color:var(--muted);font-size:10px;font-weight:850;padding:5px 8px;border-radius:8px}.miniToggle button.active{background:#fff;color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.08)}.dashboardSavingsRow{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:9px;border-top:1px solid var(--line);padding:13px 2px 5px}.dashboardSavingsRow b{display:block;font-size:13px}.dashboardSavingsRow small{display:block;color:var(--muted);font-size:10px;margin-top:3px}.dashWideLink{margin-top:10px}.dashboardQuickActions{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:14px 0 6px}.dashboardQuickActions .btn{width:100%;padding:9px 8px;font-size:10px}.dashboardCategorySection{margin-top:14px}
 @media(max-width:700px){.dashboardMainGrid{grid-template-columns:1fr}.dashboardDonutLayout{grid-template-columns:minmax(190px,230px) 1fr}.dashboardQuickActions{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:650px){.app{padding:14px 12px 78px}.dashboardHeroTop{align-items:flex-start;flex-direction:column}.dashboardHero .homeRange{align-self:stretch}.dashboardHero .homeRange button{flex:1}.dashboardSummaryGrid{grid-template-columns:1fr 1fr;gap:9px}.dashSummaryCard{min-height:112px;padding:12px}.dashSummaryCardSpending{grid-column:1/-1}.dashSummaryValue{font-size:21px}.dashCardIcon{width:36px;height:36px;flex-basis:36px;font-size:16px}.dashboardDonutLayout{grid-template-columns:1fr;gap:12px}.dashboardDonut{width:205px}.dashboardDonutWrap{justify-content:center}.dashboardQuickActions{grid-template-columns:1fr 1fr}.dashboardQuickActions .btn{font-size:10px}.nav{display:none}.dashboardTitle{font-size:25px}}
-</style></head>
+</style>
+<style>
+/* V84 dashboard polish: match approved mockup closely */
+.nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:72px}.nav .navIcon{font-size:16px;line-height:1;font-weight:900;color:var(--muted)}.nav button.active .navIcon{color:var(--accent)}
+.dashboardHero{padding:8px 2px 14px}.dashboardHeroTop{align-items:flex-end}.dashboardEyebrow{font-size:11px}.dashboardTitle{font-size:28px;margin:5px 0 5px}.dashboardDate{font-size:12px}.dashboardSummaryGrid{gap:12px;margin-bottom:14px}.dashSummaryCard{min-height:126px;padding:14px 15px}.dashSummaryValue{font-size:24px;margin-top:6px}.dashSummarySub{font-size:10px;margin-top:5px}.dashBudgetMeta{display:flex;justify-content:space-between;gap:8px;margin-top:8px;font-size:10px;color:var(--muted)}.dashBudgetMeta b{color:var(--muted);white-space:nowrap}.dashProgress{height:6px;border-radius:99px;background:#e6e9e7;overflow:hidden;margin-top:6px}.dashProgress span{display:block;height:100%;border-radius:99px;background:#3477d8}.dashCardLink,.dashWideLink{padding:7px 10px;font-size:10px;margin-top:10px}.dashboardMainGrid{grid-template-columns:minmax(0,1.35fr) minmax(300px,.85fr);gap:14px}.dashboardDonutCard,.dashboardPositionCard{min-height:0}.dashboardDonutLayout{grid-template-columns:minmax(190px,220px) 1fr;gap:18px}.dashboardDonut{width:205px;padding:22%}.dashboardDonutHole strong{font-size:19px}.dashboardDonutLegend{gap:7px}.dashboardLegendName{gap:6px}.dashboardLegendIcon{width:15px;height:15px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 15px}.dashboardLegendIcon svg{width:15px;height:15px}.dashboardLegendPosition{min-width:76px}.dashboardPositionCard{padding-bottom:6px}.dashboardPositionRow{padding:13px 2px}.dashboardSavingsRow{padding:13px 2px 5px}.savingsIcon{color:#7452bd;background:#f3effc}.dashboardQuickActions{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:14px 0 6px}.dashboardQuickActions .btn{width:100%;padding:9px 8px;font-size:10px}.dashboardCategorySection{margin-top:14px}
+/* An 11-inch iPad in portrait is ~820 CSS px wide, so keep the two main dashboard panels side-by-side. */
+@media(max-width:700px){.dashboardMainGrid{grid-template-columns:1fr}.dashboardDonutLayout{grid-template-columns:minmax(190px,230px) 1fr}.dashboardQuickActions{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){.dashboardSummaryGrid{grid-template-columns:1fr 1fr}.dashSummaryCardSpending{grid-column:1/-1}.dashboardDonutLayout{grid-template-columns:1fr}.dashboardDonut{width:205px}.dashboardQuickActions{grid-template-columns:1fr 1fr}}
+</style>
+</head>
 <body>
 
 <div id="setupScreen" class="setup hidden"><div class="card">
@@ -56,7 +65,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 <div id="app" class="app hidden">
 <div class="top"><div class="brand">Household Budget</div><button class="btn small secondary" onclick="showView('settings')">⚙︎</button></div>
 <div class="nav">
-<button data-view="dashboard" class="active" onclick="showView('dashboard')">Dashboard</button><button data-view="spending" onclick="showView('spending')">Spending</button><button data-view="budget" onclick="showView('budget')">Budget</button><button data-view="cashflow" onclick="showView('cashflow')">Cash Flow</button><button data-view="income" onclick="showView('income')">Income</button><button data-view="bills" onclick="showView('bills')">Bills</button><button data-view="settings" onclick="showView('settings')">Settings</button>
+<button data-view="dashboard" class="active" onclick="showView('dashboard')"><span class="navIcon">⌂</span><span>Dashboard</span></button><button data-view="spending" onclick="showView('spending')"><span class="navIcon">◔</span><span>Spending</span></button><button data-view="budget" onclick="showView('budget')"><span class="navIcon">▣</span><span>Budget</span></button><button data-view="cashflow" onclick="showView('cashflow')"><span class="navIcon">$</span><span>Cash Flow</span></button><button data-view="income" onclick="showView('income')"><span class="navIcon">▤</span><span>Income</span></button><button data-view="bills" onclick="showView('bills')"><span class="navIcon">▦</span><span>Bills</span></button><button data-view="settings" onclick="showView('settings')"><span class="navIcon">⚙</span><span>Settings</span></button>
 </div>
 
 <div id="overallCalcModal" class="modal hidden">
@@ -90,19 +99,19 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 <main id="view-dashboard">
 <div class="dashboardHero">
   <div class="dashboardHeroTop">
-    <div><div class="dashboardEyebrow">Household overview</div><h1 class="dashboardTitle" id="dashboardGreeting">Good afternoon, Lindsay! ☀️</h1><div class="muted dashboardDate" id="safeToSpendDateLabel"></div></div>
+    <div><div class="dashboardEyebrow">Household overview</div><h1 class="dashboardTitle" id="dashboardGreeting">Good morning, Lindsay! ☀️</h1><div class="muted dashboardDate" id="safeToSpendDateLabel"></div></div>
     <div class="range homeRange"><button data-safe="week" onclick="setDashboardSafeRange('week')">Week</button><button data-safe="month" onclick="setDashboardSafeRange('month')">Month</button></div>
   </div>
   <div id="safeWeekNav" class="safeWeekNav hidden"><button type="button" onclick="shiftDashboardWeek(-1)">← Previous</button><button type="button" class="today" onclick="goDashboardToday()">Today</button><button type="button" onclick="shiftDashboardWeek(1)">Next →</button></div>
 </div>
 <div class="dashboardSummaryGrid">
   <div class="dashSummaryCard dashSummaryCardSpending"><div class="dashCardIcon">▣</div><div class="dashCardBody"><div class="dashSummaryLabel" id="dashSpendLabel">This week's spending</div><div class="dashSummaryValue neutral" id="dashSpendValue">$0</div><div class="dashSummarySub">Total so far</div><button class="dashCardLink" onclick="setView('spending')">View spending details <span>›</span></button></div></div>
-  <div class="dashSummaryCard dashSummaryCardBudget"><div class="dashCardIcon">▤</div><div class="dashCardBody"><div class="dashSummaryLabel" id="dashPositionLabel">Weekly budget</div><div class="dashSummaryValue" id="dashPositionValue">$0 under</div><div class="dashSummarySub" id="dashPositionSub">Planned for the week</div><button class="dashCardLink" onclick="setView('budget')">View budget details <span>›</span></button></div></div>
-  <div class="dashSummaryCard dashSummaryCardRemaining"><div class="dashCardIcon">↘</div><div class="dashCardBody"><div class="dashSummaryLabel">Weekly remaining</div><div class="dashSummaryValue" id="dashMonthValue">$0 under</div><div class="dashSummarySub" id="dashMonthSub">Left to spend</div><button class="dashCardLink" onclick="openOverallCalculation('week')">View remaining details <span>›</span></button></div></div>
+  <div class="dashSummaryCard dashSummaryCardBudget"><div class="dashCardIcon">▤</div><div class="dashCardBody"><div class="dashSummaryLabel" id="dashBudgetLabel">Weekly budget</div><div class="dashSummaryValue neutral" id="dashBudgetValue">$0</div><div class="dashBudgetMeta"><span>Planned for the week</span><b id="dashBudgetUsed">0% used</b></div><div class="dashProgress"><span id="dashBudgetProgress"></span></div><button class="dashCardLink" onclick="setView('budget')">View budget details <span>›</span></button></div></div>
+  <div class="dashSummaryCard dashSummaryCardRemaining"><div class="dashCardIcon">🐷</div><div class="dashCardBody"><div class="dashSummaryLabel" id="dashRemainingLabel">Weekly remaining</div><div class="dashSummaryValue" id="dashRemainingValue">$0</div><div class="dashSummarySub" id="dashRemainingSub">Left to spend</div><button class="dashCardLink" onclick="openOverallCalculation('week')">View remaining details <span>›</span></button></div></div>
 </div>
 <div class="dashboardMainGrid">
   <section class="card dashboardDonutCard">
-    <div class="dashboardSectionHead"><div><div class="sectionTitle" id="dashboardDonutLabel">Where did our money go this week?</div><div class="muted dashboardHint">Spending mix for the selected period</div></div></div>
+    <div class="dashboardSectionHead"><div><div class="sectionTitle" id="dashboardDonutLabel">Where did our money go this week?</div></div></div>
     <div class="dashboardDonutLayout">
       <div class="dashboardDonutWrap"><div id="dashboardDonut" class="dashboardDonut"><div class="dashboardDonutHole"><strong id="dashboardDonutTotal">$0</strong><span>spent</span></div></div></div>
       <div id="dashboardDonutLegend" class="dashboardDonutLegend"></div>
@@ -110,10 +119,10 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
     <button class="dashWideLink" onclick="setView('spending')">View all spending <span>›</span></button>
   </section>
   <section class="card dashboardPositionCard">
-    <div class="dashboardSectionHead"><div><div class="sectionTitle">Your position</div><div class="muted dashboardHint">Green is under budget · red is over</div></div><div class="miniToggle"><button class="active">Week</button><button>Month</button></div></div>
-    <button type="button" class="dashboardPositionRow calcClickable" onclick="openOverallCalculation('week')"><span class="dashboardPositionIcon">↘</span><span><b>Overall this week</b><small>Overall household position</small></span><strong id="dashPositionMiniWeek" class="dashSummaryValue">$0 under</strong><span>›</span></button>
-    <button type="button" class="dashboardPositionRow calcClickable" onclick="openOverallCalculation('month')"><span class="dashboardPositionIcon">▣</span><span><b>Overall this month</b><small>Overall household position</small></span><strong id="dashPositionMiniMonth" class="dashSummaryValue">$0 under</strong><span>›</span></button>
-    <div class="dashboardSavingsRow"><span class="dashboardPositionIcon">◎</span><span><b>Savings progress</b><small>Monthly savings goal</small></span><strong>—</strong></div>
+    <div class="dashboardSectionHead"><div><div class="sectionTitle">Your position</div></div><div class="miniToggle"><button class="active">Week</button><button>Month</button></div></div>
+    <button type="button" class="dashboardPositionRow calcClickable" onclick="openOverallCalculation('week')"><span class="dashboardPositionIcon">↗</span><span><b>Overall this week</b><small>Under budget</small></span><strong id="dashPositionMiniWeek" class="dashSummaryValue">$0 under</strong><span>›</span></button>
+    <button type="button" class="dashboardPositionRow calcClickable" onclick="openOverallCalculation('month')"><span class="dashboardPositionIcon">▣</span><span><b>Overall this month</b><small>You're making great progress!</small></span><strong id="dashPositionMiniMonth" class="dashSummaryValue">$0 under</strong><span>›</span></button>
+    <div class="dashboardSavingsRow"><span class="dashboardPositionIcon savingsIcon">◎</span><span><b>Savings goal</b><small>Monthly savings goal</small></span><strong id="dashboardSavingsGoal">$0</strong></div>
   </section>
 </div>
 <div class="dashboardQuickActions">
@@ -124,6 +133,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
   <div id="categoryList" class="homeGrid"></div>
 </div>
 </main>
+
 
 <main id="view-budget" class="hidden">
 <div class="card"><div class="row"><div><div class="sectionTitle">Budget overview</div><div class="muted" style="font-size:13px;margin-top:3px">See where the month's money goes before assigning category allowances.</div></div><button class="btn small secondary" onclick="openCategorySettings()">⚙ Categories</button></div>
@@ -740,12 +750,18 @@ function renderDashboard(){
  document.querySelectorAll('.homeRange button').forEach(b=>b.classList.toggle('active',b.dataset.safe===dashboardSafeRange));
  const spendingLabel=document.getElementById('dashSpendLabel'); if(spendingLabel)spendingLabel.textContent=dashboardSafeRange==='week'?"This week's spending":"This month's spending";
  const spendingValue=document.getElementById('dashSpendValue'); if(spendingValue)spendingValue.textContent=money(totalSpent);
- const positionLabel=document.getElementById('dashPositionLabel'); if(positionLabel)positionLabel.textContent=dashboardSafeRange==='week'?'Weekly position':'Monthly position';
- const renderDashAmount=(id,balance,words=true)=>{const el=document.getElementById(id);if(!el)return;el.className=`dashSummaryValue ${balance>=0?'positive':'negative'}`;el.textContent=words?`${money(Math.abs(balance))} ${balance>=0?'under':'over'}`:money(Math.abs(balance));};
- renderDashAmount('dashPositionValue',selectedPosition);
- renderDashAmount('dashMonthValue',monthPosition);
- const monthSub=document.getElementById('dashMonthSub');if(monthSub)monthSub.textContent=`${monthPosition>=0?'Under':'Over'} budget this month`;
- const selectedSub=document.getElementById('dashPositionSub');if(selectedSub)selectedSub.textContent=dashboardSafeRange==='week'?`Week of ${fmt(ws)}`:d.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+ const weeklyBudgetTotal=(data.categories||[]).reduce((sum,c)=>sum+weeklyBudgetForWeek(c,ws),0);
+ const weeklyRollover=(data.categories||[]).reduce((sum,c)=>sum+weekCarry(c,ws),0);
+ const weeklyAvailable=weeklyBudgetTotal+weeklyRollover;
+ const renderDashAmount=(id,balance)=>{const el=document.getElementById(id);if(!el)return;el.className=`dashSummaryValue ${balance>=0?'positive':'negative'}`;el.textContent=`${money(Math.abs(balance))} ${balance>=0?'under':'over'}`;};
+ const budgetValue=document.getElementById('dashBudgetValue');if(budgetValue)budgetValue.textContent=money(weeklyAvailable);
+ const budgetUsed=document.getElementById('dashBudgetUsed');if(budgetUsed){const used=weeklyAvailable>0?Math.round(totalSpent/weeklyAvailable*100):0;budgetUsed.textContent=`${Math.max(0,used)}% used`;}
+ const budgetProgress=document.getElementById('dashBudgetProgress');if(budgetProgress)budgetProgress.style.width=`${Math.min(100,weeklyAvailable>0?totalSpent/weeklyAvailable*100:0)}%`;
+ const remainingLabel=document.getElementById('dashRemainingLabel');if(remainingLabel)remainingLabel.textContent=dashboardSafeRange==='week'?'Weekly remaining':'Monthly remaining';
+ const remaining=selectedPosition;
+ renderDashAmount('dashRemainingValue',remaining);
+ const remainingSub=document.getElementById('dashRemainingSub');if(remainingSub)remainingSub.textContent=remaining>=0?'Left to spend':'Over budget';
+ const savings=document.getElementById('dashboardSavingsGoal');if(savings)savings.textContent=money(data.savingsGoal||0);
 
  // Category position cards
  const list=document.getElementById('categoryList');
@@ -767,7 +783,7 @@ function renderDashboard(){
  }
  if(legend){
    if(spendRows.length){
-     legend.innerHTML=spendRows.map(({c,spent})=>{const v=dashboardPositionValue(c,dashboardSafeRange,d);return `<div class="dashboardDonutLegendItem"><span class="dashboardLegendName"><i style="background:${c.color}"></i>${esc(c.name)}</span><span class="dashboardLegendSpend">${money(spent)}</span><span class="dashboardLegendPosition ${v>=0?'positive':'negative'}">${v>=0?'↓':'↑'} ${money(Math.abs(v))}</span></div>`}).join('');
+     legend.innerHTML=spendRows.map(({c,spent})=>{const v=dashboardPositionValue(c,dashboardSafeRange,d);return `<div class="dashboardDonutLegendItem"><span class="dashboardLegendName"><span class="dashboardLegendIcon" style="color:${c.color}">${budgetIconSvg(c.icon||'money',15)}</span>${esc(c.name)}</span><span class="dashboardLegendSpend">${money(spent)}</span><span class="dashboardLegendPosition ${v>=0?'positive':'negative'}">${v>=0?'↓':'↑'} ${money(Math.abs(v))}</span></div>`}).join('');
    }else legend.innerHTML='<div class="dashboardDonutEmpty">No spending recorded for this period.</div>';
  }
  const donutLabel=document.getElementById('dashboardDonutLabel');if(donutLabel)donutLabel.textContent=dashboardSafeRange==='week'?"Where did our money go this week?":"Where did our money go this month?";
