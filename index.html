@@ -132,7 +132,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
 <script>
 const KEY='householdBudgetAlpha_v1';
-const APP_VERSION='V68';
+const APP_VERSION='V69';
 const colors=['#4F8EF7','#F4A300','#C65CEB','#35AFA0','#E85D75','#7A6FF0','#55A630','#F28482'];
 const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],bonusIncomes:[],bills:[],categories:[],transactions:[],categoryCarry:{},rolloverDecisions:{},lastMonth:null,people:['Shared','Lindsay','Matthew']};
 let data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
@@ -1090,9 +1090,9 @@ function setupAddIncome(){const list=document.getElementById('setupIncomeList'),
 function collectSetupIncomes(){setupIncomes=[];document.querySelectorAll('#setupIncomeList > .card').forEach(c=>{const name=c.querySelector('.siName').value.trim(),amount=+c.querySelector('.siAmount').value||0,cadence=c.querySelector('.siCadence').value,date=c.querySelector('.siDate').value,mid=+c.querySelector('.siMid').value||15;if(name&&amount&&(cadence==='midMonthEnd'||date))setupIncomes.push({name,amount,cadence,firstPayDate:date,midMonthDay:mid,secondPayDay:15})})}
 function setupAddCategory(){const n=prompt('Category name');if(!n)return;const v=+(prompt('Monthly dollar allowance')||0);setupCats.push({name:n,budget:v,type:'fixed',color:colors[setupCats.length%colors.length],icon:'money',allocationMode:'monthly'});renderSetupCats()}
 function renderSetupCats(){document.getElementById('setupCategories').innerHTML=setupCats.map(c=>`<div class="item"><div class="row"><span><span class="swatch" style="background:${c.color}"></span> ${esc(c.name)}</span><b>${money(c.budget)}</b></div></div>`).join('')||'<div class="empty">No categories yet.</div>'}
-function setupNext(step){if(step===2||step===3){collectSetupIncomes();if(!setupIncomes.length){showToast('Add at least one income source');return}}if(step===3&&!setupCats.length){showToast('Add at least one spending category');return}document.querySelectorAll('.setupStep').forEach(s=>s.classList.remove('active'));document.getElementById('setup'+step).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+function setupNext(step){if(step===2){if(!document.querySelector('#setupIncomeList .card'))setupAddIncome()}if(step>=3){collectSetupIncomes();if(!setupIncomes.length){showToast('Add at least one income source');return}}if(step>=4&&!setupCats.length){showToast('Add at least one spending category');return}document.querySelectorAll('.setupStep').forEach(s=>s.classList.remove('active'));document.getElementById('setup'+step).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
 function finishSetup(){collectSetupIncomes();data.incomes=setupIncomes;data.categories=setupCats;data.setupComplete=true;data.lastMonth=monthKey();save()}
-function init(){ensureIds();if(!data.setupComplete){document.getElementById('setupScreen').classList.remove('hidden');if(!document.querySelector('#setupIncomeList .card'))setupAddIncome();renderSetupCats()}else render()}
+function init(){ensureIds();if(!data.setupComplete){document.getElementById('setupScreen').classList.remove('hidden');renderSetupCats()}else render()}
 init();
 initCloud();
 </script>
