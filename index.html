@@ -232,7 +232,7 @@ const SHARING_META_KEY='householdBudgetSharing_v1';
 // V68: use the app's Firebase project by default. Users can still replace this
 // configuration through the advanced setup screen if they are running their own copy.
 const DEFAULT_FIREBASE_CONFIG={apiKey:'AIzaSyBVA_XFb5vh9FXZWhLkXAr1NvJN0uAWXrY',authDomain:'household-budget-9f412.firebaseapp.com',projectId:'household-budget-9f412',storageBucket:'household-budget-9f412.firebasestorage.app',messagingSenderId:'233650112540',appId:'1:233650112540:web:01dc5e869a1977a6acdb7d'};
-let cloud={app:null,db:null,auth:null,uid:null,householdId:null,unsubscribe:null,ready:false,writing:false};
+let cloud={app:null,db:null,auth:null,uid:null,householdId:null,unsubscribe:null,ready:false,writing:false,savePending:false};
 function getSharingConfig(){try{const saved=JSON.parse(localStorage.getItem(SHARING_CONFIG_KEY)||'null');return validFirebaseConfig(saved)?saved:DEFAULT_FIREBASE_CONFIG}catch(e){return DEFAULT_FIREBASE_CONFIG}}
 function getSharingMeta(){try{return JSON.parse(localStorage.getItem(SHARING_META_KEY)||'null')}catch(e){return null}}
 function saveSharingMeta(x){localStorage.setItem(SHARING_META_KEY,JSON.stringify(x))}
@@ -265,6 +265,10 @@ function subscribeToHousehold(){
       incoming.categories=(incoming.categories||[]).map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));
       incoming.people=Array.from(new Set((incoming.people||['Shared','Lindsay','Matthew']).filter(Boolean)));
       if(!incoming.people.includes('Shared'))incoming.people.unshift('Shared');
+      // If this device has a local write queued/in progress, do not let an older
+      // snapshot briefly overwrite it. The queued write will publish the latest
+      // local state immediately after the current write finishes.
+      if(cloud.writing||cloud.savePending)return;
       data=incoming;ensureIds();localStorage.setItem(KEY,JSON.stringify(data));
       render();
       updateSharingUI();
@@ -272,11 +276,27 @@ function subscribeToHousehold(){
   },err=>{console.error('Sharing listener error',err);showToast('Sharing connection lost')});
 }
 async function cloudSaveIfConnected(){
-  if(!cloud.ready||!cloud.db||!cloud.householdId||cloud.writing)return;
+  if(!cloud.ready||!cloud.db||!cloud.householdId)return;
+  // Queue changes instead of dropping them while another cloud write is in flight.
+  // This matters when a user adds an expense shortly after another change: the
+  // old implementation returned immediately if cloud.writing was true, allowing
+  // the listener to later replace the new local expense with the older cloud copy.
+  cloud.savePending=true;
+  if(cloud.writing)return;
+  cloud.writing=true;
   try{
-    cloud.writing=true;
-    await cloud.db.collection('households').doc(cloud.householdId).set({data:cloudData(),updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:cloud.uid},{merge:true});
-  }catch(e){console.error('Cloud save failed',e);showToast('Saved here, but cloud sync failed')}finally{cloud.writing=false}
+    while(cloud.savePending){
+      cloud.savePending=false;
+      const snapshot=cloudData();
+      await cloud.db.collection('households').doc(cloud.householdId).set({data:snapshot,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:cloud.uid},{merge:true});
+    }
+  }catch(e){
+    console.error('Cloud save failed',e);
+    showToast('Saved here, but cloud sync failed');
+  }finally{
+    cloud.writing=false;
+    if(cloud.savePending)cloudSaveIfConnected();
+  }
 }
 function openShareModal(){
   const meta=getSharingMeta();
