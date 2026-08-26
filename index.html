@@ -24,7 +24,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 <body>
 
 <div id="setupScreen" class="setup hidden"><div class="card">
-<div class="eyebrow">HOUSEHOLD BUDGET · V71</div><h1>Welcome to Household Budget.</h1>
+<div class="eyebrow">HOUSEHOLD BUDGET · V72</div><h1>Welcome to Household Budget.</h1>
 <p>Choose how you want to get started.</p>
 <div id="setupWelcome" class="setupStep active">
   <div style="display:grid;gap:10px;margin-top:18px">
@@ -35,9 +35,9 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
   <input id="setupImportFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)">
   <p class="muted" style="font-size:12px;margin-top:16px">Create a budget for a new household, restore one you already have, or join a household someone else has already created.</p>
 </div>
-<div id="setup1" class="setupStep"><h2>1. Add your income</h2><p>Add everyone's recurring income here.</p><div id="setupIncomeList"></div><button class="btn secondary" onclick="setupAddIncome()">＋ Add income</button><div class="actions"><button class="btn ghost" onclick="showSetupWelcome()">Back</button><button class="btn" onclick="setupNext(2)">Next</button></div></div>
-<div id="setup2" class="setupStep"><h2>2. Add your spending categories</h2><p>These are the buckets that will get weekly allowances.</p><div id="setupCategories"></div><button class="btn secondary" onclick="setupAddCategory()">＋ Add category</button><div class="actions"><button class="btn ghost" onclick="setupNext(1)">Back</button><button class="btn" onclick="setupNext(3)">Next</button></div></div>
-<div id="setup3" class="setupStep"><h2>3. You're ready.</h2><p>Monthly bills, savings, and other details can be added from the app.</p><div class="actions"><button class="btn ghost" onclick="setupNext(2)">Back</button><button class="btn" onclick="finishSetup()">Open my budget</button></div></div>
+<div id="setup1" class="setupStep"><h2>1. Add your income</h2><p><strong>Money coming into your household.</strong><br>Add your regular paychecks and other recurring income. For biweekly pay, enter one paycheck amount and one known payday.</p><div id="setupIncomeList"></div><button class="btn secondary" onclick="setupAddIncome()">＋ Add income</button><div class="actions"><button class="btn ghost" onclick="showSetupWelcome()">Back</button><button class="btn" onclick="setupNext(2)">Next</button></div></div>
+<div id="setup2" class="setupStep"><h2>2. Add your spending categories</h2><p><strong>Money you plan to spend on everyday expenses.</strong><br>Categories are <strong>not bills</strong>. They are spending limits for things like groceries, gas, entertainment, dining out, and household purchases.<br><span class="muted">Think of these as maximums, not money you have to spend.</span></p><div class="backupBox" style="margin-bottom:12px"><strong>Example:</strong> Put your $180 electric bill under <strong>Bills</strong>. Put a $400 monthly limit for groceries under <strong>Categories</strong>.</div><div id="setupCategories"></div><button class="btn secondary" onclick="setupAddCategory()">＋ Add category</button><div class="actions"><button class="btn ghost" onclick="setupNext(1)">Back</button><button class="btn" onclick="setupNext(3)">Next</button></div></div>
+<div id="setup3" class="setupStep"><h2>3. You're ready.</h2><p>Monthly bills, savings, and other details can be added from the app.</p><div class="backupBox"><strong>How your budget works:</strong><br><strong>Income</strong> → money coming in<br><strong>Bills</strong> → required expenses<br><strong>Categories</strong> → spending limits for everything else<br><br><strong>If you spend less than a category maximum, that is a win.</strong></div><div class="actions"><button class="btn ghost" onclick="setupNext(2)">Back</button><button class="btn" onclick="finishSetup()">Open my budget</button></div></div>
 </div></div>
 
 <div id="app" class="app hidden">
