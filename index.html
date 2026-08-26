@@ -52,13 +52,13 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 @media(max-width:650px){.app{padding:14px 12px 78px}.dashboardHeroTop{align-items:flex-start;flex-direction:column}.dashboardHero .homeRange{align-self:stretch}.dashboardHero .homeRange button{flex:1}.dashboardSummaryGrid{grid-template-columns:1fr 1fr;gap:9px}.dashSummaryCard{min-height:112px;padding:12px}.dashSummaryCardSpending{grid-column:1/-1}.dashSummaryValue{font-size:21px}.dashCardIcon{width:36px;height:36px;flex-basis:36px;font-size:16px}.dashboardDonutLayout{grid-template-columns:1fr;gap:12px}.dashboardDonut{width:205px}.dashboardDonutWrap{justify-content:center}.dashboardQuickActions{grid-template-columns:1fr 1fr}.dashboardQuickActions .btn{font-size:10px}.nav{display:none}.dashboardTitle{font-size:25px}}
 </style>
 <style>
-/* V87 dashboard polish: match approved mockup closely */
+/* V88 dashboard polish: match approved mockup closely */
 .nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:72px}.nav .navIcon{font-size:16px;line-height:1;font-weight:900;color:var(--muted)}.nav button.active .navIcon{color:var(--accent)}
 .dashboardHero{padding:8px 2px 14px}.dashboardHeroTop{align-items:flex-end}.dashboardEyebrow{font-size:11px}.dashboardTitle{font-size:28px;margin:5px 0 5px}.dashboardDate{font-size:12px}.dashboardSummaryGrid{gap:12px;margin-bottom:14px}.dashSummaryCard{min-height:126px;padding:14px 15px}.dashSummaryValue{font-size:24px;margin-top:6px}.dashSummarySub{font-size:10px;margin-top:5px}.dashBudgetMeta{display:flex;justify-content:space-between;gap:8px;margin-top:8px;font-size:10px;color:var(--muted)}.dashBudgetMeta b{color:var(--muted);white-space:nowrap}.dashProgress{height:6px;border-radius:99px;background:#e6e9e7;overflow:hidden;margin-top:6px}.dashProgress span{display:block;height:100%;border-radius:99px;background:#3477d8}.dashCardLink,.dashWideLink{padding:7px 10px;font-size:10px;margin-top:10px}.dashboardMainGrid{grid-template-columns:minmax(0,1.35fr) minmax(300px,.85fr);gap:14px}.dashboardDonutCard,.dashboardPositionCard{min-height:0}.dashboardDonutLayout{grid-template-columns:minmax(190px,220px) 1fr;gap:18px}.dashboardDonut{width:205px;padding:22%}.dashboardDonutHole strong{font-size:19px}.dashboardDonutLegend{gap:7px}.dashboardLegendName{gap:6px}.dashboardLegendIcon{width:15px;height:15px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 15px}.dashboardLegendIcon svg{width:15px;height:15px}.dashboardLegendPosition{min-width:76px}.dashboardPositionCard{padding-bottom:6px}.dashboardPositionRow{padding:13px 2px}.dashboardSavingsRow{padding:13px 2px 5px}.savingsIcon{color:#7452bd;background:#f3effc}.dashboardQuickActions{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:14px 0 6px}.dashboardQuickActions .btn{width:100%;padding:9px 8px;font-size:10px}.dashboardCategorySection{margin-top:14px}
 /* An 11-inch iPad in portrait is ~820 CSS px wide, so keep the two main dashboard panels side-by-side. */
 @media(max-width:700px){.dashboardMainGrid{grid-template-columns:1fr}.dashboardDonutLayout{grid-template-columns:minmax(190px,230px) 1fr}.dashboardQuickActions{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:650px){.dashboardSummaryGrid{grid-template-columns:1fr 1fr}.dashSummaryCardSpending{grid-column:1/-1}.dashboardDonutLayout{grid-template-columns:1fr}.dashboardDonut{width:205px}.dashboardQuickActions{grid-template-columns:1fr 1fr}}
-/* V87 refinements */
+/* V88 refinements */
 .dashSummaryCardRemaining .dashCardIcon{background:#f3effc;color:#7452bd}
 .dashboardDonutLayout{grid-template-columns:250px minmax(0,1fr);gap:24px;min-height:260px}
 .dashboardDonut{width:220px;height:220px}
@@ -84,7 +84,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 </style>
 
 <style>
-/* V87: approved dashboard layout — closely matches the mockup, with arrows for over/under */
+/* V88: approved dashboard layout — closely matches the mockup, with arrows for over/under */
 .nav{display:flex;align-items:stretch;gap:8px;margin:8px 0 18px;overflow-x:auto;padding:0 2px 3px}
 .nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:86px;padding:10px 8px;border:0;background:transparent;border-radius:14px;color:var(--muted);font-size:11px;font-weight:800;white-space:nowrap}
 .nav button.active{background:var(--accent2);color:var(--accent)}
@@ -101,11 +101,98 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 @media(max-width:650px){.nav{display:none}.dashboardHeroTop{align-items:flex-start;flex-direction:column}.dashboardHero .homeRange{align-self:stretch}.dashboardHero .homeRange button{flex:1}.dashboardSummaryGrid{grid-template-columns:1fr;gap:9px}.dashSummaryCard{min-height:auto;padding:14px}.dashSummaryCardSpending{grid-column:auto}.dashboardMainGrid{gap:10px}.dashboardDonutLayout{grid-template-columns:1fr;gap:16px}.dashboardDonut{width:205px;height:205px}.dashboardDonutWrap{justify-content:center}.dashboardQuickActions{grid-template-columns:1fr 1fr}.dashboardPositionCard{padding:15px}.dashboardTitle{font-size:26px}}
 @media(max-width:390px){.dashboardDonutLegendItem{grid-template-columns:minmax(0,1fr) auto}.dashboardLegendPosition{grid-column:2;grid-row:1}.dashboardLegendSpend{grid-column:2;grid-row:2}.dashboardLegendName{grid-row:1 / span 2}}
 </style>
+
+<style>
+/* V88 dashboard: actions first, no duplicate spending card, donut legend below */
+.dashboardQuickActions.dashboardQuickActionsTop{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin:12px 0 16px;
+}
+.dashboardQuickActions.dashboardQuickActionsTop .dashboardPrimaryAction{
+  grid-column:1/-1;
+  min-height:50px;
+  font-size:13px;
+  font-weight:900;
+  border-radius:14px;
+}
+.dashboardQuickActions.dashboardQuickActionsTop .btn:not(.dashboardPrimaryAction){
+  min-height:40px;
+  font-size:10px;
+}
+/* Keep the large dashboard panels side-by-side on an 11-inch iPad portrait view. */
+.dashboardMainGrid{
+  grid-template-columns:minmax(0,1.18fr) minmax(320px,.82fr);
+  gap:14px;
+  align-items:start;
+}
+.dashboardDonutLayout.dashboardDonutStacked{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:18px;
+  min-height:0;
+}
+.dashboardDonutStacked .dashboardDonutWrap{
+  width:100%;
+  display:flex;
+  justify-content:center;
+}
+.dashboardDonutStacked .dashboardDonut{
+  width:250px;
+  height:250px;
+  flex:0 0 auto;
+}
+.dashboardDonutStacked .dashboardDonutHole{
+  width:124px;
+  height:124px;
+}
+.dashboardDonutStacked .dashboardDonutLegend{
+  width:100%;
+  display:grid;
+  gap:10px;
+}
+.dashboardDonutStacked .dashboardDonutLegendItem{
+  grid-template-columns:minmax(0,1fr) auto auto;
+  gap:14px;
+  font-size:12px;
+  padding:1px 2px;
+}
+.dashboardDonutStacked .dashboardLegendSpend{min-width:78px}
+.dashboardDonutStacked .dashboardLegendPosition{min-width:92px}
+.dashboardDonutCard .dashWideLink{margin-top:14px}
+/* The position card now carries the useful summary information. */
+.dashboardPositionCard{padding-bottom:8px}
+.dashboardPositionRow{padding:16px 2px}
+@media(max-width:900px){
+  .dashboardMainGrid{grid-template-columns:minmax(0,1.12fr) minmax(290px,.88fr)}
+  .dashboardDonutStacked .dashboardDonut{width:220px;height:220px}
+  .dashboardDonutStacked .dashboardDonutHole{width:114px;height:114px}
+  .dashboardDonutStacked .dashboardDonutLegendItem{gap:10px}
+  .dashboardDonutStacked .dashboardLegendSpend{min-width:68px}
+  .dashboardDonutStacked .dashboardLegendPosition{min-width:82px}
+}
+@media(max-width:700px){
+  .dashboardMainGrid{grid-template-columns:1fr}
+  .dashboardQuickActions.dashboardQuickActionsTop{grid-template-columns:1fr 1fr}
+  .dashboardQuickActions.dashboardQuickActionsTop .dashboardPrimaryAction{grid-column:1/-1}
+}
+@media(max-width:430px){
+  .dashboardQuickActions.dashboardQuickActionsTop{gap:8px;margin-bottom:12px}
+  .dashboardQuickActions.dashboardQuickActionsTop .dashboardPrimaryAction{min-height:48px;font-size:12px}
+  .dashboardDonutStacked .dashboardDonut{width:220px;height:220px}
+  .dashboardDonutStacked .dashboardDonutLegendItem{grid-template-columns:minmax(0,1fr) auto auto;gap:8px;font-size:11px}
+  .dashboardDonutStacked .dashboardLegendSpend{min-width:62px}
+  .dashboardDonutStacked .dashboardLegendPosition{min-width:72px}
+}
+</style>
+
 </head>
 <body>
 
 <div id="setupScreen" class="setup hidden"><div class="card">
-<div class="eyebrow">HOUSEHOLD BUDGET · V87</div><h1>Welcome to Household Budget.</h1>
+<div class="eyebrow">HOUSEHOLD BUDGET · V88</div><h1>Welcome to Household Budget.</h1>
 <p>Choose how you want to get started.</p>
 <div id="setupWelcome" class="setupStep active">
   <div style="display:grid;gap:10px;margin-top:18px">
@@ -169,9 +256,6 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
   <button class="btn secondary" onclick="setView('bills')">▣ View bills</button>
   <button class="btn secondary" onclick="openCardManager()">▤ Manage cards</button>
   <button class="btn secondary" onclick="setView('budget')">◔ View budget</button>
-</div>
-<div class="dashboardSummaryGrid dashboardSingleSummary">
-  <div class="dashSummaryCard dashSummaryCardSpending"><div class="dashCardIcon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h10M7 14h5"/></svg></div><div class="dashCardBody"><div class="dashSummaryLabel" id="dashSpendLabel">This week's spending</div><div class="dashSummaryValue neutral" id="dashSpendValue">$0</div><div class="dashSummarySub">Total so far</div><button class="dashCardLink" onclick="setView('spending')">View spending details <span>›</span></button></div></div>
 </div>
 <div class="dashboardMainGrid">
   <section class="card dashboardDonutCard">
