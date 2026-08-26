@@ -84,7 +84,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 </style>
 
 <style>
-/* V88: approved dashboard layout — closely matches the mockup, with arrows for over/under */
+/* V89: approved dashboard layout — closely matches the mockup, with arrows for over/under */
 .nav{display:flex;align-items:stretch;gap:8px;margin:8px 0 18px;overflow-x:auto;padding:0 2px 3px}
 .nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:86px;padding:10px 8px;border:0;background:transparent;border-radius:14px;color:var(--muted);font-size:11px;font-weight:800;white-space:nowrap}
 .nav button.active{background:var(--accent2);color:var(--accent)}
@@ -103,7 +103,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 </style>
 
 <style>
-/* V88 dashboard: actions first, no duplicate spending card, donut legend below */
+/* V89 dashboard: actions first, no duplicate spending card, donut legend below */
 .dashboardQuickActions.dashboardQuickActionsTop{
   display:grid;
   grid-template-columns:repeat(4,minmax(0,1fr));
@@ -188,11 +188,18 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 }
 </style>
 
+<style>
+/* V89 polish: center Previous / Today / Next on phone */
+@media(max-width:650px){
+  .safeWeekNav{justify-content:center !important;}
+}
+</style>
+
 </head>
 <body>
 
 <div id="setupScreen" class="setup hidden"><div class="card">
-<div class="eyebrow">HOUSEHOLD BUDGET · V88</div><h1>Welcome to Household Budget.</h1>
+<div class="eyebrow">HOUSEHOLD BUDGET · V89</div><h1>Welcome to Household Budget.</h1>
 <p>Choose how you want to get started.</p>
 <div id="setupWelcome" class="setupStep active">
   <div style="display:grid;gap:10px;margin-top:18px">
@@ -252,10 +259,10 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 </div>
 <div class="dashboardQuickActions dashboardQuickActionsTop">
   <button class="btn dashboardPrimaryAction" onclick="openExpense()">＋ Add expense</button>
-  <button class="btn secondary" onclick="setView('income')">＋ Add income</button>
-  <button class="btn secondary" onclick="setView('bills')">▣ View bills</button>
+  <button class="btn secondary" onclick="showView('income')">＋ Add income</button>
+  <button class="btn secondary" onclick="showView('bills')">▣ View bills</button>
   <button class="btn secondary" onclick="openCardManager()">▤ Manage cards</button>
-  <button class="btn secondary" onclick="setView('budget')">◔ View budget</button>
+  <button class="btn secondary" onclick="showView('budget')">◔ View budget</button>
 </div>
 <div class="dashboardMainGrid">
   <section class="card dashboardDonutCard">
@@ -264,14 +271,14 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
       <div class="dashboardDonutWrap"><div id="dashboardDonut" class="dashboardDonut"><div class="dashboardDonutHole"><strong id="dashboardDonutTotal">$0</strong><span>spent</span></div></div></div>
       <div id="dashboardDonutLegend" class="dashboardDonutLegend"></div>
     </div>
-    <button class="dashWideLink" onclick="setView('spending')">View all spending <span>›</span></button>
+    <button class="dashWideLink" onclick="showView('spending')">View all spending <span>›</span></button>
   </section>
   <section class="card dashboardPositionCard">
     <div class="dashboardSectionHead"><div><div class="sectionTitle">Your position</div></div></div>
-    <button type="button" class="dashboardPositionRow" onclick="setView('budget')"><span class="dashboardPositionIcon budgetPositionIcon">▤</span><span><b>Weekly budget</b><small>Planned for this week</small></span><strong id="dashPositionBudget" class="dashSummaryValue neutral">$0</strong><span>›</span></button>
+    <button type="button" class="dashboardPositionRow" onclick="showView('budget')"><span class="dashboardPositionIcon budgetPositionIcon">▤</span><span><b>Weekly budget</b><small>Planned for this week</small></span><strong id="dashPositionBudget" class="dashSummaryValue neutral">$0</strong><span>›</span></button>
     <button type="button" class="dashboardPositionRow calcClickable" onclick="openOverallCalculation('week')"><span class="dashboardPositionIcon">↗</span><span><b>Overall this week</b><small id="dashPositionWeekSub">Under budget</small></span><strong id="dashPositionMiniWeek" class="dashSummaryValue">$0 under</strong><span>›</span></button>
     <button type="button" class="dashboardPositionRow calcClickable" onclick="openOverallCalculation('month')"><span class="dashboardPositionIcon">▣</span><span><b>Overall this month</b><small>Monthly position</small></span><strong id="dashPositionMiniMonth" class="dashSummaryValue">$0 under</strong><span>›</span></button>
-    <button type="button" class="dashboardPositionRow dashboardCashFlowRow" onclick="setView('cashflow')"><span class="dashboardPositionIcon savingsIcon">↔</span><span><b>Overall cash flow</b><small id="dashboardCashFlowSub">Actual money in vs. out this month</small></span><strong id="dashboardCashFlowValue">$0</strong><span>›</span></button>
+    <button type="button" class="dashboardPositionRow dashboardCashFlowRow" onclick="showView('cashflow')"><span class="dashboardPositionIcon savingsIcon">↔</span><span><b>Overall cash flow</b><small id="dashboardCashFlowSub">Actual money in vs. out this month</small></span><strong id="dashboardCashFlowValue">$0</strong><span>›</span></button>
   </section>
 </div>
 </main>
