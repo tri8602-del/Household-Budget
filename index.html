@@ -22,7 +22,13 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 .iconPicker{display:grid;grid-template-columns:repeat(7,minmax(38px,1fr));gap:7px;margin-top:8px;max-height:330px;overflow-y:auto;overflow-x:hidden;padding:2px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y}.iconChoice{height:44px;border:1px solid var(--line);background:#fff;border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer}.iconChoice svg{width:22px;height:22px}.iconChoice.selected{border:2px solid var(--accent);color:var(--accent);background:var(--accent2)}.reorderBtns{display:flex;gap:5px;margin-top:8px}.reorderBtns button{border:1px solid var(--line);background:#fff;border-radius:9px;width:36px;height:32px;font-weight:900;color:var(--muted)}.reorderBtns button:disabled{opacity:.35}.categoryIcon{display:inline-flex;vertical-align:middle;align-items:center;justify-content:center}.categoryIcon svg{display:block}.billTotal{background:var(--accent2);color:var(--accent);border-radius:16px;padding:16px;margin-top:16px}.billTotal .label{font-size:13px;font-weight:750}.billTotal .value{font-size:32px;font-weight:900;margin-top:3px}.billTotal .note{font-size:12px;margin-top:3px}.txActions{display:flex;gap:6px;align-items:center}.editLink{border:0;background:var(--accent2);color:var(--accent);border-radius:9px;padding:7px 9px;font-size:12px;font-weight:800}.miniGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.searchRow{display:grid;grid-template-columns:1fr 220px;gap:10px;margin-top:12px}.searchBox{position:relative}.searchBox input{padding-left:38px}.searchIcon{position:absolute;left:13px;top:11px;color:var(--muted);font-size:17px}.filterSummary{font-size:12px;color:var(--muted);margin-top:8px}.tagPills{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.tagPill{display:inline-flex;padding:3px 7px;border-radius:8px;background:#f0f2f0;color:var(--muted);font-size:10px;font-weight:750}.expenseTagChoices{margin-top:8px}.tagChoiceLabel{font-size:11px;color:var(--muted);font-weight:750;margin-bottom:5px}.tagChoiceList{display:flex;flex-wrap:wrap;gap:6px}.tagChoice{border:1px solid var(--line);background:#f5f7f5;color:var(--muted);border-radius:999px;padding:5px 9px;font-size:11px;font-weight:750;cursor:pointer}.tagChoice.selected{background:var(--accent2);border-color:var(--accent);color:var(--accent)}.tagChoice.addTagChoice{background:#fff;color:var(--accent)}.tagFilterRow{display:grid;grid-template-columns:1fr 180px;gap:10px;margin-top:8px}@media(max-width:560px){.tagFilterRow{grid-template-columns:1fr}}
 @media(max-width:560px){.personGrid,.formgrid,.heroGrid,.budgetFlow,.searchRow{grid-template-columns:1fr}.heroNumber{font-size:43px}.app{padding-left:12px;padding-right:12px}.card{padding:17px;border-radius:19px}.iconPicker{grid-template-columns:repeat(6,minmax(38px,1fr))}}
 </style>
-<style>.cardStatementMini{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}.cardStatementMini input[type=number]{margin-bottom:4px}.cardStatementMini label{margin-top:6px}.cashflowCard{min-width:0}.cashflowRow{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}.cashflowRow:last-child{border-bottom:0}</style></head>
+<style>.cardStatementMini{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}.cardStatementMini input[type=number]{margin-bottom:4px}.cardStatementMini label{margin-top:6px}.cashflowCard{min-width:0}.cashflowRow{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}.cashflowRow:last-child{border-bottom:0}
+/* V82 dashboard redesign: responsive, mobile-first visual hierarchy */
+.dashboardHero{padding:4px 2px 12px}.dashboardHeroTop{display:flex;align-items:flex-end;justify-content:space-between;gap:16px}.dashboardEyebrow{font-size:12px;font-weight:850;color:var(--accent);letter-spacing:.03em;text-transform:uppercase}.dashboardTitle{font-size:30px;line-height:1.05;margin:4px 0 6px}.dashboardDate{font-size:13px}.dashboardHero .homeRange{flex:0 0 auto}.dashboardSummaryGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:14px}.dashSummaryCard{border:1px solid var(--line);background:linear-gradient(145deg,#fff,#f7faf8);border-radius:18px;padding:16px;min-width:0;box-shadow:0 5px 18px rgba(25,35,28,.04)}.dashSummaryLabel{font-size:12px;font-weight:850;color:var(--muted)}.dashSummaryValue{font-size:25px;line-height:1.1;font-weight:950;margin-top:7px;display:block}.dashSummaryValue.neutral{color:var(--ink)}.dashSummarySub{font-size:11px;color:var(--muted);margin-top:6px}.dashboardMainGrid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.85fr);gap:14px}.dashboardDonutCard,.dashboardPositionCard{min-width:0}.dashboardSectionHead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}.dashboardHint{font-size:11px;margin-top:3px}.dashboardDonutLayout{display:grid;grid-template-columns:minmax(220px,300px) 1fr;align-items:center;gap:22px}.dashboardDonutWrap{display:flex;justify-content:center}.dashboardDonut{width:min(280px,100%);aspect-ratio:1;border-radius:50%;position:relative;background:var(--line);padding:23%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.04)}.dashboardDonutHole{width:100%;height:100%;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 0 0 1px rgba(0,0,0,.04)}.dashboardDonutHole strong{font-size:22px;font-weight:950}.dashboardDonutHole span{font-size:11px;color:var(--muted);margin-top:2px}.dashboardDonutLegend{display:grid;gap:8px;min-width:0}.dashboardDonutLegendItem{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:8px;font-size:12px;min-width:0}.dashboardLegendName{display:flex;align-items:center;gap:7px;min-width:0;font-weight:750}.dashboardLegendName i{width:9px;height:9px;border-radius:50%;flex:0 0 9px}.dashboardLegendName{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dashboardLegendSpend{font-weight:800;white-space:nowrap}.dashboardLegendPosition{font-weight:900;white-space:nowrap;min-width:74px;text-align:right}.dashboardDonutEmpty{font-size:12px;color:var(--muted);padding:20px 0}.dashboardPositionCard{padding-bottom:10px}.dashboardPositionRow{width:100%;display:grid;grid-template-columns:34px minmax(0,1fr) auto 16px;align-items:center;gap:9px;border:0;border-top:1px solid var(--line);background:transparent;padding:13px 2px;text-align:left;color:inherit}.dashboardPositionRow b{display:block;font-size:13px}.dashboardPositionRow small{display:block;color:var(--muted);font-size:10px;margin-top:3px}.dashboardPositionRow .dashSummaryValue{font-size:15px;margin:0}.dashboardPositionIcon{width:34px;height:34px;border-radius:11px;background:var(--accent2);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:950}.dashboardCategorySection{margin-top:14px}.dashboardQuickActions{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}.dashboardQuickActions .btn{min-width:0}.dashboardCategorySection .homeGrid{margin-top:10px}.homeCat{background:#fff;box-shadow:0 3px 12px rgba(25,35,28,.03)}
+@media(max-width:850px){.dashboardMainGrid{grid-template-columns:1fr}.dashboardDonutLayout{grid-template-columns:minmax(190px,260px) 1fr}.dashboardPositionCard{min-height:0}}
+@media(max-width:650px){.dashboardHeroTop{align-items:flex-start;flex-direction:column}.dashboardHero{padding-top:0}.dashboardTitle{font-size:26px}.dashboardSummaryGrid{grid-template-columns:1fr 1fr;gap:9px}.dashSummaryCard:first-child{grid-column:1/-1}.dashSummaryValue{font-size:22px}.dashboardMainGrid{gap:10px}.dashboardDonutLayout{grid-template-columns:1fr;gap:16px}.dashboardDonut{width:205px;padding:19%}.dashboardDonutHole strong{font-size:19px}.dashboardDonutLegend{gap:7px}.dashboardLegendPosition{min-width:68px}.dashboardQuickActions{display:grid;grid-template-columns:1fr 1fr}.dashboardQuickActions .btn{width:100%}.homeGrid{grid-template-columns:1fr 1fr}.homeCat{padding:12px 10px}.homeCatAmount{font-size:18px}.homeCatMeta{font-size:10px}.safeWeekNav{width:100%;justify-content:flex-start}}
+@media(max-width:390px){.dashboardSummaryGrid{grid-template-columns:1fr}.dashSummaryCard:first-child{grid-column:auto}.dashboardDonutLegendItem{grid-template-columns:minmax(0,1fr) auto}.dashboardLegendPosition{grid-column:2;grid-row:1}.dashboardLegendSpend{grid-column:2;grid-row:2;font-size:11px}.dashboardLegendName{grid-row:1 / span 2}.dashboardPositionRow{grid-template-columns:32px minmax(0,1fr);gap:8px}.dashboardPositionRow .dashSummaryValue{grid-column:2}.dashboardPositionRow>span:last-child{display:none}}
+</style></head>
 <body>
 
 <div id="setupScreen" class="setup hidden"><div class="card">
@@ -77,19 +83,38 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 </div>
 
 <main id="view-dashboard">
-<div class="homeAction"><button class="btn" onclick="openExpense()">＋ Add expense</button></div>
-<div class="card"><div class="homeHeader"><div><div class="sectionTitle">Spending position</div><div id="safeToSpendDateLabel" class="muted" style="font-size:13px;margin-top:3px"></div><div id="safeWeekNav" class="safeWeekNav hidden"><button type="button" onclick="shiftDashboardWeek(-1)">← Previous</button><button type="button" class="today" onclick="goDashboardToday()">Today</button><button type="button" onclick="shiftDashboardWeek(1)">Next →</button></div></div><div class="range homeRange"><button data-safe="week" onclick="setDashboardSafeRange('week')">Week</button><button data-safe="month" onclick="setDashboardSafeRange('month')">Month</button></div></div><div id="categoryList" class="homeGrid"></div></div>
-<div class="homeOverallGrid">
-  <button type="button" class="homeOverallBox calcClickable" onclick="openOverallCalculation('week')">
-    <div class="homeOverallLabel" id="homeOverallWeekLabel">Overall · this week</div>
-    <div class="homeOverallAmount" id="homeOverallWeek">$0 under</div>
-    <div class="homeOverallSub">All household spending combined · tap for calculation</div>
-  </button>
-  <button type="button" class="homeOverallBox calcClickable" onclick="openOverallCalculation('month')">
-    <div class="homeOverallLabel">Overall · this month</div>
-    <div class="homeOverallAmount" id="homeOverallMonth">$0 under</div>
-    <div class="homeOverallSub">All household spending combined · tap for calculation</div>
-  </button>
+<div class="dashboardHero">
+  <div class="dashboardHeroTop">
+    <div><div class="dashboardEyebrow">Household overview</div><h1 class="dashboardTitle">Your budget at a glance</h1><div id="safeToSpendDateLabel" class="muted dashboardDate"></div></div>
+    <div class="range homeRange"><button data-safe="week" onclick="setDashboardSafeRange('week')">Week</button><button data-safe="month" onclick="setDashboardSafeRange('month')">Month</button></div>
+  </div>
+  <div id="safeWeekNav" class="safeWeekNav hidden"><button type="button" onclick="shiftDashboardWeek(-1)">← Previous</button><button type="button" class="today" onclick="goDashboardToday()">Today</button><button type="button" onclick="shiftDashboardWeek(1)">Next →</button></div>
+</div>
+<div class="dashboardSummaryGrid">
+  <div class="dashSummaryCard"><div class="dashSummaryLabel" id="dashSpendLabel">This week's spending</div><div class="dashSummaryValue neutral" id="dashSpendValue">$0</div><div class="dashSummarySub">Total recorded spending</div></div>
+  <div class="dashSummaryCard"><div class="dashSummaryLabel" id="dashPositionLabel">Weekly position</div><div class="dashSummaryValue" id="dashPositionValue">$0 under</div><div class="dashSummarySub" id="dashPositionSub">This week</div></div>
+  <div class="dashSummaryCard"><div class="dashSummaryLabel">Monthly position</div><div class="dashSummaryValue" id="dashMonthValue">$0 under</div><div class="dashSummarySub" id="dashMonthSub">Under budget this month</div></div>
+</div>
+<div class="dashboardMainGrid">
+  <section class="card dashboardDonutCard">
+    <div class="dashboardSectionHead"><div><div class="sectionTitle" id="dashboardDonutLabel">Where did our money go this week?</div><div class="muted dashboardHint">Spending mix for the selected period</div></div></div>
+    <div class="dashboardDonutLayout">
+      <div class="dashboardDonutWrap"><div id="dashboardDonut" class="dashboardDonut"><div class="dashboardDonutHole"><strong id="dashboardDonutTotal">$0</strong><span>spent</span></div></div></div>
+      <div id="dashboardDonutLegend" class="dashboardDonutLegend"></div>
+    </div>
+  </section>
+  <section class="card dashboardPositionCard">
+    <div class="dashboardSectionHead"><div><div class="sectionTitle" id="dashboardPositionTitle">Your position this week</div><div class="muted dashboardHint">Green is under budget · red is over</div></div></div>
+    <button type="button" class="dashboardPositionRow calcClickable" onclick="openOverallCalculation('week')"><span class="dashboardPositionIcon">↘</span><span><b>This week</b><small>Overall household position</small></span><strong id="dashPositionMiniWeek" class="dashSummaryValue">$0 under</strong><span>›</span></button>
+    <button type="button" class="dashboardPositionRow calcClickable" onclick="openOverallCalculation('month')"><span class="dashboardPositionIcon">▣</span><span><b>This month</b><small>Overall household position</small></span><strong id="dashPositionMiniMonth" class="dashSummaryValue">$0 under</strong><span>›</span></button>
+  </section>
+</div>
+<div class="dashboardCategorySection">
+  <div class="dashboardSectionHead"><div><div class="sectionTitle">Category positions</div><div class="muted dashboardHint">Tap any category for the calculation.</div></div><button class="btn small secondary" onclick="setView('budget')">View budget</button></div>
+  <div id="categoryList" class="homeGrid"></div>
+</div>
+<div class="dashboardQuickActions">
+  <button class="btn" onclick="openExpense()">＋ Add expense</button><button class="btn secondary" onclick="setView('spending')">View spending</button><button class="btn secondary" onclick="setView('budget')">View budget</button><button class="btn secondary" onclick="setView('cashflow')">Cash flow</button>
 </div>
 </main>
 
@@ -139,7 +164,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 
 <main id="view-bills" class="hidden"><div class="card"><div class="row"><div><div class="sectionTitle">Bills & fixed expenses</div><div class="muted" style="font-size:13px;margin-top:3px">Everything here is part of the monthly budget.</div></div><button class="btn small" onclick="openModal('bill')">＋ Add bill</button></div><div id="billTotal" class="billTotal"><div class="label">MONTHLY BILL TOTAL</div><div id="billTotalValue" class="value">$0</div><div class="note">Annual bills are shown as their monthly equivalent.</div></div><div id="billList"></div></div></main>
 
-<main id="view-settings" class="hidden"><div class="card"><div class="sectionTitle">Budget settings</div><div class="muted" style="font-size:12px;margin-top:4px">App version <strong id="appVersionLabel">V81</strong></div><label>Savings goal</label><input id="settingsSavings" type="number" step="0.01"><div class="actions"><button class="btn" onclick="saveSettings()">Save settings</button></div></div><div class="card"><div class="sectionTitle">Share</div><p id="sharingStatus" class="muted">This budget is currently stored on this device only.</p><div id="sharingHouseholdInfo" class="backupBox hidden"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="openShareModal()">Share</button><button id="leaveHouseholdBtn" class="btn danger hidden" onclick="leaveSharedHousehold()">Stop sharing</button></div><p class="muted" style="font-size:11px;margin-top:10px">Share this budget between devices using a private household code. The existing backup system still works as a safety net.</p></div><div class="card"><div class="sectionTitle">Data</div><p class="muted">Export a backup before changing devices or browsers. Backups are also useful if you ever want an offline copy of your budget.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary" onclick="exportData()">Export Backup</button><button class="btn secondary" onclick="document.getElementById('importFile').click()">Import Backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"><button class="btn danger" onclick="resetAll()">Clear all data</button></div></div><div class="card"><div class="sectionTitle">Categories</div><div class="muted" style="font-size:13px;margin-bottom:10px">Choose the color, icon, and order for each spending category.</div><button class="btn" onclick="openCategorySettings()">Manage categories</button></div></main>
+<main id="view-settings" class="hidden"><div class="card"><div class="sectionTitle">Budget settings</div><div class="muted" style="font-size:12px;margin-top:4px">App version <strong id="appVersionLabel">V82</strong></div><label>Savings goal</label><input id="settingsSavings" type="number" step="0.01"><div class="actions"><button class="btn" onclick="saveSettings()">Save settings</button></div></div><div class="card"><div class="sectionTitle">Share</div><p id="sharingStatus" class="muted">This budget is currently stored on this device only.</p><div id="sharingHouseholdInfo" class="backupBox hidden"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="openShareModal()">Share</button><button id="leaveHouseholdBtn" class="btn danger hidden" onclick="leaveSharedHousehold()">Stop sharing</button></div><p class="muted" style="font-size:11px;margin-top:10px">Share this budget between devices using a private household code. The existing backup system still works as a safety net.</p></div><div class="card"><div class="sectionTitle">Data</div><p class="muted">Export a backup before changing devices or browsers. Backups are also useful if you ever want an offline copy of your budget.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary" onclick="exportData()">Export Backup</button><button class="btn secondary" onclick="document.getElementById('importFile').click()">Import Backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"><button class="btn danger" onclick="resetAll()">Clear all data</button></div></div><div class="card"><div class="sectionTitle">Categories</div><div class="muted" style="font-size:13px;margin-bottom:10px">Choose the color, icon, and order for each spending category.</div><button class="btn" onclick="openCategorySettings()">Manage categories</button></div></main>
 </div>
 
 <div id="modalWrap" class="modalWrap" onclick="if(event.target===this)closeModal()"><div class="modal"><button class="close" onclick="closeModal()">×</button><div id="modalTitle" class="modalTitle"></div><div id="modalBody"></div></div></div><div id="toast" class="toast"></div>
@@ -149,7 +174,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
 <script>
 const KEY='householdBudgetAlpha_v1';
-const APP_VERSION='V81';
+const APP_VERSION='V82';
 const colors=['#4F8EF7','#F4A300','#C65CEB','#35AFA0','#E85D75','#7A6FF0','#55A630','#F28482'];
 const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],bonusIncomes:[],bills:[],categories:[],transactions:[],categoryCarry:{},rolloverDecisions:{},lastMonth:null,people:['Shared','Lindsay','Matthew'],creditCards:[],creditCardPayments:[],creditCardHistory:{},creditCardOverrides:{}};
 let data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
@@ -694,15 +719,53 @@ function closeOverallCalculation(){const m=document.getElementById('overallCalcM
 function renderDashboard(){
  const cats=data.categories||[],d=dashboardSafeRange==='week'?dashboardWeekDate():new Date();
  const ws=startWeek(d),we=addDays(ws,6),fmt=o=>o.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+ const periodStart=dashboardSafeRange==='week'?ws:monthStart(d);
+ const periodEnd=dashboardSafeRange==='week'?we:monthEnd(d);
+ const periodTransactions=(data.transactions||[]).filter(t=>{const x=dateOnly(t.date);return x>=periodStart&&x<=periodEnd});
+ const totalSpent=periodTransactions.reduce((sum,t)=>sum+(Number(t.amount)||0),0);
+ const weekPosition=overallWeekBalance(d);
+ const monthPosition=overallMonthBalance(d);
+ const selectedPosition=dashboardSafeRange==='week'?weekPosition:monthPosition;
  const nav=document.getElementById('safeWeekNav'); if(nav)nav.classList.toggle('hidden',dashboardSafeRange!=='week');
- document.getElementById('safeToSpendDateLabel').textContent=dashboardSafeRange==='week'?`This week · ${fmt(ws)}–${fmt(we)}`:`This month · ${d.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`;
+ const dateLabel=document.getElementById('safeToSpendDateLabel');
+ if(dateLabel)dateLabel.textContent=dashboardSafeRange==='week'?`This week · ${fmt(ws)}–${fmt(we)}`:`This month · ${d.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`;
  document.querySelectorAll('.homeRange button').forEach(b=>b.classList.toggle('active',b.dataset.safe===dashboardSafeRange));
- document.getElementById('categoryList').innerHTML=cats.length?cats.map(c=>{const v=dashboardPositionValue(c,dashboardSafeRange,d);return `<button type="button" class="homeCat" data-category="${esc(c.name)}" onclick="openCategoryDashboardCalculation(this.dataset.category)"><div class="homeCatTop"><span class="categoryIcon" style="color:${c.color}">${budgetIconSvg(c.icon||'money',21)}</span><span class="homeCatName">${esc(c.name)}</span></div><div class="homeCatAmount ${v>=0?'positive':'negative'}">${money(Math.abs(v))} ${v>=0?'under':'over'}</div><div class="homeCatMeta">${dashboardSafeRange==='week'?'Weekly position':'Monthly position'} · tap for calculation</div></button>`}).join(''):'<div class="empty" style="grid-column:1/-1">Add categories on the Budget page.</div>';
- const week=overallWeekBalance(d),month=overallMonthBalance(new Date());
- const weekLabel=document.getElementById('homeOverallWeekLabel');if(weekLabel)weekLabel.textContent=dashboardSafeRange==='week'?`Overall · ${fmt(ws)}–${fmt(we)}`:'Overall · this week';
- const renderOverall=(id,balance)=>{const el=document.getElementById(id);if(!el)return;el.className=`homeOverallAmount ${balance>=0?'positive':'negative'}`;el.textContent=`${money(Math.abs(balance))} ${balance>=0?'under':'over'}`};
- renderOverall('homeOverallWeek',week);
- renderOverall('homeOverallMonth',month);
+ const spendingLabel=document.getElementById('dashSpendLabel'); if(spendingLabel)spendingLabel.textContent=dashboardSafeRange==='week'?"This week's spending":"This month's spending";
+ const spendingValue=document.getElementById('dashSpendValue'); if(spendingValue)spendingValue.textContent=money(totalSpent);
+ const positionLabel=document.getElementById('dashPositionLabel'); if(positionLabel)positionLabel.textContent=dashboardSafeRange==='week'?'Weekly position':'Monthly position';
+ const renderDashAmount=(id,balance,words=true)=>{const el=document.getElementById(id);if(!el)return;el.className=`dashSummaryValue ${balance>=0?'positive':'negative'}`;el.textContent=words?`${money(Math.abs(balance))} ${balance>=0?'under':'over'}`:money(Math.abs(balance));};
+ renderDashAmount('dashPositionValue',selectedPosition);
+ renderDashAmount('dashMonthValue',monthPosition);
+ const monthSub=document.getElementById('dashMonthSub');if(monthSub)monthSub.textContent=`${monthPosition>=0?'Under':'Over'} budget this month`;
+ const selectedSub=document.getElementById('dashPositionSub');if(selectedSub)selectedSub.textContent=dashboardSafeRange==='week'?`Week of ${fmt(ws)}`:d.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+
+ // Category position cards
+ const list=document.getElementById('categoryList');
+ if(list)list.innerHTML=cats.length?cats.map(c=>{const v=dashboardPositionValue(c,dashboardSafeRange,d);return `<button type="button" class="homeCat" data-category="${esc(c.name)}" onclick="openCategoryDashboardCalculation(this.dataset.category)"><div class="homeCatTop"><span class="categoryIcon" style="color:${c.color}">${budgetIconSvg(c.icon||'money',20)}</span><span class="homeCatName">${esc(c.name)}</span></div><div class="homeCatAmount ${v>=0?'positive':'negative'}">${money(Math.abs(v))} ${v>=0?'under':'over'}</div><div class="homeCatMeta">${dashboardSafeRange==='week'?'Weekly':'Monthly'} position · tap for calculation</div></button>`}).join(''):'<div class="empty" style="grid-column:1/-1">Add categories on the Budget page.</div>';
+
+ // Donut: spending mix for the selected dashboard period.
+ const spendRows=cats.map(c=>({c,spent:periodTransactions.filter(t=>t.category===c.name).reduce((sum,t)=>sum+(Number(t.amount)||0),0)})).filter(x=>x.spent>0).sort((a,b)=>b.spent-a.spent);
+ const donut=document.getElementById('dashboardDonut');
+ const legend=document.getElementById('dashboardDonutLegend');
+ const donutTotal=document.getElementById('dashboardDonutTotal');
+ if(donutTotal)donutTotal.textContent=money(totalSpent);
+ if(donut){
+   if(totalSpent>0){
+     let cursor=0;
+     const stops=spendRows.map(({c,spent})=>{const start=cursor/totalSpent*100;cursor+=spent;const end=cursor/totalSpent*100;return `${c.color} ${start}% ${end}%`;}).join(',');
+     donut.style.background=`conic-gradient(${stops})`;
+     donut.classList.remove('empty');
+   }else{donut.style.background='var(--line)';donut.classList.add('empty');}
+ }
+ if(legend){
+   if(spendRows.length){
+     legend.innerHTML=spendRows.map(({c,spent})=>{const v=dashboardPositionValue(c,dashboardSafeRange,d);return `<div class="dashboardDonutLegendItem"><span class="dashboardLegendName"><i style="background:${c.color}"></i>${esc(c.name)}</span><span class="dashboardLegendSpend">${money(spent)}</span><span class="dashboardLegendPosition ${v>=0?'positive':'negative'}">${v>=0?'↓':'↑'} ${money(Math.abs(v))}</span></div>`}).join('');
+   }else legend.innerHTML='<div class="dashboardDonutEmpty">No spending recorded for this period.</div>';
+ }
+ const donutLabel=document.getElementById('dashboardDonutLabel');if(donutLabel)donutLabel.textContent=dashboardSafeRange==='week'?"Where did our money go this week?":"Where did our money go this month?";
+ const positionTitle=document.getElementById('dashboardPositionTitle');if(positionTitle)positionTitle.textContent=dashboardSafeRange==='week'?'Your position this week':'Your position this month';
+ const weekPosEl=document.getElementById('dashPositionMiniWeek');if(weekPosEl)renderDashAmount('dashPositionMiniWeek',weekPosition);
+ const monthPosEl=document.getElementById('dashPositionMiniMonth');if(monthPosEl)renderDashAmount('dashPositionMiniMonth',monthPosition);
 }
 function monthPeriods(base=new Date()){
  const first=monthStart(base),last=monthEnd(base),ps=[];
