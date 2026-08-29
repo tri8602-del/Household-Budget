@@ -193,14 +193,19 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
   .safeWeekNav{justify-content:center !important;}
 }
 
-/* V104.3: stable two-row mobile navigation — no pop-up More menu */
+/* V104.4: mobile nav polish + modal action access */
 .mobileNav,.mobileMoreMenu{display:none}
+/* When a modal is open, the fixed mobile navigation must not cover Save/Submit. */
+body.modal-open .mobileNav{display:none!important}
+body.modal-open .modalWrap{z-index:120!important}
+body.modal-open .modal{z-index:130!important}
 @media(max-width:650px){
   .app{padding-bottom:142px}
   .nav{display:none !important}
   .mobileNav{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:auto;position:fixed;left:0;right:0;bottom:0;z-index:80;background:rgba(255,255,255,.98);border-top:1px solid rgba(60,80,78,.12);box-shadow:0 -8px 24px rgba(40,50,48,.10);padding:7px 8px calc(7px + env(safe-area-inset-bottom));gap:2px 4px;}
   .mobileNav button{border:0;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:5px 2px;min-height:48px;font-weight:800}
-  .mobileNav button span{font-size:18px;line-height:18px}
+  .mobileNav button span{font-size:18px;line-height:18px;display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px}
+  .mobileNav button span svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   .mobileNav button small{font-size:9px}
   .mobileNav button.active{color:var(--accent)}
   .mobileMoreMenu{display:none !important}
@@ -242,7 +247,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
   <button data-view="spending" onclick="showView('spending')"><span>◔</span><small>Spending</small></button>
   <button data-view="budget" onclick="showView('budget')"><span>▣</span><small>Budget</small></button>
   <button data-view="cashflow" onclick="showView('cashflow')"><span>↔</span><small>Cash Flow</small></button>
-  <button data-view="income" onclick="showView('income')"><span>↕</span><small>Income</small></button>
+  <button data-view="income" onclick="showView('income')"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18v10H3z"/><path d="M12 5v14M8 9h8"/></svg></span><small>Income</small></button>
   <button data-view="bills" onclick="showView('bills')"><span>▤</span><small>Bills</small></button>
   <button data-view="settings" onclick="showView('settings')"><span>⚙︎</span><small>Settings</small></button>
 </div>
@@ -356,7 +361,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 
 <main id="view-bills" class="hidden"><div class="card"><div class="row"><div><div class="sectionTitle">Bills & fixed expenses</div><div class="muted" style="font-size:13px;margin-top:3px">Everything here is part of the monthly budget.</div></div><button class="btn small" onclick="openModal('bill')">＋ Add bill</button></div><div id="billTotal" class="billTotal"><div class="label">MONTHLY BILL TOTAL</div><div id="billTotalValue" class="value">$0</div><div class="note">Annual bills are shown as their monthly equivalent.</div></div><div id="billList"></div></div></main>
 
-<main id="view-settings" class="hidden"><div class="card"><div class="sectionTitle">Budget settings</div><div class="muted" style="font-size:12px;margin-top:4px">App version <strong id="appVersionLabel">V104.3</strong></div><label>Savings goal</label><input id="settingsSavings" type="number" step="0.01"><div class="actions"><button class="btn" onclick="saveSettings()">Save settings</button></div></div><div class="card"><div class="sectionTitle">Share</div><p id="sharingStatus" class="muted">This budget is currently stored on this device only.</p><div id="sharingHouseholdInfo" class="backupBox hidden"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="openShareModal()">Share</button><button class="btn secondary" onclick="forceSyncNow()">↻ Sync now</button><button id="leaveHouseholdBtn" class="btn danger hidden" onclick="leaveSharedHousehold()">Stop sharing</button></div><p class="muted" style="font-size:11px;margin-top:10px">Share this budget between devices using a private household code. The existing backup system still works as a safety net.</p></div><div class="card"><div class="sectionTitle">Data</div><p class="muted">Export a backup before changing devices or browsers. Backups are also useful if you ever want an offline copy of your budget.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary" onclick="exportData()">Export Backup</button><button class="btn secondary" onclick="document.getElementById('importFile').click()">Import Backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"><button class="btn danger" onclick="resetAll()">Clear all data</button></div></div><div class="card"><div class="sectionTitle">Categories</div><div class="muted" style="font-size:13px;margin-bottom:10px">Choose the color, icon, and order for each spending category.</div><button class="btn" onclick="openCategorySettings()">Manage categories</button></div><div class="legalFooter">Household Budget • © 2026 Lindsay Shay</div></main>
+<main id="view-settings" class="hidden"><div class="card"><div class="sectionTitle">Budget settings</div><div class="muted" style="font-size:12px;margin-top:4px">App version <strong id="appVersionLabel">V104.4</strong></div><label>Savings goal</label><input id="settingsSavings" type="number" step="0.01"><div class="actions"><button class="btn" onclick="saveSettings()">Save settings</button></div></div><div class="card"><div class="sectionTitle">Share</div><p id="sharingStatus" class="muted">This budget is currently stored on this device only.</p><div id="sharingHouseholdInfo" class="backupBox hidden"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="openShareModal()">Share</button><button class="btn secondary" onclick="forceSyncNow()">↻ Sync now</button><button id="leaveHouseholdBtn" class="btn danger hidden" onclick="leaveSharedHousehold()">Stop sharing</button></div><p class="muted" style="font-size:11px;margin-top:10px">Share this budget between devices using a private household code. The existing backup system still works as a safety net.</p></div><div class="card"><div class="sectionTitle">Data</div><p class="muted">Export a backup before changing devices or browsers. Backups are also useful if you ever want an offline copy of your budget.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary" onclick="exportData()">Export Backup</button><button class="btn secondary" onclick="document.getElementById('importFile').click()">Import Backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"><button class="btn danger" onclick="resetAll()">Clear all data</button></div></div><div class="card"><div class="sectionTitle">Categories</div><div class="muted" style="font-size:13px;margin-bottom:10px">Choose the color, icon, and order for each spending category.</div><button class="btn" onclick="openCategorySettings()">Manage categories</button></div><div class="legalFooter">Household Budget • © 2026 Lindsay Shay</div></main>
 </div>
 
 <div id="modalWrap" class="modalWrap" onclick="if(event.target===this)closeModal()"><div class="modal"><button class="close" onclick="closeModal()">×</button><div id="modalTitle" class="modalTitle"></div><div id="modalBody"></div></div></div><div id="toast" class="toast"></div>
@@ -366,7 +371,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
 <script>
 const KEY='householdBudgetAlpha_v1';
-const APP_VERSION='V104.3';
+const APP_VERSION='V104.4';
 const colors=['#4F8EF7','#F4A300','#C65CEB','#35AFA0','#E85D75','#7A6FF0','#55A630','#F28482'];
 const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],bonusIncomes:[],bills:[],billOverrides:{},categories:[],transactions:[],categoryCarry:{},rolloverDecisions:{},lastMonth:null,people:['Shared','Lindsay','Matthew'],creditCards:[],creditCardPayments:[],creditCardHistory:{},creditCardOverrides:{},paymentSources:[{id:'checking',name:'Checking',type:'debit'},{id:'debit2',name:'Other debit account',type:'debit'}]};
 let data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
