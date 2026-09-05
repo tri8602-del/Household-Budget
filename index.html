@@ -13,7 +13,7 @@ button,input,select{font:inherit}button{cursor:pointer}.app{max-width:920px;marg
 .budgetFlow{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:15px}.flowBox,.summaryBox{background:#f7f9f7;border:1px solid var(--line);border-radius:14px;padding:13px}.flowBox .label,.summaryBox .label{font-size:12px;color:var(--muted)}.flowBox .value,.summaryBox .value{font-size:21px;font-weight:900;margin-top:3px}.budgetTable{width:100%;border-collapse:separate;border-spacing:0;margin-top:16px}.budgetTable th{font-size:12px;color:var(--muted);text-align:left;padding:9px 8px;border-bottom:1px solid var(--line)}.budgetTable td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle}.budgetTable input,.budgetTable select{padding:8px 9px;border-radius:9px}.budgetTable .num{text-align:right}
 .warning{background:#f9e9e8;color:var(--danger);border-radius:14px;padding:13px;margin-top:12px;font-weight:800}.good{background:var(--accent2);color:var(--accent);border-radius:14px;padding:13px;margin-top:12px;font-weight:800}.category{border:1px solid var(--line);background:#fafbfa;border-radius:16px;padding:15px;margin-top:11px}.catname{font-weight:850}.amount{font-weight:900;font-size:19px}.positive{color:var(--accent)}.negative{color:var(--danger)}.catmeta{font-size:12px;color:var(--muted);margin-top:4px}.progress{height:7px;background:#e9ece9;border-radius:8px;overflow:hidden;margin-top:11px}.progress .bar{height:100%;background:var(--accent);border-radius:8px}.list{margin-top:12px}.item{padding:13px 0;border-bottom:1px solid var(--line)}.item:last-child{border-bottom:0}.itemTitle{font-weight:800}.empty{padding:25px 5px;text-align:center;color:var(--muted)}.pill{display:inline-flex;padding:5px 8px;border-radius:9px;background:var(--accent2);color:var(--accent);font-size:12px;font-weight:800}.pill.red{background:#f7e7e6;color:var(--danger)}
 .range{display:flex;background:#eef1ee;border-radius:12px;padding:3px}.range button{border:0;background:transparent;color:var(--muted);padding:8px 13px;border-radius:9px;font-weight:800}.range button.active{background:#fff;color:var(--ink);box-shadow:0 1px 5px rgba(0,0,0,.08)}
-.chartWrap{position:relative;padding-left:54px}.yScale{position:absolute;left:0;top:0;bottom:34px;width:48px;color:var(--muted);font-size:10px}.yScale span{position:absolute;right:6px;transform:translateY(50%)}.chart{height:290px;display:flex;align-items:flex-end;gap:6px;border-bottom:1px solid var(--line);padding:8px 4px 30px;box-sizing:border-box;position:relative;margin-top:18px;overflow:visible}.gridLine{position:absolute;left:0;right:0;border-top:1px dashed #dfe4df;pointer-events:none}.barGroup{height:100%;flex:1;display:flex;align-items:flex-end;justify-content:center;position:relative}.stack{width:min(48px,80%);display:flex;flex-direction:column;justify-content:flex-end;border-radius:7px 7px 2px 2px;overflow:hidden;position:relative;z-index:2}.seg{width:100%}.xlabel{position:absolute;bottom:-24px;font-size:11px;color:var(--muted);white-space:nowrap}.budgetMarker{position:absolute;left:10%;right:10%;height:0;border-top:3px solid var(--accent);z-index:5;pointer-events:none}.budgetMarker::after{content:attr(data-label);position:absolute;right:0;top:-18px;font-size:9px;color:var(--accent);background:var(--card);padding:0 3px}.monthBarNav{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.monthBarNav button{padding:7px 11px;border:1px solid var(--line);border-radius:10px;background:#eef1ee;color:var(--ink);font-weight:750}.monthBarNav button.today{background:#fff}.monthBarClickable{cursor:pointer}.monthBarClickable:focus-visible{outline:3px solid #6b8f82;outline-offset:2px}.weekAllocation{position:absolute;left:0;right:0;height:0;border-top:3px solid var(--accent);z-index:6;pointer-events:none}.weekAllocation::after{content:attr(data-label);position:absolute;right:2px;top:-19px;font-size:9px;color:var(--accent);background:var(--card);padding:0 3px}
+.chartWrap{position:relative;padding-left:54px}.yScale{position:absolute;left:0;top:0;bottom:34px;width:48px;color:var(--muted);font-size:10px}.yScale span{position:absolute;right:6px;transform:translateY(50%)}.chart{height:290px;display:flex;align-items:flex-end;gap:6px;border-bottom:1px solid var(--line);padding:8px 4px 30px;box-sizing:border-box;position:relative;margin-top:18px;overflow:visible}.gridLine{position:absolute;left:0;right:0;border-top:1px dashed #dfe4df;pointer-events:none}.barGroup{height:100%;flex:1;display:flex;align-items:flex-end;justify-content:center;position:relative}.stack{width:min(48px,80%);display:flex;flex-direction:column;justify-content:flex-end;border-radius:7px 7px 2px 2px;overflow:hidden;position:relative;z-index:2}.seg{width:100%}.xlabel{position:absolute;bottom:-24px;font-size:11px;color:var(--muted);white-space:nowrap}.budgetMarker{position:absolute;left:10%;right:10%;height:0;border-top:3px solid var(--accent);z-index:5;pointer-events:none}.budgetMarker::after{content:attr(data-label);position:absolute;right:0;top:-18px;font-size:9px;color:var(--accent);background:var(--card);padding:0 3px}.monthBarNav{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.monthBarNav button{padding:7px 11px;border:1px solid var(--line);border-radius:10px;background:#eef1ee;color:var(--ink);font-weight:750}.monthBarNav button.today{background:#fff}.incomeMonthNav{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:12px}.incomeMonthNav button{padding:8px 11px;border:1px solid var(--line);border-radius:10px;background:#eef1ee;color:var(--ink);font-weight:750}.incomeMonthNav button.today{background:#fff}.incomeMonthLabel{font-weight:850;min-width:150px;text-align:center}.incomeRuleMeta{font-size:12px;color:var(--muted);margin-top:4px}.incomePaycheckList{margin-top:10px;border-top:1px solid var(--line)}.incomePaycheckRow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}.incomePaycheckDate{font-weight:800}.incomePaycheckMeta{font-size:11px;color:var(--muted);margin-top:2px}.incomeEdited{font-size:10px;font-weight:850;color:var(--accent);background:var(--accent2);padding:4px 7px;border-radius:999px;white-space:nowrap}.incomePaycheckAmount{font-weight:900;white-space:nowrap}.incomeRuleActions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.incomeSectionHead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.incomeMonthTotalNote{font-size:12px;color:var(--muted);margin-top:3px}@media(max-width:560px){.incomePaycheckRow{grid-template-columns:minmax(0,1fr) auto}.incomePaycheckAmount{grid-column:2;grid-row:1}.incomePaycheckRow .editLink{grid-column:2;grid-row:2}.incomeMonthLabel{min-width:120px}}.monthBarClickable{cursor:pointer}.monthBarClickable:focus-visible{outline:3px solid #6b8f82;outline-offset:2px}.weekAllocation{position:absolute;left:0;right:0;height:0;border-top:3px solid var(--accent);z-index:6;pointer-events:none}.weekAllocation::after{content:attr(data-label);position:absolute;right:2px;top:-19px;font-size:9px;color:var(--accent);background:var(--card);padding:0 3px}
 .chartScaleNote{display:flex;justify-content:center;gap:18px;font-size:11px;color:var(--muted);margin-top:8px}.cashflowMonthNav{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.cashflowMonthNav button{padding:7px 11px;border:1px solid var(--line);border-radius:10px;background:#eef1ee;color:var(--ink);font-weight:750}.cashflowMonthNav .today{background:#fff}.cashflowSummary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.cashflowBox{background:#fafbfa;border:1px solid var(--line);border-radius:15px;padding:14px}.cashflowBox .label{font-size:11px;color:var(--muted);font-weight:750}.cashflowBox .value{font-size:23px;font-weight:900;margin-top:4px}.cashflowBox .note{font-size:10px;color:var(--muted);margin-top:3px}.cashflowList{margin-top:12px}.cashflowRow{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}.cashflowRow:last-child{border-bottom:0}.cashflowRow .sub{font-size:12px}.cashflowTotal{font-weight:900;font-size:18px}.cashflowCardGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.cashflowCard{background:#fafbfa;border:1px solid var(--line);border-radius:15px;padding:14px}.cashflowCardTitle{font-weight:850}.cashflowCardAmount{font-size:21px;font-weight:900;margin-top:5px}.cashflowPaymentForm{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;margin-top:12px}.cashflowPaymentForm>div{min-width:0}.cashflowMuted{font-size:11px;color:var(--muted);line-height:1.45}@media(max-width:650px){.cashflowSummary{grid-template-columns:1fr}.cashflowPaymentForm{grid-template-columns:1fr}.cashflowCardGrid{grid-template-columns:1fr}}.categoryDetailOverlay{max-height:70vh;overflow:auto}.categoryCalc{border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:12px;background:#fafbfa}.categoryCalcHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.categoryCalcFormula{font-size:15px;font-weight:800;line-height:1.45;margin-top:7px}.categoryCalcExpenses{margin-top:10px;border-top:1px solid var(--line);padding-top:9px}.categoryCalcExpense{display:flex;justify-content:space-between;gap:10px;padding:6px 0;font-size:12px}.categoryCalcResult{margin-top:8px;font-weight:900}.categoryDetailModalTitle{display:flex;align-items:center;gap:9px}.categoryDetailModalSub{font-size:12px;color:var(--muted);margin-top:3px}.categoryDetailClose{margin-left:auto}.categoryDetailControls{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-top:12px}.categoryDetailControls>div{flex:1;min-width:180px}.categoryDetailControls .monthCtl{max-width:180px}.detailSummary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}.detailStat{background:#fafbfa;border:1px solid var(--line);border-radius:14px;padding:12px}.detailStat .label{font-size:11px;color:var(--muted);font-weight:750}.detailStat .value{font-size:20px;font-weight:900;margin-top:4px}.detailStat .value.good{background:transparent;padding:0;margin-top:4px}.detailStat .value.bad{background:transparent;padding:0;margin-top:4px}.detailWeek{border:1px solid var(--line);border-radius:15px;margin-top:12px;overflow:hidden}.detailWeekHead{background:#fafbfa;padding:12px 14px}.detailWeekHead .over{font-weight:850}.detailExpenses{padding:0 14px}.detailExpense{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid var(--line)}.detailExpenseMain{min-width:0}.detailExpenseName{font-weight:800;overflow-wrap:anywhere}.detailExpenseMeta{font-size:11px;color:var(--muted);margin-top:3px}.detailExpenseAmount{font-weight:850;white-space:nowrap}.detailWeekEmpty{padding:12px 0;color:var(--muted);font-size:12px}.detailMonthTitle{margin-top:18px;font-size:15px;font-weight:900}@media(max-width:650px){.detailSummary{grid-template-columns:1fr 1fr}.detailExpense{align-items:flex-start}.detailExpense .editLink{display:inline-block;margin-left:7px}}.legendHint{width:100%;font-size:11px;color:var(--muted);margin-bottom:2px}.legend{display:flex;flex-wrap:wrap;gap:9px 15px;margin-top:17px}.legendItem{font-size:12px;display:flex;gap:6px;align-items:center}.bigTotal{font-size:40px;font-weight:900;margin-top:5px}.personGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.personCard{background:#fafbfa;border:1px solid var(--line);border-radius:15px;padding:14px}.personAmount{font-size:24px;font-weight:900;margin-top:4px}
 .homeOverallGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.homeOverallBox{border:1px solid var(--line);background:#fafbfa;border-radius:16px;padding:14px;text-align:left;cursor:pointer}.homeOverallBox:hover{background:#f5f8f5}.homeOverallLabel{font-size:13px;color:var(--muted);font-weight:800}.homeOverallAmount{font-size:25px;font-weight:900;margin-top:5px}.homeOverallSub{font-size:11px;color:var(--muted);margin-top:4px}.homeAction{display:flex;justify-content:flex-start;margin:0 0 12px}.homeCashSummary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.homeCashBox{background:#f7f9f7;border:1px solid var(--line);border-radius:15px;padding:13px}.homeCashBox .label{font-size:11px;color:var(--muted);font-weight:750}.homeCashBox .value{font-size:21px;font-weight:900;margin-top:4px}.homeCashBox .note{font-size:10px;color:var(--muted);margin-top:3px}@media(max-width:560px){.homeCashSummary{grid-template-columns:1fr 1fr}}.homeAction .btn{min-width:150px}.homeHeader{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.safeWeekNav{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:9px}.safeWeekNav button{border:0;background:var(--accent2);color:var(--accent);border-radius:9px;padding:6px 9px;font-size:11px;font-weight:800}.safeWeekNav .today{background:#eef1ee;color:var(--ink)}.homeGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.homeCat{border:1px solid var(--line);background:#fafbfa;border-radius:15px;padding:13px;min-width:0;cursor:pointer}.homeCat:hover{background:#f5f8f5}.homeCatTop{display:flex;align-items:center;gap:8px;min-width:0}.homeCatName{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.homeCatAmount{font-size:22px;font-weight:900;margin-top:7px}.homeCatMeta{font-size:11px;color:var(--muted);margin-top:2px}.budgetCategoryName{border:0;background:transparent;padding:0;color:inherit;font-weight:800;text-align:left;cursor:pointer}.budgetCategoryName:hover{color:var(--accent);text-decoration:underline}.budgetDetailHint{font-size:12px;color:var(--muted);margin-top:4px}.spendingListCard{margin-top:14px}.calcClickable{cursor:pointer}.calcClickable:hover{background:#f3f7f4}.calcHint{font-size:10px;color:var(--muted);margin-top:3px}.overallCalc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.overallCalcBox{background:#fafbfa;border:1px solid var(--line);border-radius:14px;padding:13px}.overallCalcBox .label{font-size:11px;color:var(--muted);font-weight:750}.overallCalcBox .formula{font-size:15px;font-weight:850;line-height:1.5;margin-top:7px}.overallCalcBox .result{font-size:18px;font-weight:900;margin-top:6px}.calcBreakdown{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fafbfa;margin-top:12px}.calcBreakdown h4{margin:0 0 8px;font-size:15px}.calcLine{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}.calcLine:last-child{border-bottom:0}.calcLine strong{white-space:nowrap}.calcTotal{font-size:15px;font-weight:900;padding-top:9px}.calcMuted{font-size:12px;color:var(--muted);line-height:1.45}@media(max-width:650px){.overallCalc{grid-template-columns:1fr}}.spendingListHeader{display:flex;align-items:center;justify-content:space-between;gap:10px}.spendingSearch{display:grid;grid-template-columns:1fr 220px;gap:10px;margin-top:12px}@media(max-width:650px){.homeGrid{grid-template-columns:1fr 1fr}.spendingSearch{grid-template-columns:1fr}.homeCatAmount{font-size:20px}}
 .formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}label{display:block;font-weight:750;font-size:13px;margin:12px 0 6px}input,select{width:100%;padding:11px 12px;border:1px solid #d9ded9;border-radius:11px;background:#fff;color:var(--ink)}input[type=color]{padding:4px;height:42px}.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.modalWrap{position:fixed;inset:0;background:rgba(20,25,22,.42);display:none;align-items:flex-end;justify-content:center;z-index:20;overflow:hidden}.modalWrap.open{display:flex}.modal{position:fixed;inset:0;background:rgba(255,255,255,.98);color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:20px;z-index:40;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y}.modal.hidden{display:none!important}.categorySettingsList{width:min(760px,100%);max-height:58vh;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;padding-right:4px}.categorySettingsActions{width:min(760px,100%);position:sticky;bottom:0;background:#fff;padding-top:10px;margin-top:2px;border-top:1px solid var(--line);z-index:2}.modalCard,.modalBox{background:white;width:min(760px,100%);max-height:88vh;overflow:auto;border-radius:24px;padding:22px;box-shadow:0 18px 60px rgba(20,25,22,.22)}.modal,.modalBox,.modalCard{background:#fff!important;opacity:1!important;color:var(--ink)!important}.modalTitle{font-size:20px;font-weight:900;width:min(760px,100%);padding-right:48px;box-sizing:border-box}.modal #modalBody{width:min(760px,100%);padding-bottom:calc(18px + env(safe-area-inset-bottom));box-sizing:border-box}.modal #modalBody>.actions{position:sticky;bottom:0;background:#fff;padding:12px 0 calc(12px + env(safe-area-inset-bottom));margin-top:18px;border-top:1px solid var(--line);z-index:5}.modal #modalBody>.actions .btn{min-height:44px}@media(max-width:560px){.modal{padding:14px 14px calc(14px + env(safe-area-inset-bottom))}.modalTitle{font-size:18px}.modal #modalBody>.actions{display:grid;grid-template-columns:1fr 1fr}.modal #modalBody>.actions .btn{width:100%}.modal #modalBody>.actions .btn:only-child{grid-column:1/-1}}.close{float:right;border:0;background:#eef1ee;border-radius:10px;width:36px;height:36px}.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#202522;color:white;padding:11px 15px;border-radius:12px;display:none;z-index:30;font-weight:750}.setup{max-width:700px;margin:7vh auto;padding-bottom:calc(88px + env(safe-area-inset-bottom))}.setup h1{font-size:36px;margin:0 0 8px}.setup p{color:var(--muted);line-height:1.5}.setupStep{display:none}.setupStep.active{display:block}.setupStep>.actions{position:sticky;bottom:0;z-index:10;background:rgba(255,255,255,.98);padding:12px 0 calc(12px + env(safe-area-inset-bottom));margin-top:18px;border-top:1px solid var(--line);box-shadow:0 -8px 18px rgba(20,25,22,.05)}@media(max-width:560px){.setup{margin:16px auto;padding:0 14px calc(92px + env(safe-area-inset-bottom))}.setupStep>.actions{display:grid;grid-template-columns:1fr 1fr}.setupStep>.actions .btn{width:100%;min-height:46px}.setupStep>.actions .btn:only-child{grid-column:1/-1}}.setupCategoryChoices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-bottom:14px}.setupCategoryChoice{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fafbfa;display:flex;align-items:center;gap:9px;font-size:13px;font-weight:750}.setupCategoryChoice input{width:19px!important;height:19px!important;min-width:19px!important;margin:0;padding:0;accent-color:var(--accent)}@media(max-width:560px){.setupCategoryChoices{grid-template-columns:1fr}}.dots{display:flex;gap:6px;margin:20px 0}.dot{width:28px;height:5px;border-radius:5px;background:#dfe4df}.dot.active{background:var(--accent)}.backupBox{background:#f6f8f6;border-radius:14px;padding:13px;font-size:13px}.hidden{display:none!important}.legalFooter{text-align:center;color:var(--muted);font-size:11px;line-height:1.4;padding:14px 6px 4px}.budgetImpact{margin-top:12px}.budgetImpact label{display:grid!important;grid-template-columns:24px minmax(0,1fr);align-items:start!important;gap:10px!important;margin:0!important;cursor:pointer}.budgetImpact input[type="checkbox"]{width:24px!important;height:24px!important;min-width:24px!important;padding:0!important;margin:2px 0 0!important;accent-color:var(--accent);border-radius:6px;cursor:pointer}.budgetImpact span{min-width:0}.budgetImpact .muted{display:inline;line-height:1.45}
@@ -357,7 +357,7 @@ body.modal-open .modal{z-index:130!important}
 <div class="card"><div class="sectionTitle">Credit-card payments</div><div class="cashflowMuted" style="margin-top:4px">Enter the amount you actually paid on each card during this month.</div><div class="cashflowPaymentForm"><div><label>Credit card</label><select id="cashflowPaymentCard"></select></div><div><label>Amount paid</label><input id="cashflowPaymentAmount" type="number" step="0.01" min="0" placeholder="0.00"></div><button class="btn" onclick="addCreditCardPayment()">Add payment</button></div><div id="cashflowPaymentsList" class="cashflowList"></div></div>
 </main>
 
-<main id="view-income" class="hidden"><div class="card"><div class="row"><div><div class="sectionTitle">Income</div><div class="muted" style="font-size:13px;margin-top:3px">Paydays are calculated automatically.</div></div><div style="display:flex;gap:7px"><button class="btn small secondary" onclick="openModal('bonus')">＋ Bonus</button><button class="btn small" onclick="openModal('income')">＋ Recurring</button></div></div><div id="incomeTotal" class="billTotal"><div class="label">MONTHLY INCOME TOTAL</div><div id="incomeTotalValue" class="value">$0</div><div class="note">Includes recurring income and bonuses for the current month.</div></div><div id="incomeList"></div></div></main>
+<main id="view-income" class="hidden"><div class="card"><div class="incomeSectionHead"><div><div class="sectionTitle">Income</div><div class="muted" style="font-size:13px;margin-top:3px">Paychecks are generated from your income rules. Individual checks can be edited without changing the rule.</div></div><div class="incomeRuleActions"><button class="btn small secondary" onclick="openModal('bonus')">＋ Bonus</button><button class="btn small" onclick="openModal('income')">＋ Recurring</button></div></div><div class="incomeMonthNav"><button type="button" onclick="shiftIncomeMonth(-1)">← Previous</button><div id="incomeMonthLabel" class="incomeMonthLabel"></div><button type="button" class="today" onclick="goIncomeToday()">Today</button><button type="button" onclick="shiftIncomeMonth(1)">Next →</button></div><div id="incomeTotal" class="billTotal"><div class="label">MONTHLY INCOME TOTAL</div><div id="incomeTotalValue" class="value">$0</div><div id="incomeTotalNote" class="incomeMonthTotalNote"></div></div><div id="incomeList"></div></div></main>
 
 <main id="view-bills" class="hidden"><div class="card"><div class="row"><div><div class="sectionTitle">Bills & fixed expenses</div><div class="muted" style="font-size:13px;margin-top:3px">Everything here is part of the monthly budget.</div></div><button class="btn small" onclick="openModal('bill')">＋ Add bill</button></div><div id="billTotal" class="billTotal"><div class="label">MONTHLY BILL TOTAL</div><div id="billTotalValue" class="value">$0</div><div class="note">Annual bills are shown as their monthly equivalent.</div></div><div id="billList"></div></div></main>
 
@@ -371,11 +371,11 @@ body.modal-open .modal{z-index:130!important}
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
 <script>
 const KEY='householdBudgetAlpha_v1';
-const APP_VERSION='V105.5.1';
+const APP_VERSION='V106.0.0';
 const colors=['#4F8EF7','#F4A300','#C65CEB','#35AFA0','#E85D75','#7A6FF0','#55A630','#F28482'];
-const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],manualIncomePayments:[],bonusIncomes:[],bills:[],billOverrides:{},categories:[],transactions:[],categoryCarry:{},rolloverDecisions:{},lastMonth:null,people:['Shared','Lindsay','Matthew'],creditCards:[],creditCardPayments:[],creditCardHistory:{},creditCardOverrides:{},paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}],expenseOrder:[],categoryBudgetOverrides:{}};
+const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],incomeOverrides:{},manualIncomePayments:[],bonusIncomes:[],bills:[],billOverrides:{},categories:[],transactions:[],categoryCarry:{},rolloverDecisions:{},lastMonth:null,people:['Shared','Lindsay','Matthew'],creditCards:[],creditCardPayments:[],creditCardHistory:{},creditCardOverrides:{},paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}],expenseOrder:[],categoryBudgetOverrides:{}};
 let data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
-data.incomes=data.incomes||[];data.manualIncomePayments=Array.isArray(data.manualIncomePayments)?data.manualIncomePayments:[];data.billOverrides=(data.billOverrides&&typeof data.billOverrides==='object')?data.billOverrides:{};data.bonusIncomes=data.bonusIncomes||[];data.bills=data.bills||[];data.transactions=data.transactions||[];data.categories=data.categories||[];data.creditCards=Array.isArray(data.creditCards)?data.creditCards:[];data.creditCardPayments=Array.isArray(data.creditCardPayments)?data.creditCardPayments:[];data.creditCardHistory=(data.creditCardHistory&&typeof data.creditCardHistory==='object')?data.creditCardHistory:{};data.creditCardOverrides=(data.creditCardOverrides&&typeof data.creditCardOverrides==='object')?data.creditCardOverrides:{};data.paymentSources=Array.isArray(data.paymentSources)&&data.paymentSources.length?data.paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}];data.savedTags=Array.isArray(data.savedTags)?data.savedTags.map(x=>String(x).trim()).filter(Boolean):[];data.bills=data.bills.map(b=>({...b,tags:normalizeTags(b.tags||[])}));
+data.incomes=data.incomes||[];data.incomeOverrides=(data.incomeOverrides&&typeof data.incomeOverrides==='object')?data.incomeOverrides:{};data.manualIncomePayments=Array.isArray(data.manualIncomePayments)?data.manualIncomePayments:[];data.billOverrides=(data.billOverrides&&typeof data.billOverrides==='object')?data.billOverrides:{};data.bonusIncomes=data.bonusIncomes||[];data.bills=data.bills||[];data.transactions=data.transactions||[];data.categories=data.categories||[];data.creditCards=Array.isArray(data.creditCards)?data.creditCards:[];data.creditCardPayments=Array.isArray(data.creditCardPayments)?data.creditCardPayments:[];data.creditCardHistory=(data.creditCardHistory&&typeof data.creditCardHistory==='object')?data.creditCardHistory:{};data.creditCardOverrides=(data.creditCardOverrides&&typeof data.creditCardOverrides==='object')?data.creditCardOverrides:{};data.paymentSources=Array.isArray(data.paymentSources)&&data.paymentSources.length?data.paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}];data.savedTags=Array.isArray(data.savedTags)?data.savedTags.map(x=>String(x).trim()).filter(Boolean):[];data.bills=data.bills.map(b=>({...b,tags:normalizeTags(b.tags||[])}));
 data.categoryBudgetOverrides=(data.categoryBudgetOverrides&&typeof data.categoryBudgetOverrides==='object')?data.categoryBudgetOverrides:{};
 data.categories=data.categories.map((c,i)=>{
   const out={...c,id:c.id||('cat_'+Date.now().toString(36)+'_'+i+'_'+Math.random().toString(36).slice(2,7)),color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'};
@@ -476,20 +476,84 @@ function addMonths(d,n){const x=new Date(d);x.setMonth(x.getMonth()+n);return x}
 function monthStart(d=new Date()){return new Date(d.getFullYear(),d.getMonth(),1,12)}
 function monthEnd(d=new Date()){return new Date(d.getFullYear(),d.getMonth()+1,0,12)}
 function startWeek(d=new Date()){const x=new Date(d);x.setHours(12,0,0,0);x.setDate(x.getDate()-((x.getDay()+6)%7));return x}
-function persistData(){cloud.lastLocalMutationAt=Date.now();localStorage.setItem(KEY,JSON.stringify(data));cloudSaveIfConnected()}
+function persistData(){cloud.lastLocalMutationAt=Date.now();localStorage.setItem(KEY,JSON.stringify(data));if(cloud.ready&&cloud.householdId)cloud.localDirty=true;saveCloudSyncState();cloudSaveIfConnected()}
 function save(){persistData();render()}
 
 // Optional cloud sharing. Local storage remains the source of truth until a household is connected.
 const SHARING_CONFIG_KEY='householdBudgetFirebaseConfig_v1';
 const SHARING_META_KEY='householdBudgetSharing_v1';
+const CLOUD_SYNC_STATE_KEY='householdBudgetCloudSync_v2';
 // V68: use the app's Firebase project by default. Users can still replace this
 // configuration through the advanced setup screen if they are running their own copy.
 const DEFAULT_FIREBASE_CONFIG={apiKey:'AIzaSyBVA_XFb5vh9FXZWhLkXAr1NvJN0uAWXrY',authDomain:'household-budget-9f412.firebaseapp.com',projectId:'household-budget-9f412',storageBucket:'household-budget-9f412.firebasestorage.app',messagingSenderId:'233650112540',appId:'1:233650112540:web:01dc5e869a1977a6acdb7d'};
-let cloud={app:null,db:null,auth:null,uid:null,householdId:null,unsubscribe:null,ready:false,writing:false,savePending:false,lastLocalMutationAt:0};
+let cloud={app:null,db:null,auth:null,uid:null,householdId:null,unsubscribe:null,ready:false,writing:false,savePending:false,lastLocalMutationAt:0,baseRevision:0,baseData:null,localDirty:false};
 function getSharingConfig(){try{const saved=JSON.parse(localStorage.getItem(SHARING_CONFIG_KEY)||'null');return validFirebaseConfig(saved)?saved:DEFAULT_FIREBASE_CONFIG}catch(e){return DEFAULT_FIREBASE_CONFIG}}
 function getSharingMeta(){try{return JSON.parse(localStorage.getItem(SHARING_META_KEY)||'null')}catch(e){return null}}
 function saveSharingMeta(x){localStorage.setItem(SHARING_META_KEY,JSON.stringify(x))}
 function validFirebaseConfig(c){return !!(c&&c.apiKey&&c.authDomain&&c.projectId&&c.appId)}
+function deepEqual(a,b){try{return JSON.stringify(a)===JSON.stringify(b)}catch(e){return false}}
+function clone(x){return structuredClone(x)}
+function saveCloudSyncState(){try{if(!cloud.householdId)return;localStorage.setItem(CLOUD_SYNC_STATE_KEY,JSON.stringify({householdId:cloud.householdId,baseRevision:cloud.baseRevision||0,baseData:cloud.baseData||null,localDirty:!!cloud.localDirty}))}catch(e){console.warn('Could not save sync state',e)}}
+function loadCloudSyncState(){try{const x=JSON.parse(localStorage.getItem(CLOUD_SYNC_STATE_KEY)||'null');if(x&&x.householdId===cloud.householdId){cloud.baseRevision=Number(x.baseRevision)||0;cloud.baseData=x.baseData?clone(x.baseData):null;cloud.localDirty=!!x.localDirty}}catch(e){console.warn('Could not load sync state',e)}}
+function clearCloudSyncState(){try{localStorage.removeItem(CLOUD_SYNC_STATE_KEY)}catch(e){}}
+function recordIdForArray(name,x){if(x===undefined||x===null)return null;if(typeof x!=='object')return String(x);if(x.id!==undefined&&x.id!==null)return String(x.id);if(name==='people')return String(x);return null}
+function mergeThreeWay(base,local,remote){
+  if(deepEqual(local,base))return clone(remote);
+  if(deepEqual(remote,base))return clone(local);
+  if(deepEqual(local,remote))return clone(local);
+  if(Array.isArray(base)&&Array.isArray(local)&&Array.isArray(remote))return mergeArrayThreeWay(base,local,remote);
+  if(base&&local&&remote&&typeof base==='object'&&typeof local==='object'&&typeof remote==='object'){
+    const out={};const keys=new Set([...Object.keys(base),...Object.keys(local),...Object.keys(remote)]);
+    keys.forEach(k=>{const hasB=Object.prototype.hasOwnProperty.call(base,k),hasL=Object.prototype.hasOwnProperty.call(local,k),hasR=Object.prototype.hasOwnProperty.call(remote,k);if(!hasL&&hasR&&hasB){if(deepEqual(remote[k],base[k]))return;out[k]=clone(remote[k]);return}if(!hasR&&hasL&&hasB){if(deepEqual(local[k],base[k]))return;out[k]=clone(local[k]);return}if(!hasL&&!hasR)return;if(!hasB){if(hasL&&hasR)out[k]=deepEqual(local[k],remote[k])?clone(local[k]):clone(local[k]);else out[k]=clone(hasL?local[k]:remote[k]);return}out[k]=mergeThreeWay(base[k],local[k],remote[k]);});return out;
+  }
+  // When the same scalar was changed on both sides, keep the local edit. The
+  // conflict is intentionally deterministic rather than silently reverting it.
+  return clone(local);
+}
+function mergeArrayThreeWay(base,local,remote){
+  const keyed=[...base,...local,...remote].every(x=>recordIdForArray('',x)!==null);
+  if(!keyed){
+    if(deepEqual(local,remote))return clone(local);
+    if(deepEqual(local,base))return clone(remote);
+    if(deepEqual(remote,base))return clone(local);
+    return clone(local);
+  }
+  const bm=new Map(base.map(x=>[recordIdForArray('',x),x])),lm=new Map(local.map(x=>[recordIdForArray('',x),x])),rm=new Map(remote.map(x=>[recordIdForArray('',x),x]));
+  const order=[];[local,remote,base].forEach(arr=>arr.forEach(x=>{const id=recordIdForArray('',x);if(id!==null&&!order.includes(id))order.push(id)}));
+  const out=[];for(const id of order){const b=bm.get(id),l=lm.get(id),r=rm.get(id);let v;
+    if(l===undefined&&r===undefined)continue;
+    if(l===undefined){if(b!==undefined&&deepEqual(r,b))continue;v=clone(r)}
+    else if(r===undefined){if(b!==undefined&&deepEqual(l,b))continue;v=clone(l)}
+    else if(b===undefined)v=deepEqual(l,r)?clone(l):clone(l);
+    else v=mergeThreeWay(b,l,r);
+    if(v!==undefined)out.push(v);
+  }return out;
+}
+function mergePeopleThreeWay(base,local,remote){
+  const b=new Set((base||[]).map(String)),l=new Set((local||[]).map(String)),r=new Set((remote||[]).map(String)),out=[];
+  const order=[...(local||[]),...(remote||[]),...(base||[])].map(String);order.forEach(id=>{if(out.includes(id))return;const inB=b.has(id),inL=l.has(id),inR=r.has(id);if(inL&&inR)out.push(id);else if(inL&&!inR){if(!inB)out.push(id);else if(!deepEqual([...l].sort(),[...b].sort())&&deepEqual([...r].sort(),[...b].sort()))out.push(id)}else if(!inL&&inR){if(!inB)out.push(id);else if(deepEqual([...l].sort(),[...b].sort()))out.push(id)}});if(!out.includes('Shared'))out.unshift('Shared');return out;
+}
+function prepareIncoming(remote){
+  const incoming={...clone(blank),...(remote.data||{}),setupComplete:true};
+  incoming.categories=(incoming.categories||[]).map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));
+  incoming.people=mergePeopleThreeWay([],incoming.people||['Shared','Lindsay','Matthew'],[]);
+  if(!incoming.people.includes('Shared'))incoming.people.unshift('Shared');
+  ensureIdsFor(incoming);
+  return incoming;
+}
+function ensureIdsFor(target){
+  const used=new Set();(target.transactions||[]).forEach((t,i)=>{if(!t.id||used.has(String(t.id)))t.id=`tx-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}`;used.add(String(t.id))});
+  (target.bills||[]).forEach((b,i)=>{if(!b.id)b.id=`bill-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}`});
+  (target.incomes||[]).forEach((x,i)=>{if(!x.id)x.id=`income-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}`});
+  (target.manualIncomePayments||[]).forEach((x,i)=>{if(!x.id)x.id=`mi-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}`;});
+  (target.bonusIncomes||[]).forEach((x,i)=>{if(!x.id)x.id=`bonus-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}`});
+  (target.categories||[]).forEach((x,i)=>{if(!x.id)x.id=`cat-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}`});
+  (target.creditCards||[]).forEach((x,i)=>{if(typeof x==='object'&&!x.id)x.id=`card-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}`});
+  (target.creditCardPayments||[]).forEach((x,i)=>{if(!x.id)x.id=`ccp-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}`});
+  (target.paymentSources||[]).forEach((x,i)=>{if(typeof x==='object'&&!x.id)x.id=`acct-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}`});
+}
+function syncRecordBase(){cloud.baseData=clone(data);saveCloudSyncState()}
+
 async function initCloud(){
   const cfg=getSharingConfig();
   if(!validFirebaseConfig(cfg)||typeof firebase==='undefined')return false;
@@ -498,6 +562,7 @@ async function initCloud(){
     if(!cloud.auth.currentUser)await cloud.auth.signInAnonymously();
     cloud.uid=cloud.auth.currentUser?.uid||null;
     const meta=getSharingMeta();cloud.householdId=meta?.householdId||null;
+    if(cloud.householdId)loadCloudSyncState();
     cloud.ready=!!cloud.uid;
     if(cloud.ready&&cloud.householdId)subscribeToHousehold();
     updateSharingUI();
@@ -510,60 +575,65 @@ function subscribeToHousehold(){
   if(!cloud.db||!cloud.householdId)return;
   if(cloud.unsubscribe)cloud.unsubscribe();
   const ref=cloud.db.collection('households').doc(cloud.householdId);
-  cloud.unsubscribe=ref.onSnapshot(snap=>{
+  cloud.unsubscribe=ref.onSnapshot(async snap=>{
     if(!snap.exists)return;
-    const remote=snap.data();
-    if(remote.joinCode&&remote.data){
-      const incoming={...structuredClone(blank),...remote.data,setupComplete:true};
-      incoming.categories=(incoming.categories||[]).map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));
-      incoming.people=Array.from(new Set((incoming.people||['Shared','Lindsay','Matthew']).filter(Boolean)));
-      if(!incoming.people.includes('Shared'))incoming.people.unshift('Shared');
-      // If this device has a local write queued/in progress, do not let an older
-      // snapshot briefly overwrite it. The queued write will publish the latest
-      // local state immediately after the current write finishes.
-      if(cloud.writing||cloud.savePending)return;
-      if(remote.clientUpdatedAt && remote.clientUpdatedAt < cloud.lastLocalMutationAt)return;
-      data=incoming;ensureIds();localStorage.setItem(KEY,JSON.stringify(data));
-      render();
-      updateSharingUI();
+    const remote=snap.data();if(!remote.joinCode||!remote.data)return;
+    const remoteRevision=Number(remote.revision||0);
+    const incoming=prepareIncoming(remote);
+    // First connection to a legacy household: establish a base without erasing
+    // this device's local copy. If local data differs, publish it through the
+    // safe transaction path instead of replacing it from the listener.
+    if(!cloud.baseData){
+      cloud.baseRevision=remoteRevision;
+      if(deepEqual(data,incoming)){cloud.baseData=clone(incoming);cloud.localDirty=false;}
+      else if(!data.setupComplete){data=incoming;cloud.baseData=clone(incoming);cloud.localDirty=false;localStorage.setItem(KEY,JSON.stringify(data));}
+      else {data=mergeThreeWay(structuredClone(blank),data,incoming);ensureIds();normalizePaymentData();localStorage.setItem(KEY,JSON.stringify(data));cloud.baseData=clone(incoming);cloud.localDirty=true;}
+      saveCloudSyncState();
+    } else if(remoteRevision>cloud.baseRevision){
+      if(cloud.localDirty||!deepEqual(data,cloud.baseData)){
+        data=mergeThreeWay(cloud.baseData,data,incoming);ensureIds();normalizePaymentData();localStorage.setItem(KEY,JSON.stringify(data));cloud.baseData=clone(incoming);cloud.baseRevision=remoteRevision;cloud.localDirty=true;saveCloudSyncState();
+      }else{
+        data=incoming;ensureIds();normalizePaymentData();localStorage.setItem(KEY,JSON.stringify(data));cloud.baseData=clone(incoming);cloud.baseRevision=remoteRevision;cloud.localDirty=false;saveCloudSyncState();render();updateSharingUI();
+      }
     }
+    if(cloud.localDirty)cloudSaveIfConnected();
   },err=>{console.error('Sharing listener error',err);showToast('Sharing connection lost')});
 }
 async function cloudSaveIfConnected(){
   if(!cloud.ready||!cloud.db||!cloud.householdId)return;
-  // Queue changes instead of dropping them while another cloud write is in flight.
-  // This matters when a user adds an expense shortly after another change: the
-  // old implementation returned immediately if cloud.writing was true, allowing
-  // the listener to later replace the new local expense with the older cloud copy.
-  cloud.savePending=true;
-  if(cloud.writing)return;
-  cloud.writing=true;
+  cloud.savePending=true;if(cloud.writing)return;cloud.writing=true;
   try{
     while(cloud.savePending){
       cloud.savePending=false;
-      const snapshot=cloudData();
-      await cloud.db.collection('households').doc(cloud.householdId).set({data:snapshot,clientUpdatedAt:cloud.lastLocalMutationAt,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:cloud.uid},{merge:true});
+      const localSnapshot=clone(data),base=clone(cloud.baseData||data),expectedRevision=Number(cloud.baseRevision||0);
+      await cloud.db.runTransaction(async tx=>{
+        const ref=cloud.db.collection('households').doc(cloud.householdId),snap=await tx.get(ref);
+        if(!snap.exists)throw new Error('Shared household not found');
+        const remote=snap.data(),remoteRevision=Number(remote.revision||0),remoteData=prepareIncoming(remote);
+        let merged;
+        if(remoteRevision===expectedRevision)merged=localSnapshot;
+        else merged=mergeThreeWay(base,localSnapshot,remoteData);
+        ensureIdsFor(merged);normalizePaymentDataFor(merged);
+        const nextRevision=Math.max(remoteRevision,expectedRevision)+1;
+        tx.set(ref,{data:merged,revision:nextRevision,clientUpdatedAt:Date.now(),updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:cloud.uid},{merge:true});
+        cloud.baseRevision=nextRevision;cloud.baseData=clone(merged);data=merged;cloud.localDirty=false;
+      });
+      localStorage.setItem(KEY,JSON.stringify(data));saveCloudSyncState();render();updateSharingUI();
     }
-  }catch(e){
-    console.error('Cloud save failed',e);
-    showToast('Saved here, but cloud sync failed');
-  }finally{
-    cloud.writing=false;
-    if(cloud.savePending)cloudSaveIfConnected();
-  }
+  }catch(e){console.error('Cloud save failed',e);cloud.localDirty=true;saveCloudSyncState();showToast('Saved here. Sync will retry when connected');}
+  finally{cloud.writing=false;if(cloud.savePending)cloudSaveIfConnected();}
+}
+function normalizePaymentDataFor(target){
+  target.manualIncomePayments=Array.isArray(target.manualIncomePayments)?target.manualIncomePayments:[];
+  target.creditCards=Array.isArray(target.creditCards)?target.creditCards:[];
+  target.creditCardPayments=Array.isArray(target.creditCardPayments)?target.creditCardPayments:[];
+  target.creditCardHistory=(target.creditCardHistory&&typeof target.creditCardHistory==='object')?target.creditCardHistory:{};
+  target.creditCardOverrides=(target.creditCardOverrides&&typeof target.creditCardOverrides==='object')?target.creditCardOverrides:{};
+  target.paymentSources=Array.isArray(target.paymentSources)?target.paymentSources:[];
 }
 async function forceSyncNow(){
   if(!cloud.ready||!cloud.db||!cloud.householdId){showToast('Set up sharing first');return}
-  try{
-    const snap=await cloud.db.collection('households').doc(cloud.householdId).get();
-    if(!snap.exists){showToast('Shared household not found');return}
-    const remote=snap.data(),remoteStamp=Number(remote.clientUpdatedAt||0);
-    if(remote.data&&remoteStamp>=Number(cloud.lastLocalMutationAt||0)){
-      data={...structuredClone(blank),...remote.data,setupComplete:true};ensureIds();normalizePaymentData();localStorage.setItem(KEY,JSON.stringify(data));render();updateSharingUI();showToast('Synced with shared budget');
-    }else{
-      const stamp=Date.now();await cloud.db.collection('households').doc(cloud.householdId).set({data:cloudData(),clientUpdatedAt:stamp,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:cloud.uid},{merge:true});cloud.lastLocalMutationAt=stamp;showToast('Latest local changes synced');
-    }
-  }catch(e){console.error(e);showToast('Could not sync right now')}
+  cloud.localDirty=true;await cloudSaveIfConnected();showToast(cloud.localDirty?'Saved here. Sync will retry when connected':'Budget synced safely');
 }
 function openShareModal(){
   const meta=getSharingMeta();
@@ -594,8 +664,8 @@ async function createSharedHousehold(){
   const name=prompt('Give this shared budget a name','Household Budget');if(name===null)return;
   const id=code.toLowerCase();
   try{
-    await cloud.db.collection('households').doc(id).set({joinCode:code.toLowerCase(),name:name.trim()||'Household Budget',data:cloudData(),createdAt:firebase.firestore.FieldValue.serverTimestamp(),updatedAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:cloud.uid,updatedBy:cloud.uid},{merge:false});
-    cloud.householdId=id;saveSharingMeta({householdId:id,name:name.trim()||'Household Budget',code});subscribeToHousehold();updateSharingUI();closeModal();showToast('Shared household created');
+    await cloud.db.collection('households').doc(id).set({joinCode:code.toLowerCase(),name:name.trim()||'Household Budget',data:cloudData(),revision:1,clientUpdatedAt:Date.now(),createdAt:firebase.firestore.FieldValue.serverTimestamp(),updatedAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:cloud.uid,updatedBy:cloud.uid},{merge:false});
+    cloud.householdId=id;cloud.baseRevision=1;cloud.baseData=clone(data);cloud.localDirty=false;saveSharingMeta({householdId:id,name:name.trim()||'Household Budget',code});saveCloudSyncState();subscribeToHousehold();updateSharingUI();closeModal();showToast('Shared household created');
   }catch(e){console.error(e);showToast('Could not create household')}
 }
 async function joinSharedHousehold(){
@@ -608,7 +678,7 @@ async function joinSharedHousehold(){
     if(!snap.exists){showToast('Household not found');return}
     const remote=snap.data();if(String(remote.joinCode||'').toUpperCase()!==code||!remote.data){showToast('That household code is not valid');return}
     if(!confirm('Joining will replace this device’s current budget with the shared household budget. Continue?'))return;
-    data={...structuredClone(blank),...remote.data,setupComplete:true};data.categories=(data.categories||[]).map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));data.people=Array.from(new Set((data.people||['Shared','Lindsay','Matthew']).filter(Boolean)));if(!data.people.includes('Shared'))data.people.unshift('Shared');ensureIds();localStorage.setItem(KEY,JSON.stringify(data));cloud.householdId=id;saveSharingMeta({householdId:id,name:remote.name||'Household',code});subscribeToHousehold();closeModal();render();updateSharingUI();showToast('Joined shared household');
+    data={...structuredClone(blank),...remote.data,setupComplete:true};cloud.baseRevision=Number(remote.revision||0);cloud.baseData=clone(data);cloud.localDirty=false;data.categories=(data.categories||[]).map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));data.people=Array.from(new Set((data.people||['Shared','Lindsay','Matthew']).filter(Boolean)));if(!data.people.includes('Shared'))data.people.unshift('Shared');ensureIds();localStorage.setItem(KEY,JSON.stringify(data));cloud.householdId=id;cloud.baseRevision=Number(remote.revision||0);cloud.baseData=clone(data);cloud.localDirty=false;saveCloudSyncState();saveSharingMeta({householdId:id,name:remote.name||'Household',code});subscribeToHousehold();closeModal();render();updateSharingUI();showToast('Joined shared household');
   }catch(e){console.error(e);showToast('Could not join household')}
 }
 function openJoinHousehold(fromSetup=false){
@@ -622,21 +692,63 @@ function updateSharingUI(){
 }
 function leaveSharedHousehold(){
   if(!confirm('Stop syncing this device with the shared household? Your current data will stay on this device.'))return;
-  if(cloud.unsubscribe)cloud.unsubscribe();cloud.unsubscribe=null;cloud.householdId=null;cloud.ready=!!cloud.uid;localStorage.removeItem(SHARING_META_KEY);updateSharingUI();showToast('Sharing stopped on this device');
+  if(cloud.unsubscribe)cloud.unsubscribe();cloud.unsubscribe=null;cloud.householdId=null;cloud.ready=!!cloud.uid;localStorage.removeItem(SHARING_META_KEY);clearCloudSyncState();updateSharingUI();showToast('Sharing stopped on this device');
 }
 function showToast(t){const e=document.getElementById('toast');e.textContent=t;e.style.display='block';clearTimeout(window._toast);window._toast=setTimeout(()=>e.style.display='none',1800)}
 
-function ensureIds(){
-  let changed=false;
-  const used=new Set();
-  (data.transactions||[]).forEach((t,i)=>{t.tags=normalizeTags(t.tags||[]);if(!t.id||used.has(String(t.id))){t.id=`tx-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}`;changed=true}used.add(String(t.id))});
-  (data.bills||[]).forEach((b,i)=>{if(!b.id){b.id=`bill-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}`;changed=true}});
-  if(changed)persistData();
-}
+function ensureIds(){let before=JSON.stringify(data);ensureIdsFor(data);data.categories=(data.categories||[]).map((c,i)=>({...c,id:c.id||`cat_${Date.now().toString(36)}_${i}_${Math.random().toString(36).slice(2,7)}`}));data.bills=(data.bills||[]).map(b=>({...b,tags:normalizeTags(b.tags||[])}));if(JSON.stringify(data)!==before){localStorage.setItem(KEY,JSON.stringify(data));if(cloud.ready&&cloud.householdId){cloud.localDirty=true;saveCloudSyncState();cloudSaveIfConnected()}}}
 ensureIds();
 
 // V68: reconnect to the saved/default Firebase project when this device already has a budget.
 if(data.setupComplete) initCloud();
+
+let incomeViewMonth=monthKey();
+function incomeOverrideKey(incomeId,scheduledDate){return `${incomeId}__${scheduledDate}`}
+function incomeOverrideFor(incomeId,scheduledDate){return (data.incomeOverrides||{})[incomeOverrideKey(incomeId,scheduledDate)]||null}
+function incomePaychecksForMonth(m=new Date()){
+  const mk=monthKey(m),out=[],seen=new Set();
+  (data.incomes||[]).forEach(rule=>{
+    if(rule.cadence==='manual')return;
+    const scheduled=paydayDates(rule,m);
+    scheduled.forEach(d=>{
+      const sd=dateValue(d),ov=incomeOverrideFor(rule.id,sd),actual=ov?.date||sd;
+      if(monthKey(dateOnly(actual))!==mk)return;
+      const key=`${rule.id}|${sd}`;seen.add(key);
+      out.push({id:ov?.id||incomeOverrideKey(rule.id,sd),incomeId:rule.id,sourceName:rule.name,scheduledDate:sd,date:actual,amount:ov&&ov.amount!==undefined?Number(ov.amount)||0:Number(rule.amount)||0,edited:!!ov,rule});
+    });
+  });
+  // Include edited paychecks whose actual date was moved into this month.
+  Object.keys(data.incomeOverrides||{}).forEach(k=>{
+    const ov=data.incomeOverrides[k],rule=(data.incomes||[]).find(x=>String(x.id)===String(ov?.incomeId));if(!rule||!ov?.scheduledDate||!ov?.date||monthKey(dateOnly(ov.date))!==mk)return;
+    const key=`${rule.id}|${ov.scheduledDate}`;if(seen.has(key))return;
+    out.push({id:ov.id||k,incomeId:rule.id,sourceName:rule.name,scheduledDate:ov.scheduledDate,date:ov.date,amount:Number(ov.amount)||0,edited:true,rule});
+  });
+  return out.sort((a,b)=>String(a.date).localeCompare(String(b.date))||String(a.sourceName).localeCompare(String(b.sourceName)));
+}
+function incomeMonthTotal(m=new Date()){
+  const recurring=incomePaychecksForMonth(m).reduce((s,p)=>s+(Number(p.amount)||0),0);
+  const manual=(data.manualIncomePayments||[]).reduce((s,p)=>s+(p.month===monthKey(m)?Number(p.amount)||0:0),0);
+  const bonuses=(data.bonusIncomes||[]).reduce((s,b)=>s+(b.month===monthKey(m)?Number(b.amount)||0:0),0);
+  return recurring+manual+bonuses;
+}
+function shiftIncomeMonth(delta){const d=dateOnly(`${incomeViewMonth}-01`);d.setDate(1);d.setMonth(d.getMonth()+delta);incomeViewMonth=monthKey(d);renderIncome()}
+function goIncomeToday(){incomeViewMonth=monthKey();renderIncome()}
+let incomeEditDraft=null;
+function editIncomePaycheck(incomeId,scheduledDate){const key=incomeOverrideKey(incomeId,scheduledDate),rule=(data.incomes||[]).find(x=>String(x.id)===String(incomeId));if(!rule)return;const existing=data.incomeOverrides?.[key];incomeEditDraft={key,incomeId,scheduledDate,amount:existing&&existing.amount!==undefined?Number(existing.amount):Number(rule.amount)||0,date:existing?.date||scheduledDate,existing:!!existing};openModal('editIncomePaycheck',key)}
+function saveIncomePaycheckEdit(key){
+  const draft=incomeEditDraft;if(!draft||draft.key!==key)return;
+  const amount=Number(document.getElementById('fAmount')?.value),date=document.getElementById('fDate')?.value||draft.scheduledDate;
+  if(!Number.isFinite(amount)||amount<0||!date){showToast('Enter a valid amount and date');return}
+  data.incomeOverrides=data.incomeOverrides||{};const rule=(data.incomes||[]).find(x=>String(x.id)===String(draft.incomeId));
+  data.incomeOverrides[key]={id:key,incomeId:draft.incomeId,sourceName:rule?.name||'',scheduledDate:draft.scheduledDate,amount:Math.round(amount*100)/100,date,edited:true,updatedAt:Date.now()};incomeEditDraft=null;save();closeModal();renderIncome();showToast('Paycheck updated')
+}
+function clearIncomePaycheckEdit(key){if(data.incomeOverrides?.[key]){delete data.incomeOverrides[key];save();}incomeEditDraft=null;closeModal();renderIncome();showToast('Paycheck reset to rule')}
+function ensureIncomeOverrides(){
+  data.incomeOverrides=(data.incomeOverrides&&typeof data.incomeOverrides==='object')?data.incomeOverrides:{};
+  (data.incomes||[]).forEach((x,i)=>{if(!x.id)x.id=`income-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}`});
+  (data.manualIncomePayments||[]).forEach((p,i)=>{if(!p.id)p.id=`mi-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}`;const src=(data.incomes||[])[Number(p.sourceId)];if(src){p.sourceId=src.id;p.incomeId=src.id}});
+  Object.keys(data.incomeOverrides).forEach(k=>{const o=data.incomeOverrides[k];if(!o.id)o.id=k;if(!o.incomeId&&o.sourceId!==undefined){const src=(data.incomes||[])[Number(o.sourceId)];if(src)o.incomeId=src.id}});
+}
 
 function paydayDates(i,m=new Date()){
  const first=dateOnly(i.firstPayDate),start=monthStart(m),end=monthEnd(m),out=[];
@@ -678,28 +790,7 @@ function paydayDates(i,m=new Date()){
  return out.sort((a,b)=>a-b)
 }
 
-function monthlyIncome(m=new Date()){
-  // The budget is a MONTHLY plan, not a cash-balance timeline.
-  // Determine how many paychecks belong to the calendar month from each
-  // schedule's dates, then credit the FULL monthly income on day 1.
-  // Pay dates are still used to determine the count for weekly/biweekly income.
-  const recurring=(data.incomes||[]).reduce((total,i)=>{
-    if(i.cadence==='manual') return total;
-    const amount=Number(i.amount)||0;
-    if(!amount) return total;
-    const count=paydayDates(i,m).filter(d=>{
-      const start=i.startDate?new Date(i.startDate+'T00:00:00'):null;
-      const end=i.endDate?new Date(i.endDate+'T23:59:59'):null;
-      return (!start||d>=start)&&(!end||d<=end);
-    }).length;
-    return total + amount*count;
-  },0);
-  const manual=(data.manualIncomePayments||[]).reduce((total,p)=>
-    total+(p.month===monthKey(m)?(Number(p.amount)||0):0),0);
-  const bonuses=(data.bonusIncomes||[]).reduce((total,b)=>
-    total+(b.month===monthKey(m)?(Number(b.amount)||0):0),0);
-  return recurring+manual+bonuses;
-}
+function monthlyIncome(m=new Date()){return incomeMonthTotal(m)}
 
 // Income and bills are intentionally NOT prorated by today's date or by the
 // day a paycheck/bill happens. For the budget, the full month's expected
@@ -1436,7 +1527,8 @@ function openModal(type,pref=''){
   body=`<form onsubmit="return saveExpenseEditById(event,'${esc(String(t.id))}')"><label>Amount</label><input id="fAmount" type="number" step=".01" min="0" value="${Number(t.amount)||0}" required><label>Date</label><input id="fDate" type="date" value="${esc(t.date||dateValue())}" required><label>Category</label><select id="fCat">${data.categories.map(c=>`<option value="${esc(c.name)}" ${c.name===t.category?'selected':''}>${esc(c.name)}</option>`).join('')}</select><label>Who spent it?</label><select id="fWho">${data.people.map(p=>`<option value="${esc(p)}" ${p===(t.who||'Shared')?'selected':''}>${esc(p)}</option>`).join('')}</select><label>Note</label><input id="fNote" value="${esc(t.note||'')}"><label>Payment method</label><select id="fPaymentMethod" onchange="handleExpensePaymentMethodChange()"><option value="debit" ${t.paymentMethod!=='creditCard'?'selected':''}>Payment account</option><option value="creditCard" ${t.paymentMethod==='creditCard'?'selected':''}>Credit card</option></select><div id="expenseDebitWrap" class="${t.paymentMethod==='creditCard'?'hidden':''}"><div class="row"><label>Paid from</label><button type="button" class="editLink" onclick="addPaymentAccountFromExpense()">＋ Add account</button></div><select id="fPaymentSource">${paymentAccounts().map(x=>`<option value="${esc(x.id)}" ${x.id===(t.paymentSource||'checking')?'selected':''}>${esc(x.name)}</option>`).join('')}</select></div><div id="expenseCreditCardWrap" class="${t.paymentMethod==='creditCard'?'':'hidden'}"><label>Credit card</label><select id="fCreditCard" onchange="handleExpenseCardChoice()">${availableCreditCards().map(c=>`<option value="${esc(c)}" ${c===t.creditCard?'selected':''}>${esc(c)}</option>`).join('')}<option value="__add__">＋ Add a credit card</option></select><div id="expenseNewCardWrap" class="hidden" style="margin-top:8px"><div class="row"><input id="fNewCardName" placeholder="Card name"><button type="button" class="editLink" onclick="saveNewCardFromExpense()">Add card</button></div></div></div><div class="budgetImpact"><label style="display:flex;align-items:center;gap:8px;margin-top:12px"><input id="fCountsTowardBudget" type="checkbox" ${t.countsTowardBudget!==false?'checked':''}> <span><strong>Counts toward budget</strong><br><span class="muted" style="font-size:11px">Uncheck to track this purchase without reducing your budget or category balance.</span></span></label></div><label>Tags <span class="muted">(optional)</span></label><input id="fTags" value="${esc((t.tags||[]).join(', '))}" placeholder="Amazon, Christmas" oninput="syncExpenseTagChoices()">${renderExpenseTagChoices(t.tags||[])}<div class="actions"><button type="button" class="btn danger" onclick="deleteExpenseById('${esc(String(t.id))}')">Delete</button><button type="button" class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn">Save changes</button></div></form>`;
  }
  if(type==='income'){title='Add recurring income';body=incomeForm(null)}
- if(type==='editIncome'){title=(data.incomes?.[pref]?.cadence==='manual'?'Edit income source':'Edit recurring income');body=incomeForm(data.incomes?.[pref],`saveIncomeEdit(${pref})`)}
+ if(type==='editIncome'){title=(data.incomes?.[pref]?.cadence==='manual'?'Edit income source':'Edit recurring income rule');body=incomeForm(data.incomes?.[pref],`saveIncomeEdit(${pref})`)}
+ if(type==='editIncomePaycheck'){const draft=incomeEditDraft?.key===pref?incomeEditDraft:null;const ov=data.incomeOverrides?.[pref],rule=(data.incomes||[]).find(x=>String(x.id)===String(draft?.incomeId||ov?.incomeId));if(!draft&&!ov)return;if(!rule)return;const amount=draft?draft.amount:Number(ov.amount)||Number(rule.amount)||0,date=draft?.date||ov?.date||ov?.scheduledDate||dateValue();title=`Edit ${esc(rule.name)} paycheck`;body=`<div class="backupBox"><strong>This changes this paycheck only.</strong><br>Normal rule amount: ${money(rule.amount)}</div><label>Amount received</label><input id="fAmount" type="number" step=".01" min="0" value="${amount}"><label>Pay date</label><input id="fDate" type="date" value="${esc(date)}"><div class="actions"><button type="button" class="btn danger" onclick="clearIncomePaycheckEdit('${esc(pref)}')">Reset to rule</button><button type="button" class="btn ghost" onclick="incomeEditDraft=null;closeModal()">Cancel</button><button type="button" class="btn" onclick="saveIncomePaycheckEdit('${esc(pref)}')">Save changes</button></div>`}
  if(type==='manualIncomePayment'){const src=data.incomes?.[pref];if(!src)return;title='Add income received';body=`<label>Income source</label><input value="${esc(src.name)}" disabled><label>Amount received</label><input id="fAmount" type="number" step=".01" min="0" autofocus><label>Date received</label><input id="fDate" type="date" value="${dateValue()}"><div class="actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="addManualIncomePayment(${pref})">Add income</button></div>`}
  if(type==='bonus'){title='Add bonus income';body=`<label>Income source</label><input id="fName" placeholder="Bonus"><label>Amount</label><input id="fAmount" type="number" step=".01" min="0"><label>Month</label><input id="fMonth" type="month" value="${monthKey()}"><div class="actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="addBonusIncome()">Save bonus</button></div>`}
  if(type==='editBonus'){const b=data.bonusIncomes?.[pref];if(!b)return;title='Edit bonus income';body=`<label>Income source</label><input id="fName" value="${esc(b.name)}"><label>Amount</label><input id="fAmount" type="number" step=".01" value="${b.amount}"><label>Month</label><input id="fMonth" type="month" value="${esc(b.month||monthKey())}"><div class="actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="saveBonusEdit(${pref})">Save changes</button></div>`}
@@ -1566,12 +1658,12 @@ function saveExpenseEditById(e,id){
  t.amount=amount;t.date=document.getElementById('fDate').value||dateValue();t.category=document.getElementById('fCat').value;t.who=document.getElementById('fWho').value;t.person=t.who;t.note=document.getElementById('fNote').value.trim();t.tags=normalizeTags(document.getElementById('fTags')?.value||'');data.savedTags=Array.isArray(data.savedTags)?data.savedTags:[];t.tags.forEach(tag=>{if(!data.savedTags.some(x=>x.toLowerCase()===tag.toLowerCase()))data.savedTags.push(tag)});t.paymentMethod=document.getElementById('fPaymentMethod')?.value||'debit';t.paymentSource=t.paymentMethod==='creditCard'?'':(document.getElementById('fPaymentSource')?.value||'checking');t.paymentSourceName=t.paymentMethod==='creditCard'?'':(paymentAccounts().find(x=>x.id===t.paymentSource)?.name||t.paymentSourceName||'Checking');t.creditCard=t.paymentMethod==='creditCard'?(document.getElementById('fCreditCard')?.value||''):'';t.countsTowardBudget=document.getElementById('fCountsTowardBudget')?.checked!==false;if(t.paymentMethod==='creditCard'&&!t.creditCard){showToast('Choose a credit card');return false}const stay=currentView;currentView=stay;save();closeModal();showView(stay);showToast('Expense updated');return false;
 }
 function deleteExpenseById(id){const i=data.transactions.findIndex(x=>String(x.id)===String(id));if(i<0)return;if(confirm('Delete this expense?')){const removedId=String(data.transactions[i].id);data.transactions.splice(i,1);data.expenseOrder=Array.isArray(data.expenseOrder)?data.expenseOrder.filter(x=>String(x)!==removedId):[];save();closeModal();showToast('Expense deleted')}}
-function addIncome(){const name=document.getElementById('fName').value.trim(),cadence=document.getElementById('fFreq').value,amount=+document.getElementById('fAmount')?.value||0,firstPayDate=document.getElementById('fDate')?.value||'';if(!name){showToast('Enter an income name');return}if(cadence!=='manual'&&amount<=0){showToast('Enter an income amount');return}if(cadence!=='manual'&&cadence!=='midMonthEnd'&&!firstPayDate){showToast('Choose a known payday');return}data.incomes.push({name,amount:cadence==='manual'?0:amount,cadence,firstPayDate,secondPayDay:+document.getElementById('fSecond')?.value||15,midMonthDay:+document.getElementById('fMid')?.value||15,startDate:document.getElementById('fStartDate')?.value||'',endDate:document.getElementById('fEndDate')?.value||''});save();closeModal();showToast(cadence==='manual'?'Income source added':'Income added')}
-function saveIncomeEdit(i){const x=data.incomes?.[i];if(!x)return;const name=document.getElementById('fName').value.trim(),cadence=document.getElementById('fFreq').value,amount=+document.getElementById('fAmount')?.value||0,firstPayDate=document.getElementById('fDate')?.value||'';if(!name){showToast('Enter an income name');return}if(cadence!=='manual'&&amount<=0){showToast('Enter an income amount');return}if(cadence!=='manual'&&cadence!=='midMonthEnd'&&!firstPayDate){showToast('Choose a known payday');return}Object.assign(x,{name,amount:cadence==='manual'?0:amount,cadence,firstPayDate,secondPayDay:+document.getElementById('fSecond')?.value||15,midMonthDay:+document.getElementById('fMid')?.value||15,startDate:document.getElementById('fStartDate')?.value||'',endDate:document.getElementById('fEndDate')?.value||''});save();closeModal();showToast('Income updated')}
-function addManualIncomePayment(sourceIndex){const src=data.incomes?.[sourceIndex];const amount=+document.getElementById('fAmount')?.value||0,date=document.getElementById('fDate')?.value||'';if(!src||src.cadence!=='manual')return;if(amount<=0||!date){showToast('Enter the amount and date received');return}data.manualIncomePayments=data.manualIncomePayments||[];data.manualIncomePayments.push({id:'mi_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7),sourceId:sourceIndex,sourceName:src.name,amount,date,month:date.slice(0,7)});save();closeModal();showToast('Income added')}
+function addIncome(){const name=document.getElementById('fName').value.trim(),cadence=document.getElementById('fFreq').value,amount=+document.getElementById('fAmount')?.value||0,firstPayDate=document.getElementById('fDate')?.value||'';if(!name){showToast('Enter an income name');return}if(cadence!=='manual'&&amount<=0){showToast('Enter an income amount');return}if(cadence!=='manual'&&cadence!=='midMonthEnd'&&!firstPayDate){showToast('Choose a known payday');return}data.incomes.push({id:`income-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,name,amount:cadence==='manual'?0:amount,cadence,firstPayDate,secondPayDay:+document.getElementById('fSecond')?.value||15,midMonthDay:+document.getElementById('fMid')?.value||15,startDate:document.getElementById('fStartDate')?.value||'',endDate:document.getElementById('fEndDate')?.value||''});save();closeModal();showToast(cadence==='manual'?'Income source added':'Income added')}
+function saveIncomeEdit(i){const x=data.incomes?.[i];if(!x)return;const name=document.getElementById('fName').value.trim(),cadence=document.getElementById('fFreq').value,amount=+document.getElementById('fAmount')?.value||0,firstPayDate=document.getElementById('fDate')?.value||'';if(!name){showToast('Enter an income name');return}if(cadence!=='manual'&&amount<=0){showToast('Enter an income amount');return}if(cadence!=='manual'&&cadence!=='midMonthEnd'&&!firstPayDate){showToast('Choose a known payday');return}const oldName=x.name;Object.assign(x,{name,amount:cadence==='manual'?0:amount,cadence,firstPayDate,secondPayDay:+document.getElementById('fSecond')?.value||15,midMonthDay:+document.getElementById('fMid')?.value||15,startDate:document.getElementById('fStartDate')?.value||'',endDate:document.getElementById('fEndDate')?.value||''});(data.manualIncomePayments||[]).forEach(p=>{if(p.sourceId===x.id||p.sourceName===oldName){p.sourceId=x.id;p.incomeId=x.id;p.sourceName=x.name}});Object.values(data.incomeOverrides||{}).forEach(o=>{if(o.incomeId===x.id)o.sourceName=x.name});save();closeModal();showToast('Income rule updated')}
+function addManualIncomePayment(sourceIndex){const src=data.incomes?.[sourceIndex];const amount=+document.getElementById('fAmount')?.value||0,date=document.getElementById('fDate')?.value||'';if(!src||src.cadence!=='manual')return;if(amount<=0||!date){showToast('Enter the amount and date received');return}data.manualIncomePayments=data.manualIncomePayments||[];data.manualIncomePayments.push({id:'mi_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7),sourceId:src.id,incomeId:src.id,sourceName:src.name,amount,date,month:date.slice(0,7)});save();closeModal();showToast('Income added')}
 function removeManualIncomePayment(id){const p=(data.manualIncomePayments||[]).find(x=>String(x.id)===String(id));if(!p)return;if(confirm('Delete this income entry?')){data.manualIncomePayments=data.manualIncomePayments.filter(x=>String(x.id)!==String(id));save()}}
-function removeIncome(i){if(confirm('Delete this income source?')){const src=data.incomes?.[i];data.incomes.splice(i,1);if(src?.cadence==='manual')data.manualIncomePayments=(data.manualIncomePayments||[]).filter(p=>p.sourceName!==src.name);save()}}
-function addBonusIncome(){const name=document.getElementById('fName').value.trim(),amount=+document.getElementById('fAmount').value||0,month=document.getElementById('fMonth').value;if(!name||amount<=0){showToast('Enter an income name and amount');return}data.bonusIncomes.push({name,amount,month});save();closeModal();showToast('Bonus added')}
+function removeIncome(i){if(confirm('Delete this income source?')){const src=data.incomes?.[i];data.incomes.splice(i,1);if(src?.cadence==='manual')data.manualIncomePayments=(data.manualIncomePayments||[]).filter(p=>p.incomeId!==src.id&&p.sourceId!==src.id&&p.sourceName!==src.name);Object.keys(data.incomeOverrides||{}).forEach(k=>{if(data.incomeOverrides[k]?.incomeId===src?.id)delete data.incomeOverrides[k]});save()}}
+function addBonusIncome(){const name=document.getElementById('fName').value.trim(),amount=+document.getElementById('fAmount').value||0,month=document.getElementById('fMonth').value;if(!name||amount<=0){showToast('Enter an income name and amount');return}data.bonusIncomes.push({id:`bonus-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,name,amount,month});save();closeModal();showToast('Bonus added')}
 function saveBonusEdit(i){const b=data.bonusIncomes?.[i];if(!b)return;Object.assign(b,{name:document.getElementById('fName').value.trim(),amount:+document.getElementById('fAmount').value||0,month:document.getElementById('fMonth').value});save();closeModal();showToast('Bonus updated')}
 function removeBonus(i){if(confirm('Delete this bonus?')){data.bonusIncomes.splice(i,1);save()}}
 function saveBillTagsAsSaved(tags){data.savedTags=Array.isArray(data.savedTags)?data.savedTags:[];normalizeTags(tags).forEach(tag=>{if(!data.savedTags.some(x=>x.toLowerCase()===tag.toLowerCase()))data.savedTags.push(tag)});}
@@ -1580,18 +1672,23 @@ function toggleBillMonth(i){const b=data.bills?.[i];if(!b)return;const m=new Dat
 function setBillActual(i){const b=data.bills?.[i];if(!b)return;const m=new Date(),key=billOverrideKey(b,m),ov=billOverrideForMonth(b,m),current=(ov&&ov.amount!==undefined)?ov.amount:b.amount;const v=prompt(`Actual amount for ${b.name} this month (${monthKey(m)}):`,current);if(v===null)return;const amount=Number(v);if(!Number.isFinite(amount)||amount<0){showToast('Enter a valid amount');return}data.billOverrides=data.billOverrides||{};data.billOverrides[key]={amount};save();renderBills();renderCashflow();renderBudget();showToast('Monthly bill amount saved')}
 function saveBillEdit(i){const b=data.bills?.[i];if(!b)return;const name=document.getElementById('fName').value.trim(),amount=+document.getElementById('fAmount').value||0,method=document.getElementById('fMethod').value,creditCard=method==='credit'?(document.getElementById('fCreditCard')?.value||''):'';if(!name||amount<=0){showToast('Enter a bill name and amount');return}if(method==='credit'&&!creditCard){showToast('Choose a credit card');return}const billTags=normalizeTags(document.getElementById('fBillTags')?.value||'');saveBillTagsAsSaved(billTags);Object.assign(b,{name,amount,frequency:document.getElementById('fFreq').value,due:+document.getElementById('fDue').value||0,method,creditCard,type:document.getElementById('fType').value,tags:normalizeTags(document.getElementById('fBillTags')?.value||'')});save();closeModal();renderBills();renderCashflow();showToast('Bill updated')}
 
+function formatIncomeDate(s){return dateOnly(s).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
 function renderIncome(){
- const now=new Date(),mk=monthKey(now);
+ const m=dateOnly(`${incomeViewMonth}-01`),mk=monthKey(m),label=m.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+ document.getElementById('incomeMonthLabel').textContent=label;
+ const paycheckGroups={};incomePaychecksForMonth(m).forEach(p=>(paycheckGroups[p.incomeId]??=[]).push(p));
  const rows=(data.incomes||[]).map((i,n)=>{
    if(i.cadence==='manual'){
-     const payments=(data.manualIncomePayments||[]).filter(p=>p.sourceName===i.name&&p.month===mk).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+     const payments=(data.manualIncomePayments||[]).filter(p=>(p.incomeId===i.id||p.sourceId===i.id||p.sourceName===i.name)&&p.month===mk).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
      const total=payments.reduce((sum,p)=>sum+(Number(p.amount)||0),0);
-     return `<div class="item"><div class="row"><div><div class="itemTitle">${esc(i.name)}</div><div class="sub">Manual / irregular · ${payments.length?`${payments.length} check${payments.length===1?'':'s'} this month · ${money(total)}`:'No checks entered this month'}</div>${payments.length?`<div style="margin-top:8px">${payments.map(p=>`<div class="sub" style="display:flex;gap:10px;align-items:center;justify-content:space-between;padding:3px 0"><span>${esc(String(p.date))} · <strong>${money(p.amount)}</strong></span><button class="editLink" onclick="removeManualIncomePayment('${esc(String(p.id))}')">Delete</button></div>`).join('')}</div>`:''}</div><div><button class="btn small" onclick="openModal('manualIncomePayment',${n})">＋ Add check</button><button class="btn small secondary" onclick="openModal('editIncome',${n})">Edit</button><button class="btn small danger" onclick="removeIncome(${n})">×</button></div></div></div>`;
+     return `<div class="item"><div class="row"><div><div class="itemTitle">${esc(i.name)}</div><div class="incomeRuleMeta">Manual / irregular · ${payments.length?`${payments.length} check${payments.length===1?'':'s'} this month · ${money(total)}`:'No checks entered this month'}</div>${payments.length?`<div style="margin-top:8px">${payments.map(p=>`<div class="incomePaycheckRow"><div><div class="incomePaycheckDate">${esc(formatIncomeDate(p.date))}</div><div class="incomePaycheckMeta">Manual income</div></div><div class="incomePaycheckAmount">${money(p.amount)}</div><button class="editLink" onclick="removeManualIncomePayment('${esc(String(p.id))}')">Delete</button></div>`).join('')}</div>`:''}</div><div><button class="btn small" onclick="openModal('manualIncomePayment',${n})">＋ Add check</button><button class="btn small secondary" onclick="openModal('editIncome',${n})">Edit rule</button><button class="btn small danger" onclick="removeIncome(${n})">×</button></div></div></div>`;
    }
-   const ds=paydayDates(i,now);return `<div class="item"><div class="row"><div><div class="itemTitle">${esc(i.name)}</div><div class="sub">${money(i.amount)} · ${esc(i.cadence)} · ${ds.map(d=>d.toLocaleDateString()).join(', ')}</div></div><div><button class="btn small secondary" onclick="openModal('editIncome',${n})">Edit</button><button class="btn small danger" onclick="removeIncome(${n})">×</button></div></div></div>`
+   const pays=paycheckGroups[i.id]||[];
+   return `<div class="item"><div class="row"><div style="min-width:0"><div class="itemTitle">${esc(i.name)}</div><div class="incomeRuleMeta">Recurring · ${esc(i.cadence)} · Normal ${money(i.amount)} · ${pays.length} paycheck${pays.length===1?'':'s'}</div><div class="incomePaycheckList">${pays.length?pays.map(p=>`<div class="incomePaycheckRow"><div><div class="incomePaycheckDate">${esc(formatIncomeDate(p.date))}</div><div class="incomePaycheckMeta">${p.edited?`Scheduled ${esc(formatIncomeDate(p.scheduledDate))}`:'Scheduled paycheck'}</div></div><div>${p.edited?'<span class="incomeEdited">Edited</span>':''}</div><div class="incomePaycheckAmount">${money(p.amount)}</div><button class="editLink" onclick="editIncomePaycheck('${esc(String(p.incomeId))}','${esc(String(p.scheduledDate))}')">Edit</button></div>`).join(''):'<div class="empty" style="padding:14px 0">No paychecks scheduled this month.</div>'}</div></div><div><button class="btn small secondary" onclick="openModal('editIncome',${n})">Edit rule</button><button class="btn small danger" onclick="removeIncome(${n})">×</button></div></div></div>`;
  }).join('');
- const bonuses=(data.bonusIncomes||[]).map((b,n)=>`<div class="item"><div class="row"><div><div class="itemTitle">${esc(b.name)}</div><div class="sub">${esc(b.month)} · Bonus</div></div><div><b>${money(b.amount)}</b><button class="btn small secondary" onclick="openModal('editBonus',${n})">Edit</button><button class="btn small danger" onclick="removeBonus(${n})">×</button></div></div></div>`).join('');
- document.getElementById('incomeTotalValue').textContent=money(monthlyIncome(now));
+ const bonuses=(data.bonusIncomes||[]).map((b,n)=>({b,n})).filter(x=>x.b.month===mk).map(({b,n})=>`<div class="item"><div class="row"><div><div class="itemTitle">${esc(b.name)}</div><div class="sub">${esc(b.month)} · Bonus</div></div><div><b>${money(b.amount)}</b><button class="btn small secondary" onclick="openModal('editBonus',${n})">Edit</button><button class="btn small danger" onclick="removeBonus(${n})">×</button></div></div></div>`).join('');
+ document.getElementById('incomeTotalValue').textContent=money(incomeMonthTotal(m));
+ document.getElementById('incomeTotalNote').textContent=`Includes paychecks, manual income, and bonuses for ${label}.`;
  document.getElementById('incomeList').innerHTML=(rows||'<div class="empty">No income sources yet.</div>')+(bonuses?`<div style="margin-top:18px"><div class="sectionTitle">Bonus income</div>${bonuses}</div>`:'');
 }
 function saveCategorySettings(){data.categories.forEach((c,i)=>{const n=document.getElementById('cn'+i),col=document.getElementById('cc'+i),ic=document.getElementById('ci'+i);if(n?.value.trim())c.name=n.value.trim();if(col?.value)c.color=col.value;if(ic?.value)c.icon=ic.value});persistData();closeModal();render();showToast('Category changes saved')}
@@ -1605,7 +1702,7 @@ function saveSettings(){
     return;
   }
   data.savingsGoal=Math.round(value*100)/100;
-  cloud.lastLocalMutationAt=Date.now();
+  cloud.lastLocalMutationAt=Date.now();if(cloud.ready&&cloud.householdId)cloud.localDirty=true;saveCloudSyncState();
   localStorage.setItem(KEY,JSON.stringify(data));
   render();
   cloudSaveIfConnected();
@@ -1614,9 +1711,9 @@ function saveSettings(){
 function showView(v){currentView=v;document.querySelectorAll('main[id^="view-"]').forEach(x=>x.classList.toggle('hidden',x.id!=="view-"+v));document.querySelectorAll('.nav button,.mobileNav button[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===v));closeMobileMore();if(v==='budget')renderBudget();if(v==='bills')renderBills();if(v==='income')renderIncome();if(v==='spending')renderAnalytics();if(v==='cashflow')renderCashflow();if(v==='dashboard')renderDashboard()}
 function toggleMobileMore(){const m=document.getElementById('mobileMoreMenu');if(m)m.classList.toggle('hidden')}
 function closeMobileMore(){const m=document.getElementById('mobileMoreMenu');if(m)m.classList.add('hidden')}
-function render(){if(!data.setupComplete)return;normalizePaymentData();ensureExpenseOrder();ensureWeeklyRollover();document.getElementById('app').classList.remove('hidden');document.getElementById('setupScreen').classList.add('hidden');document.getElementById('settingsSavings').value=data.savingsGoal||0;const versionLabel=document.getElementById('appVersionLabel');if(versionLabel)versionLabel.textContent=APP_VERSION;renderDashboard();renderBudget();renderBills();renderIncome();renderAnalytics();renderCashflow();showView(currentView)}
+function render(){if(!data.setupComplete)return;ensureIncomeOverrides();normalizePaymentData();ensureExpenseOrder();ensureWeeklyRollover();document.getElementById('app').classList.remove('hidden');document.getElementById('setupScreen').classList.add('hidden');document.getElementById('settingsSavings').value=data.savingsGoal||0;const versionLabel=document.getElementById('appVersionLabel');if(versionLabel)versionLabel.textContent=APP_VERSION;renderDashboard();renderBudget();renderBills();renderIncome();renderAnalytics();renderCashflow();showView(currentView)}
 function exportData(){const backup={app:'Household Budget',version:1,exportedAt:new Date().toISOString(),data};const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'}),filename='household-budget-backup-'+dateValue()+'.json';const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup exported')}
-function importData(event){const f=event.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.data||!Array.isArray(x.data.incomes)||!Array.isArray(x.data.categories))throw Error();data={...structuredClone(blank),...x.data,setupComplete:true};data.categories=(data.categories||[]).map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));data.people=Array.from(new Set((data.people||['Shared','Lindsay','Matthew']).filter(Boolean)));if(!data.people.includes('Shared'))data.people.unshift('Shared');normalizePaymentData();ensureIds();persistData();event.target.value='';render();showToast('Backup imported')}catch(e){showToast('That backup could not be imported')}};r.readAsText(f)}
+function importData(event){const f=event.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.data||!Array.isArray(x.data.incomes)||!Array.isArray(x.data.categories))throw Error();data={...structuredClone(blank),...x.data,setupComplete:true};data.categories=(data.categories||[]).map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));data.people=Array.from(new Set((data.people||['Shared','Lindsay','Matthew']).filter(Boolean)));if(!data.people.includes('Shared'))data.people.unshift('Shared');normalizePaymentData();ensureIds();ensureIncomeOverrides();persistData();event.target.value='';render();showToast('Backup imported')}catch(e){showToast('That backup could not be imported')}};r.readAsText(f)}
 function resetAll(){if(confirm('Clear all household budget data from this device?')){localStorage.removeItem(KEY);location.reload()}}
 
 const SETUP_DRAFT_KEY='householdBudgetSetupDraft_v1';
@@ -1668,8 +1765,8 @@ function setupAddCategory(){setupAddCustomCategory()}
 function showSetupWelcome(){const v=document.getElementById('setupVersionLabel');if(v)v.textContent=APP_VERSION;document.querySelectorAll('.setupStep').forEach(s=>s.classList.remove('active'));document.getElementById('setupWelcome').classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
 function startNewBudget(){document.querySelectorAll('.setupStep').forEach(s=>s.classList.remove('active'));document.getElementById('setup1').classList.add('active');if(!document.querySelector('#setupIncomeList .setupIncomeCard')){restoreSetupDraft();if(!document.querySelector('#setupIncomeList .setupIncomeCard'))setupAddIncome();}window.scrollTo({top:0,behavior:'smooth'})}
 function setupNext(step){saveSetupDraft();if(step===2){collectSetupIncomes();if(!setupIncomes.length){showToast('Add at least one income source');return}renderSetupCategoryChoices();renderSetupCats()}if(step===3&&!setupCats.length){showToast('Add at least one spending category');return}document.querySelectorAll('.setupStep').forEach(s=>s.classList.remove('active'));document.getElementById('setup'+step).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
-function finishSetup(){collectSetupIncomes();if(!setupIncomes.length){showToast('Add at least one income source');setupNext(1);return}if(!setupCats.length){showToast('Add at least one spending category');setupNext(2);return}data.incomes=setupIncomes;data.categories=setupCats;data.setupComplete=true;data.lastMonth=monthKey();clearSetupDraft();save()}
-function init(){ensureIds();normalizePaymentData();const v=document.getElementById('setupVersionLabel');if(v)v.textContent=APP_VERSION;const addBtn=document.getElementById('setupAddIncomeBtn');if(addBtn&&!addBtn.dataset.bound){addBtn.dataset.bound='1';addBtn.addEventListener('click',()=>setupAddIncome());}if(!data.setupComplete){document.getElementById('setupScreen').classList.remove('hidden');restoreSetupDraft();showSetupWelcome();renderSetupCategoryChoices();renderSetupCats()}else render()}
+function finishSetup(){collectSetupIncomes();if(!setupIncomes.length){showToast('Add at least one income source');setupNext(1);return}if(!setupCats.length){showToast('Add at least one spending category');setupNext(2);return}data.incomes=setupIncomes.map((x,i)=>({...x,id:x.id||`income-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}`}));data.categories=setupCats;data.setupComplete=true;ensureIncomeOverrides();data.lastMonth=monthKey();clearSetupDraft();save()}
+function init(){ensureIds();ensureIncomeOverrides();normalizePaymentData();const v=document.getElementById('setupVersionLabel');if(v)v.textContent=APP_VERSION;const addBtn=document.getElementById('setupAddIncomeBtn');if(addBtn&&!addBtn.dataset.bound){addBtn.dataset.bound='1';addBtn.addEventListener('click',()=>setupAddIncome());}if(!data.setupComplete){document.getElementById('setupScreen').classList.remove('hidden');restoreSetupDraft();showSetupWelcome();renderSetupCategoryChoices();renderSetupCats()}else render()}
 init();
 initCloud();
 </script>
