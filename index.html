@@ -220,7 +220,7 @@ body.modal-open .modal{z-index:130!important}
 <body>
 
 <div id="setupScreen" class="setup hidden"><div class="card">
-<div class="eyebrow">HOUSEHOLD BUDGET · <span id="setupVersionLabel">V105.5.0</span></div><h1>Welcome to Household Budget.</h1>
+<div class="eyebrow">HOUSEHOLD BUDGET · <span id="setupVersionLabel">V105.6.3</span></div><h1>Welcome to Household Budget.</h1>
 <p>Choose how you want to get started.</p>
 <div id="setupWelcome" class="setupStep active">
   <div style="display:grid;gap:10px;margin-top:18px">
@@ -232,7 +232,7 @@ body.modal-open .modal{z-index:130!important}
   <p class="muted" style="font-size:12px;margin-top:16px">Create a budget for a new household, restore one you already have, or join a household someone else has already created.</p>
 </div>
 <div id="setup1" class="setupStep"><h2>1. Add your income</h2><p><strong>Money coming into your household.</strong><br>Add your regular paychecks and other recurring income. For biweekly pay, enter one paycheck amount and one known payday.</p><div id="setupIncomeList"></div><button id="setupAddIncomeBtn" type="button" class="btn secondary">＋ Add another income</button><div class="actions"><button type="button" class="btn ghost" onclick="showSetupWelcome()">Back</button><button type="button" class="btn" onclick="setupNext(2)">Next</button></div></div>
-<div id="setup2" class="setupStep"><h2>2. Add your spending categories</h2><p><strong>Money you plan to spend on everyday expenses.</strong><br>Start with the suggestions below, uncheck anything you do not use, or add your own category.</p><div class="backupBox" style="margin-bottom:12px"><strong>Example:</strong> Put your $180 electric bill under <strong>Bills</strong>. Put a $400 monthly limit for groceries under <strong>Categories</strong>.</div><h3 style="margin:14px 0 8px">Suggested categories</h3><div id="setupCategoryChoices" class="setupCategoryChoices"></div><label>Add your own category</label><div class="formgrid"><input id="setupCustomCategory" placeholder="e.g. Hobbies" onkeydown="if(event.key==='Enter'){event.preventDefault();setupAddCustomCategory()}"><button type="button" class="btn secondary" onclick="setupAddCustomCategory()">＋ Add</button></div><div id="setupCategories" style="margin-top:12px"></div><div class="actions"><button class="btn ghost" onclick="setupNext(1)">Back</button><button class="btn" onclick="setupNext(3)">Next</button></div></div>
+<div id="setup2" class="setupStep"><h2>2. Add your spending categories</h2><p><strong>Money you plan to spend on everyday expenses.</strong><br>Start with the suggestions below, uncheck anything you do not use, or add your own category.</p><div class="backupBox" style="margin-bottom:12px"><strong>Example:</strong> Put your $180 electric bill under <strong>Bills</strong>. Put a $400 monthly limit for groceries under <strong>Categories</strong>.</div><h3 style="margin:14px 0 8px">Suggested categories</h3><div id="setupCategoryChoices" class="setupCategoryChoices" aria-live="polite"></div><div id="setupCategoryChoicesStatus" class="muted" style="font-size:12px;margin-top:6px"></div><label>Add your own category</label><div class="formgrid"><input id="setupCustomCategory" placeholder="e.g. Hobbies"><button id="setupAddCustomCategoryBtn" type="button" class="btn secondary">＋ Add</button></div><div id="setupCategories" style="margin-top:12px"></div><div class="actions"><button class="btn ghost" onclick="setupNext(1)">Back</button><button class="btn" onclick="setupNext(3)">Next</button></div></div>
 <div id="setup3" class="setupStep"><h2>3. You're ready.</h2><p>Monthly bills, savings, and other details can be added from the app.</p><div class="backupBox"><strong>How your budget works:</strong><br><strong>Income</strong> → money coming in<br><strong>Bills</strong> → required expenses<br><strong>Categories</strong> → spending limits for everything else<br><br><strong>If you spend less than a category maximum, that is a win.</strong></div><div class="actions"><button class="btn ghost" onclick="setupNext(2)">Back</button><button class="btn" onclick="finishSetup()">Open my budget</button></div></div>
 </div></div>
 
@@ -357,11 +357,11 @@ body.modal-open .modal{z-index:130!important}
 <div class="card"><div class="sectionTitle">Credit-card payments</div><div class="cashflowMuted" style="margin-top:4px">Enter the amount you actually paid on each card during this month.</div><div class="cashflowPaymentForm"><div><label>Credit card</label><select id="cashflowPaymentCard"></select></div><div><label>Amount paid</label><input id="cashflowPaymentAmount" type="number" step="0.01" min="0" placeholder="0.00"></div><button class="btn" onclick="addCreditCardPayment()">Add payment</button></div><div id="cashflowPaymentsList" class="cashflowList"></div></div>
 </main>
 
-<main id="view-income" class="hidden"><div class="card"><div class="row"><div><div class="sectionTitle">Income</div><div class="muted" style="font-size:13px;margin-top:3px">Paydays are calculated automatically.</div></div><div style="display:flex;gap:7px"><button class="btn small secondary" onclick="openModal('bonus')">＋ Bonus</button><button class="btn small" onclick="openModal('income')">＋ Recurring</button></div></div><div id="incomeTotal" class="billTotal"><div class="label">MONTHLY INCOME TOTAL</div><div id="incomeTotalValue" class="value">$0</div><div class="note">Includes recurring income and bonuses for the current month.</div></div><div id="incomeList"></div></div></main>
+<main id="view-income" class="hidden"><div class="card"><div class="row"><div><div class="sectionTitle">Income</div><div id="incomeMonthLabel" class="muted" style="font-size:13px;margin-top:3px"></div><div class="cashflowMonthNav"><button type="button" onclick="shiftIncomeMonth(-1)">← Previous</button><button type="button" class="today" onclick="goIncomeToday()">Today</button><button type="button" onclick="shiftIncomeMonth(1)">Next →</button></div></div><div style="display:flex;gap:7px"><button class="btn small secondary" onclick="openModal('bonus')">＋ Bonus</button><button class="btn small" onclick="openModal('income')">＋ Recurring</button></div></div><div id="incomeTotal" class="billTotal"><div class="label">MONTHLY INCOME TOTAL</div><div id="incomeTotalValue" class="value">$0</div><div class="note">Includes recurring income, manual income, and bonuses for the selected month.</div></div><div id="incomeList"></div></div></main>
 
 <main id="view-bills" class="hidden"><div class="card"><div class="row"><div><div class="sectionTitle">Bills & fixed expenses</div><div class="muted" style="font-size:13px;margin-top:3px">Everything here is part of the monthly budget.</div></div><button class="btn small" onclick="openModal('bill')">＋ Add bill</button></div><div id="billTotal" class="billTotal"><div class="label">MONTHLY BILL TOTAL</div><div id="billTotalValue" class="value">$0</div><div class="note">Annual bills are shown as their monthly equivalent.</div></div><div id="billList"></div></div></main>
 
-<main id="view-settings" class="hidden"><div class="card"><div class="sectionTitle">Budget settings</div><div class="muted" style="font-size:12px;margin-top:4px">App version <strong id="appVersionLabel">V105.3</strong></div><label>Savings goal</label><input id="settingsSavings" type="number" step="0.01"><div class="actions"><button class="btn" onclick="saveSettings()">Save settings</button></div></div><div class="card"><div class="sectionTitle">Share</div><p id="sharingStatus" class="muted">This budget is currently stored on this device only.</p><div id="sharingHouseholdInfo" class="backupBox hidden"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="openShareModal()">Share</button><button class="btn secondary" onclick="forceSyncNow()">↻ Sync now</button><button id="leaveHouseholdBtn" class="btn danger hidden" onclick="leaveSharedHousehold()">Stop sharing</button></div><p class="muted" style="font-size:11px;margin-top:10px">Share this budget between devices using a private household code. The existing backup system still works as a safety net.</p></div><div class="card"><div class="sectionTitle">Data</div><p class="muted">Export a backup before changing devices or browsers. Backups are also useful if you ever want an offline copy of your budget.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary" onclick="exportData()">Export Backup</button><button class="btn secondary" onclick="document.getElementById('importFile').click()">Import Backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"><button class="btn danger" onclick="resetAll()">Clear all data</button></div></div><div class="card"><div class="sectionTitle">Categories</div><div class="muted" style="font-size:13px;margin-bottom:10px">Choose the color, icon, and order for each spending category.</div><button class="btn" onclick="openCategorySettings()">Manage categories</button></div><div class="legalFooter">Household Budget • © 2026 Lindsay Shay</div></main>
+<main id="view-settings" class="hidden"><div class="card"><div class="sectionTitle">Budget settings</div><div class="muted" style="font-size:12px;margin-top:4px">App version <strong id="appVersionLabel">V105.6.3</strong></div><label>Savings goal</label><input id="settingsSavings" type="number" step="0.01"><div class="actions"><button class="btn" onclick="saveSettings()">Save settings</button></div></div><div class="card"><div class="sectionTitle">Share</div><p id="sharingStatus" class="muted">This budget is currently stored on this device only.</p><div id="sharingHouseholdInfo" class="backupBox hidden"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="openShareModal()">Share</button><button class="btn secondary" onclick="forceSyncNow()">↻ Sync now</button><button id="leaveHouseholdBtn" class="btn danger hidden" onclick="leaveSharedHousehold()">Stop sharing</button></div><p class="muted" style="font-size:11px;margin-top:10px">Share this budget between devices using a private household code. The existing backup system still works as a safety net.</p></div><div class="card"><div class="sectionTitle">End-of-month reconciliation</div><p class="muted">Upload a bank or account transaction export and compare it with the expenses recorded here. Nothing is changed automatically.</p><button class="btn" onclick="openReconcileModal()">Open reconciliation</button></div><div class="card"><div class="sectionTitle">Data</div><p class="muted">Export a backup before changing devices or browsers. Backups are also useful if you ever want an offline copy of your budget.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary" onclick="exportData()">Export Backup</button><button class="btn secondary" onclick="document.getElementById('importFile').click()">Import Backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"><button class="btn danger" onclick="resetAll()">Clear all data</button></div></div><div class="card"><div class="sectionTitle">Categories</div><div class="muted" style="font-size:13px;margin-bottom:10px">Choose the color, icon, and order for each spending category.</div><button class="btn" onclick="openCategorySettings()">Manage categories</button></div><div class="legalFooter">Household Budget • © 2026 Lindsay Shay</div></main>
 </div>
 
 <div id="modalWrap" class="modalWrap" onclick="if(event.target===this)closeModal()"><div class="modal"><button class="close" onclick="closeModal()">×</button><div id="modalTitle" class="modalTitle"></div><div id="modalBody"></div></div></div><div id="toast" class="toast"></div>
@@ -371,12 +371,13 @@ body.modal-open .modal{z-index:130!important}
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
 <script>
 const KEY='householdBudgetAlpha_v1';
-const APP_VERSION='V105.5.0';
+const APP_VERSION='V105.6.3';
 const colors=['#4F8EF7','#F4A300','#C65CEB','#35AFA0','#E85D75','#7A6FF0','#55A630','#F28482'];
-const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],manualIncomePayments:[],bonusIncomes:[],bills:[],billOverrides:{},categories:[],transactions:[],categoryCarry:{},rolloverDecisions:{},lastMonth:null,people:['Shared','Lindsay','Matthew'],creditCards:[],creditCardPayments:[],creditCardHistory:{},creditCardOverrides:{},paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}],expenseOrder:[],categoryBudgetOverrides:{}};
+const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],manualIncomePayments:[],bonusIncomes:[],bills:[],billOverrides:{},categories:[],transactions:[],categoryCarry:{},rolloverDecisions:{},lastMonth:null,people:['Shared','Lindsay','Matthew'],creditCards:[],creditCardPayments:[],creditCardHistory:{},creditCardOverrides:{},incomeOverrides:{},paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}],expenseOrder:[],categoryBudgetOverrides:{},reconciliations:{}};
 let data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
-data.incomes=data.incomes||[];data.manualIncomePayments=Array.isArray(data.manualIncomePayments)?data.manualIncomePayments:[];data.billOverrides=(data.billOverrides&&typeof data.billOverrides==='object')?data.billOverrides:{};data.bonusIncomes=data.bonusIncomes||[];data.bills=data.bills||[];data.transactions=data.transactions||[];data.categories=data.categories||[];data.creditCards=Array.isArray(data.creditCards)?data.creditCards:[];data.creditCardPayments=Array.isArray(data.creditCardPayments)?data.creditCardPayments:[];data.creditCardHistory=(data.creditCardHistory&&typeof data.creditCardHistory==='object')?data.creditCardHistory:{};data.creditCardOverrides=(data.creditCardOverrides&&typeof data.creditCardOverrides==='object')?data.creditCardOverrides:{};data.paymentSources=Array.isArray(data.paymentSources)&&data.paymentSources.length?data.paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}];data.savedTags=Array.isArray(data.savedTags)?data.savedTags.map(x=>String(x).trim()).filter(Boolean):[];data.bills=data.bills.map(b=>({...b,tags:normalizeTags(b.tags||[])}));
+data.incomes=data.incomes||[];data.manualIncomePayments=Array.isArray(data.manualIncomePayments)?data.manualIncomePayments:[];data.billOverrides=(data.billOverrides&&typeof data.billOverrides==='object')?data.billOverrides:{};data.bonusIncomes=data.bonusIncomes||[];data.bills=data.bills||[];data.transactions=data.transactions||[];data.categories=data.categories||[];data.creditCards=Array.isArray(data.creditCards)?data.creditCards:[];data.creditCardPayments=Array.isArray(data.creditCardPayments)?data.creditCardPayments:[];data.creditCardHistory=(data.creditCardHistory&&typeof data.creditCardHistory==='object')?data.creditCardHistory:{};data.creditCardOverrides=(data.creditCardOverrides&&typeof data.creditCardOverrides==='object')?data.creditCardOverrides:{};data.incomeOverrides=(data.incomeOverrides&&typeof data.incomeOverrides==='object')?data.incomeOverrides:{};data.paymentSources=Array.isArray(data.paymentSources)&&data.paymentSources.length?data.paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}];data.savedTags=Array.isArray(data.savedTags)?data.savedTags.map(x=>String(x).trim()).filter(Boolean):[];data.bills=data.bills.map(b=>({...b,tags:normalizeTags(b.tags||[])}));
 data.categoryBudgetOverrides=(data.categoryBudgetOverrides&&typeof data.categoryBudgetOverrides==='object')?data.categoryBudgetOverrides:{};
+data.incomeOverrides=(data.incomeOverrides&&typeof data.incomeOverrides==='object')?data.incomeOverrides:{};
 data.categories=data.categories.map((c,i)=>{
   const out={...c,id:c.id||('cat_'+Date.now().toString(36)+'_'+i+'_'+Math.random().toString(36).slice(2,7)),color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'};
   if(out.type==='percent'){out.percent=Number(out.percent)||0;out.budget=0;}
@@ -608,7 +609,7 @@ async function joinSharedHousehold(){
     if(!snap.exists){showToast('Household not found');return}
     const remote=snap.data();if(String(remote.joinCode||'').toUpperCase()!==code||!remote.data){showToast('That household code is not valid');return}
     if(!confirm('Joining will replace this device’s current budget with the shared household budget. Continue?'))return;
-    data={...structuredClone(blank),...remote.data,setupComplete:true};data.categories=(data.categories||[]).map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));data.people=Array.from(new Set((data.people||['Shared','Lindsay','Matthew']).filter(Boolean)));if(!data.people.includes('Shared'))data.people.unshift('Shared');ensureIds();localStorage.setItem(KEY,JSON.stringify(data));cloud.householdId=id;saveSharingMeta({householdId:id,name:remote.name||'Household',code});subscribeToHousehold();closeModal();render();updateSharingUI();showToast('Joined shared household');
+    data={...structuredClone(blank),...remote.data,setupComplete:true};data.reconciliations=(data.reconciliations&&typeof data.reconciliations==='object')?data.reconciliations:{};data.categories=(data.categories||[]).map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));data.people=Array.from(new Set((data.people||['Shared','Lindsay','Matthew']).filter(Boolean)));if(!data.people.includes('Shared'))data.people.unshift('Shared');ensureIds();localStorage.setItem(KEY,JSON.stringify(data));cloud.householdId=id;saveSharingMeta({householdId:id,name:remote.name||'Household',code});subscribeToHousehold();closeModal();render();updateSharingUI();showToast('Joined shared household');
   }catch(e){console.error(e);showToast('Could not join household')}
 }
 function openJoinHousehold(fromSetup=false){
@@ -631,6 +632,8 @@ function ensureIds(){
   const used=new Set();
   (data.transactions||[]).forEach((t,i)=>{t.tags=normalizeTags(t.tags||[]);if(!t.id||used.has(String(t.id))){t.id=`tx-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}`;changed=true}used.add(String(t.id))});
   (data.bills||[]).forEach((b,i)=>{if(!b.id){b.id=`bill-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}`;changed=true}});
+  const incomeUsed=new Set();
+  (data.incomes||[]).forEach((inc,i)=>{if(!inc.id||incomeUsed.has(String(inc.id))){inc.id=`income-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}`;changed=true}incomeUsed.add(String(inc.id))});
   if(changed)persistData();
 }
 ensureIds();
@@ -678,21 +681,19 @@ function paydayDates(i,m=new Date()){
  return out.sort((a,b)=>a-b)
 }
 
+function incomeOverrideKey(incomeId,scheduledDate){return `${incomeId}\u001f${dateOnly(scheduledDate).toISOString().slice(0,10)}`}
+function incomeOverrideFor(income,scheduledDate){return data.incomeOverrides?.[incomeOverrideKey(income.id,scheduledDate)]||null}
+function paycheckAmountFor(income,scheduledDate){const ov=incomeOverrideFor(income,scheduledDate);return ov&&ov.amount!==undefined?Number(ov.amount)||0:Number(income.amount)||0}
 function monthlyIncome(m=new Date()){
   // The budget is a MONTHLY plan, not a cash-balance timeline.
-  // Determine how many paychecks belong to the calendar month from each
-  // schedule's dates, then credit the FULL monthly income on day 1.
-  // Pay dates are still used to determine the count for weekly/biweekly income.
+  // Each scheduled paycheck can have its own one-time amount override without
+  // changing the recurring rule for future paychecks.
   const recurring=(data.incomes||[]).reduce((total,i)=>{
     if(i.cadence==='manual') return total;
-    const amount=Number(i.amount)||0;
-    if(!amount) return total;
-    const count=paydayDates(i,m).filter(d=>{
-      const start=i.startDate?new Date(i.startDate+'T00:00:00'):null;
-      const end=i.endDate?new Date(i.endDate+'T23:59:59'):null;
-      return (!start||d>=start)&&(!end||d<=end);
-    }).length;
-    return total + amount*count;
+    const start=i.startDate?new Date(i.startDate+'T00:00:00'):null;
+    const end=i.endDate?new Date(i.endDate+'T23:59:59'):null;
+    const dates=paydayDates(i,m).filter(d=>(!start||d>=start)&&(!end||d<=end));
+    return total + dates.reduce((sum,d)=>sum+paycheckAmountFor(i,d),0);
   },0);
   const manual=(data.manualIncomePayments||[]).reduce((total,p)=>
     total+(p.month===monthKey(m)?(Number(p.amount)||0):0),0);
@@ -1437,6 +1438,14 @@ function openModal(type,pref=''){
  }
  if(type==='income'){title='Add recurring income';body=incomeForm(null)}
  if(type==='editIncome'){title=(data.incomes?.[pref]?.cadence==='manual'?'Edit income source':'Edit recurring income');body=incomeForm(data.incomes?.[pref],`saveIncomeEdit(${pref})`)}
+ if(type==='editIncomePayment'){
+   const src=data.incomes?.[pref?.sourceIndex];const scheduled=pref?.scheduledDate;
+   if(!src||!scheduled)return;
+   const ov=incomeOverrideFor(src,new Date(`${scheduled}T12:00:00`));
+   const current=ov&&ov.amount!==undefined?Number(ov.amount):Number(src.amount)||0;
+   title='Edit this paycheck';
+   body=`<div class="backupBox"><strong>${esc(src.name)}</strong><br><span class="muted">Payday: ${esc(new Date(`${scheduled}T12:00:00`).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}))}</span><br><span class="muted">Recurring amount: ${money(src.amount)}</span></div><label>Actual paycheck amount</label><input id="fAmount" type="number" step=".01" min="0" value="${current}" autofocus><div class="muted" style="font-size:12px;margin-top:5px">This changes <strong>only this paycheck</strong>. Future paychecks will keep the recurring amount.</div><div class="actions"><button type="button" class="btn ghost" onclick="closeModal()">Cancel</button>${ov?`<button type="button" class="btn secondary" onclick="resetIncomePaymentOverride(${pref.sourceIndex},'${esc(scheduled)}')">Use recurring amount</button>`:''}<button type="button" class="btn" onclick="saveIncomePaymentOverride(${pref.sourceIndex},'${esc(scheduled)}')">Save paycheck</button></div>`;
+ }
  if(type==='manualIncomePayment'){const src=data.incomes?.[pref];if(!src)return;title='Add income received';body=`<label>Income source</label><input value="${esc(src.name)}" disabled><label>Amount received</label><input id="fAmount" type="number" step=".01" min="0" autofocus><label>Date received</label><input id="fDate" type="date" value="${dateValue()}"><div class="actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="addManualIncomePayment(${pref})">Add income</button></div>`}
  if(type==='bonus'){title='Add bonus income';body=`<label>Income source</label><input id="fName" placeholder="Bonus"><label>Amount</label><input id="fAmount" type="number" step=".01" min="0"><label>Month</label><input id="fMonth" type="month" value="${monthKey()}"><div class="actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="addBonusIncome()">Save bonus</button></div>`}
  if(type==='editBonus'){const b=data.bonusIncomes?.[pref];if(!b)return;title='Edit bonus income';body=`<label>Income source</label><input id="fName" value="${esc(b.name)}"><label>Amount</label><input id="fAmount" type="number" step=".01" value="${b.amount}"><label>Month</label><input id="fMonth" type="month" value="${esc(b.month||monthKey())}"><div class="actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="saveBonusEdit(${pref})">Save changes</button></div>`}
@@ -1509,11 +1518,12 @@ function saveCardFromManager(){const input=document.getElementById('newCardNameM
 function addPaymentAccountFromExpense(){const n=prompt('New payment account name');if(!n)return;const name=n.trim();if(!name)return;normalizePaymentData();if(paymentAccounts().some(x=>x.name.toLowerCase()===name.toLowerCase())){showToast('That payment account already exists');return;}const id=`account-${Date.now()}-${Math.random().toString(36).slice(2,7)}`;data.paymentSources.push({id,name,type:'account'});save();const select=document.getElementById('fPaymentSource');if(select){select.innerHTML=paymentAccounts().map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('');select.value=id;}showToast('Payment account added');}
 function openPaymentSourceManager(){
  normalizePaymentData();
- const rows=paymentAccounts().map((x,i)=>`<div class="row" style="margin:8px 0"><input id="paySrc${i}" value="${esc(x.name)}"><button type="button" class="editLink" onclick="deletePaymentSource(${i})" ${x.id==='checking'?'disabled':''}>Remove</button></div>`).join('');
+ const rows=paymentAccounts().map((x,i)=>`<div class="row" style="margin:8px 0"><input id="paySrc${i}" value="${esc(x.name)}"><button type="button" class="editLink" onclick="deletePaymentSourceById('${esc(x.id)}')" ${x.id==='checking'?'disabled':''}>Remove</button></div>`).join('');
  openCustomModal('Payment accounts',`<div class="muted" style="font-size:12px;margin-bottom:10px">Add any place you can spend money from, such as Checking, Cash, Apple Cash, PayPal, or MODAK. Only Checking is included in the primary checking cash-flow total.</div>${rows}<div class="row" style="margin-top:10px"><input id="newPaySrc" placeholder="New payment account"><button type="button" class="editLink" onclick="addPaymentSource()">Add</button></div><div class="actions"><button type="button" class="btn ghost" onclick="closeModal()">Cancel</button><button type="button" class="btn" onclick="savePaymentSources()">Save</button></div>`);
 }
 function addPaymentSource(){const n=document.getElementById('newPaySrc')?.value.trim();if(!n)return;if(paymentAccounts().some(x=>x.name.toLowerCase()===n.toLowerCase())){showToast('That payment account already exists');return;}data.paymentSources.push({id:`account-${Date.now()}-${Math.random().toString(36).slice(2,7)}`,name:n,type:'account'});openPaymentSourceManager();}
-function deletePaymentSource(i){const list=paymentAccounts(),src=list[i];if(!src)return;if(src.id==='checking'){showToast('Checking is the primary account and cannot be removed');return;}const used=(data.transactions||[]).some(t=>t.paymentMethod!=='creditCard'&&t.paymentSource===src.id);const msg=used?`Remove ${src.name} from your active payment accounts? Existing expenses will keep ${src.name} in their historical records.`:`Remove ${src.name}?`;if(!confirm(msg))return;(data.transactions||[]).forEach(t=>{if(t.paymentMethod!=='creditCard'&&t.paymentSource===src.id)t.paymentSourceName=src.name;});data.paymentSources=data.paymentSources.filter(x=>x.id!==src.id);save();openPaymentSourceManager();showToast('Payment account removed');}
+function deletePaymentSourceById(id){normalizePaymentData();const src=(data.paymentSources||[]).find(x=>x.id===id);if(!src)return;if(src.id==='checking'||src.primary===true){showToast('Checking is the primary account and cannot be removed');return;}const used=(data.transactions||[]).some(t=>t.paymentMethod!=='creditCard'&&t.paymentSource===src.id);const msg=used?`Remove ${src.name} from your active payment accounts? Existing expenses will keep ${src.name} in their historical records.`:`Remove ${src.name}?`;if(!confirm(msg))return;(data.transactions||[]).forEach(t=>{if(t.paymentMethod!=='creditCard'&&t.paymentSource===src.id){t.paymentSourceName=src.name;t.paymentSource='';}});data.paymentSources=(data.paymentSources||[]).filter(x=>x.id!==src.id);save();openPaymentSourceManager();showToast('Payment account removed');}
+function deletePaymentSource(i){const src=paymentAccounts()[i];if(src)deletePaymentSourceById(src.id);}
 function savePaymentSources(){const list=paymentAccounts();list.forEach((src,i)=>{const v=document.getElementById('paySrc'+i)?.value.trim();if(v)src.name=v;});save();closeModal();showToast('Payment accounts saved');}
 function openCardManager(){openCustomModal('Manage credit cards',`<div class="muted" style="margin-bottom:10px">Add, rename, or remove cards. Removing a card does not delete its historical expenses or payments.</div><div id="cardManagerList">${renderCardManagerHtml()}</div><div class="actions"><button class="btn secondary" onclick="openAddCardModal()">＋ Add card</button><button class="btn ghost" onclick="closeModal()">Done</button></div>`);}
 function renderCardManagerHtml(){const cards=availableCreditCards();if(!cards.length)return '<div class="empty">No credit cards yet.</div>';return cards.map((card,i)=>`<div class="cashflowRow"><div><strong>${esc(card)}</strong></div><div style="display:flex;gap:6px"><button class="editLink" onclick="renameCreditCard(${i})">Rename</button><button class="editLink" style="color:var(--danger);background:#f7e7e6" onclick="deleteCreditCardByIndex(${i})">Delete</button></div></div>`).join('');}
@@ -1540,14 +1550,17 @@ function saveCreditCardStatement(){const card=document.getElementById('statement
 function clearCreditCardStatement(){const card=document.getElementById('statementCard')?.value||'';if(!card)return;const key=creditCardKey(card,cashflowMonth);delete data.creditCardHistory[key];delete data.creditCardOverrides[key];save();renderCashflow();showToast('Manual amount cleared');}
 function addCreditCardPayment(){const card=document.getElementById('cashflowPaymentCard')?.value||'';const amount=+(document.getElementById('cashflowPaymentAmount')?.value||0);if(!card||amount<=0){showToast('Choose a card and enter the payment amount');return;}data.creditCardPayments.push({id:`ccp-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,month:cashflowMonth,card,amount});save();renderCashflow();showToast('Credit-card payment added');}
 function deleteCreditCardPayment(id){const i=data.creditCardPayments.findIndex(x=>String(x.id)===String(id));if(i<0)return;if(confirm('Delete this credit-card payment?')){data.creditCardPayments.splice(i,1);save();renderCashflow();}}
-function creditCardChargesForMonth(card,m){const tx=(data.transactions||[]).filter(t=>t.paymentMethod==='creditCard'&&t.creditCard===card&&String(t.date||'').slice(0,7)===m).reduce((s,t)=>s+(+t.amount||0),0);const bills=(data.bills||[]).filter(b=>b.method==='credit'&&b.creditCard===card).reduce((s,b)=>s+billAmountForMonth(b,new Date(`${m}-01T12:00:00`)),0);return tx+bills}
+function sameCard(a,b){return String(a||'').trim().toLowerCase()===String(b||'').trim().toLowerCase()}
+function creditCardExpensesForMonth(card,m){return (data.transactions||[]).filter(t=>t.paymentMethod==='creditCard'&&sameCard(t.creditCard,card)&&String(t.date||'').slice(0,7)===m).reduce((s,t)=>s+(+t.amount||0),0)}
+function creditCardBillsForMonth(card,m){const d=new Date(`${m}-01T12:00:00`);return (data.bills||[]).filter(b=>b.method==='credit'&&sameCard(b.creditCard,card)&&!billIsSkippedForMonth(b,d)).reduce((s,b)=>s+billAmountForMonth(b,d),0)}
+function creditCardChargesForMonth(card,m){return creditCardExpensesForMonth(card,m)+creditCardBillsForMonth(card,m)}
 function creditCardPaymentsForMonth(card,m){return (data.creditCardPayments||[]).filter(p=>p.card===card&&p.month===m).reduce((s,p)=>s+(+p.amount||0),0)}
 function cashExpensesForMonth(m){return (data.transactions||[]).filter(t=>t.paymentMethod!=='creditCard'&&(t.paymentSource||'checking')==='checking'&&String(t.date||'').slice(0,7)===m).reduce((s,t)=>s+(+t.amount||0),0)}
 function cashBillsForMonth(m=cashflowMonth){const d=new Date(`${m}-01T12:00:00`);return (data.bills||[]).filter(b=>b.method!=='credit').reduce((s,b)=>s+billAmountForMonth(b,d),0)}
 let cashflowMonth=monthKey();
 function shiftCashflowMonth(delta){cashflowMonth=monthKey(addMonths(new Date(`${cashflowMonth}-01T12:00:00`),Number(delta)||0));renderCashflow()}
 function goCashflowToday(){cashflowMonth=monthKey();renderCashflow()}
-function renderCashflow(){const base=new Date(`${cashflowMonth}-01T12:00:00`),label=base.toLocaleDateString('en-US',{month:'long',year:'numeric'}),prev=monthKey(addMonths(base,-1));document.getElementById('cashflowLabel').textContent=label;const income=monthlyIncome(base),cashExpenses=cashExpensesForMonth(cashflowMonth),bills=cashBillsForMonth(),cards=availableCreditCards(),payments=(data.creditCardPayments||[]).filter(p=>p.month===cashflowMonth).reduce((s,p)=>s+(+p.amount||0),0),out=cashExpenses+bills+payments,remaining=income-out;document.getElementById('cashflowIncome').textContent=money(income);document.getElementById('cashflowOut').textContent=money(out);document.getElementById('cashflowRemaining').textContent=money(remaining);document.getElementById('cashflowOutBreakdown').innerHTML=`<div class="cashflowRow"><div><strong>Checking expenses</strong><div class="sub">Expenses paid from Checking</div></div><strong>${money(cashExpenses)}</strong></div><div class="cashflowRow"><div><strong>Bills</strong><div class="sub">Bills not marked as paid by credit card</div></div><strong>${money(bills)}</strong></div><div class="cashflowRow"><div><strong>Credit-card payments</strong><div class="sub">Payments entered for ${label}</div></div><strong>${money(payments)}</strong></div><div class="cashflowRow"><div class="cashflowTotal">Total money out</div><div class="cashflowTotal">${money(out)}</div></div>`;const cardGrid=document.getElementById('cashflowCards');document.getElementById('cashflowCardEmpty').classList.toggle('hidden',cards.length>0);cardGrid.innerHTML=cards.map(card=>{const calc=creditCardChargesForMonth(card,cashflowMonth),manual=manualCreditCardAmount(card,cashflowMonth),effective=effectiveCreditCardChargesForMonth(card,cashflowMonth),paid=creditCardPaymentsForMonth(card,cashflowMonth),priorCalc=creditCardChargesForMonth(card,prev),priorManual=manualCreditCardAmount(card,prev),prior=useManualCreditCardAmount(card,prev)&&priorManual!==null?priorManual:priorCalc;return `<div class="cashflowCard"><div class="cashflowCardTitle">${esc(card)}</div><div class="cashflowCardAmount">${money(effective)}</div><div class="cashflowMuted">${manual!==null&&useManualCreditCardAmount(card,cashflowMonth)?'Manual statement amount ·':'Calculated charges ·'} preview for next month</div><div style="margin-top:10px;font-weight:800">Paid this month: ${money(paid)}</div><div style="margin-top:8px;font-size:12px;color:var(--muted)">Prior month charges: <strong>${money(prior)}</strong></div><div class="cardStatementMini"><label>Actual charges for ${label}</label><input id="stmt-${encodeURIComponent(card)}" data-card="${esc(card)}" type="number" min="0" step="0.01" value="${manual!==null?manual:''}" placeholder="Leave blank to use calculated"><label style="display:flex;align-items:center;gap:7px;font-size:12px"><input id="use-${encodeURIComponent(card)}" data-card="${esc(card)}" type="checkbox" ${useManualCreditCardAmount(card,cashflowMonth)?'checked':''} style="width:auto"> Use this amount instead</label><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="editLink" onclick="saveStatementForCard('${esc(card)}')">Save actual</button><button class="editLink" onclick="clearStatementForCard('${esc(card)}')">Clear</button></div></div></div>`}).join('');const sel=document.getElementById('cashflowPaymentCard');if(sel){const current=sel.value;sel.innerHTML=cards.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');if(cards.includes(current))sel.value=current;}const pays=(data.creditCardPayments||[]).filter(p=>p.month===cashflowMonth).sort((a,b)=>a.card.localeCompare(b.card));document.getElementById('cashflowPaymentsList').innerHTML=pays.length?pays.map(p=>`<div class="cashflowRow"><div><strong>${esc(p.card)}</strong><div class="sub">${label}</div></div><div style="display:flex;gap:8px;align-items:center"><strong>${money(p.amount)}</strong><button class="editLink" onclick="editCreditCardPayment('${esc(String(p.id))}')">Edit</button><button class="editLink" onclick="deleteCreditCardPayment('${esc(String(p.id))}')">Delete</button></div></div>`).join(''):'<div class="empty">No credit-card payments entered for this month.</div>';}
+function renderCashflow(){const base=new Date(`${cashflowMonth}-01T12:00:00`),label=base.toLocaleDateString('en-US',{month:'long',year:'numeric'}),prev=monthKey(addMonths(base,-1));document.getElementById('cashflowLabel').textContent=label;const income=monthlyIncome(base),cashExpenses=cashExpensesForMonth(cashflowMonth),bills=cashBillsForMonth(),cards=availableCreditCards(),payments=(data.creditCardPayments||[]).filter(p=>p.month===cashflowMonth).reduce((s,p)=>s+(+p.amount||0),0),out=cashExpenses+bills+payments,remaining=income-out;document.getElementById('cashflowIncome').textContent=money(income);document.getElementById('cashflowOut').textContent=money(out);document.getElementById('cashflowRemaining').textContent=money(remaining);document.getElementById('cashflowOutBreakdown').innerHTML=`<div class="cashflowRow"><div><strong>Checking expenses</strong><div class="sub">Expenses paid from Checking</div></div><strong>${money(cashExpenses)}</strong></div><div class="cashflowRow"><div><strong>Bills</strong><div class="sub">Bills not marked as paid by credit card</div></div><strong>${money(bills)}</strong></div><div class="cashflowRow"><div><strong>Credit-card payments</strong><div class="sub">Payments entered for ${label}</div></div><strong>${money(payments)}</strong></div><div class="cashflowRow"><div class="cashflowTotal">Total money out</div><div class="cashflowTotal">${money(out)}</div></div>`;const cardGrid=document.getElementById('cashflowCards');document.getElementById('cashflowCardEmpty').classList.toggle('hidden',cards.length>0);cardGrid.innerHTML=cards.map(card=>{const expenses=creditCardExpensesForMonth(card,cashflowMonth),bills=creditCardBillsForMonth(card,cashflowMonth),calc=expenses+bills,manual=manualCreditCardAmount(card,cashflowMonth),effective=effectiveCreditCardChargesForMonth(card,cashflowMonth),paid=creditCardPaymentsForMonth(card,cashflowMonth),priorCalc=creditCardChargesForMonth(card,prev),priorManual=manualCreditCardAmount(card,prev),prior=useManualCreditCardAmount(card,prev)&&priorManual!==null?priorManual:priorCalc;return `<div class="cashflowCard"><div class="cashflowCardTitle">${esc(card)}</div><div class="cashflowCardAmount">${money(effective)}</div><div class="cashflowMuted">${manual!==null&&useManualCreditCardAmount(card,cashflowMonth)?'Manual statement amount ·':'Calculated charges ·'} preview for next month</div><div style="margin-top:10px;font-size:12px;color:var(--muted)"><div>Expenses: <strong>${money(expenses)}</strong></div><div style="margin-top:4px">Bills: <strong>${money(bills)}</strong></div></div><div style="margin-top:10px;font-weight:800">Paid this month: ${money(paid)}</div><div style="margin-top:8px;font-size:12px;color:var(--muted)">Prior month charges: <strong>${money(prior)}</strong></div><div class="cardStatementMini"><label>Actual charges for ${label}</label><input id="stmt-${encodeURIComponent(card)}" data-card="${esc(card)}" type="number" min="0" step="0.01" value="${manual!==null?manual:''}" placeholder="Leave blank to use calculated"><label style="display:flex;align-items:center;gap:7px;font-size:12px"><input id="use-${encodeURIComponent(card)}" data-card="${esc(card)}" type="checkbox" ${useManualCreditCardAmount(card,cashflowMonth)?'checked':''} style="width:auto"> Use this amount instead</label><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="editLink" onclick="saveStatementForCard('${esc(card)}')">Save actual</button><button class="editLink" onclick="clearStatementForCard('${esc(card)}')">Clear</button></div></div></div>`}).join('');const sel=document.getElementById('cashflowPaymentCard');if(sel){const current=sel.value;sel.innerHTML=cards.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');if(cards.includes(current))sel.value=current;}const pays=(data.creditCardPayments||[]).filter(p=>p.month===cashflowMonth).sort((a,b)=>a.card.localeCompare(b.card));document.getElementById('cashflowPaymentsList').innerHTML=pays.length?pays.map(p=>`<div class="cashflowRow"><div><strong>${esc(p.card)}</strong><div class="sub">${label}</div></div><div style="display:flex;gap:8px;align-items:center"><strong>${money(p.amount)}</strong><button class="editLink" onclick="editCreditCardPayment('${esc(String(p.id))}')">Edit</button><button class="editLink" onclick="deleteCreditCardPayment('${esc(String(p.id))}')">Delete</button></div></div>`).join(''):'<div class="empty">No credit-card payments entered for this month.</div>';}
 function saveStatementForCard(card){const id=encodeURIComponent(card),v=document.getElementById('stmt-'+id)?.value;if(v===''){showToast('Enter an amount');return;}data.creditCardHistory[creditCardKey(card,cashflowMonth)]=Number(v)||0;data.creditCardOverrides[creditCardKey(card,cashflowMonth)]=!!document.getElementById('use-'+id)?.checked;save();renderCashflow();showToast('Actual amount saved');}
 function clearStatementForCard(card){const key=creditCardKey(card,cashflowMonth);delete data.creditCardHistory[key];delete data.creditCardOverrides[key];save();renderCashflow();showToast('Manual amount cleared');}
 function editCreditCardPayment(id){const p=data.creditCardPayments.find(x=>String(x.id)===String(id));if(!p)return;openCustomModal('Edit credit-card payment',`<label>Credit card</label><select id="editPaymentCard">${availableCreditCards().map(c=>`<option value="${esc(c)}" ${c===p.card?'selected':''}>${esc(c)}</option>`).join('')}</select><label>Amount paid</label><input id="editPaymentAmount" type="number" step="0.01" min="0" value="${Number(p.amount)||0}"><div class="actions"><button class="btn ghost" onclick="closeModal();renderCashflow()">Cancel</button><button class="btn" onclick="saveCreditCardPaymentEdit('${esc(String(id))}')">Save</button></div>`);}
@@ -1565,7 +1578,7 @@ function saveExpenseEditById(e,id){
  t.amount=amount;t.date=document.getElementById('fDate').value||dateValue();t.category=document.getElementById('fCat').value;t.who=document.getElementById('fWho').value;t.person=t.who;t.note=document.getElementById('fNote').value.trim();t.tags=normalizeTags(document.getElementById('fTags')?.value||'');data.savedTags=Array.isArray(data.savedTags)?data.savedTags:[];t.tags.forEach(tag=>{if(!data.savedTags.some(x=>x.toLowerCase()===tag.toLowerCase()))data.savedTags.push(tag)});t.paymentMethod=document.getElementById('fPaymentMethod')?.value||'debit';t.paymentSource=t.paymentMethod==='creditCard'?'':(document.getElementById('fPaymentSource')?.value||'checking');t.paymentSourceName=t.paymentMethod==='creditCard'?'':(paymentAccounts().find(x=>x.id===t.paymentSource)?.name||t.paymentSourceName||'Checking');t.creditCard=t.paymentMethod==='creditCard'?(document.getElementById('fCreditCard')?.value||''):'';t.countsTowardBudget=document.getElementById('fCountsTowardBudget')?.checked!==false;if(t.paymentMethod==='creditCard'&&!t.creditCard){showToast('Choose a credit card');return false}const stay=currentView;currentView=stay;save();closeModal();showView(stay);showToast('Expense updated');return false;
 }
 function deleteExpenseById(id){const i=data.transactions.findIndex(x=>String(x.id)===String(id));if(i<0)return;if(confirm('Delete this expense?')){const removedId=String(data.transactions[i].id);data.transactions.splice(i,1);data.expenseOrder=Array.isArray(data.expenseOrder)?data.expenseOrder.filter(x=>String(x)!==removedId):[];save();closeModal();showToast('Expense deleted')}}
-function addIncome(){const name=document.getElementById('fName').value.trim(),cadence=document.getElementById('fFreq').value,amount=+document.getElementById('fAmount')?.value||0,firstPayDate=document.getElementById('fDate')?.value||'';if(!name){showToast('Enter an income name');return}if(cadence!=='manual'&&amount<=0){showToast('Enter an income amount');return}if(cadence!=='manual'&&cadence!=='midMonthEnd'&&!firstPayDate){showToast('Choose a known payday');return}data.incomes.push({name,amount:cadence==='manual'?0:amount,cadence,firstPayDate,secondPayDay:+document.getElementById('fSecond')?.value||15,midMonthDay:+document.getElementById('fMid')?.value||15,startDate:document.getElementById('fStartDate')?.value||'',endDate:document.getElementById('fEndDate')?.value||''});save();closeModal();showToast(cadence==='manual'?'Income source added':'Income added')}
+function addIncome(){const name=document.getElementById('fName').value.trim(),cadence=document.getElementById('fFreq').value,amount=+document.getElementById('fAmount')?.value||0,firstPayDate=document.getElementById('fDate')?.value||'';if(!name){showToast('Enter an income name');return}if(cadence!=='manual'&&amount<=0){showToast('Enter an income amount');return}if(cadence!=='manual'&&cadence!=='midMonthEnd'&&!firstPayDate){showToast('Choose a known payday');return}data.incomes.push({id:`income-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,name,amount:cadence==='manual'?0:amount,cadence,firstPayDate,secondPayDay:+document.getElementById('fSecond')?.value||15,midMonthDay:+document.getElementById('fMid')?.value||15,startDate:document.getElementById('fStartDate')?.value||'',endDate:document.getElementById('fEndDate')?.value||''});save();closeModal();showToast(cadence==='manual'?'Income source added':'Income added')}
 function saveIncomeEdit(i){const x=data.incomes?.[i];if(!x)return;const name=document.getElementById('fName').value.trim(),cadence=document.getElementById('fFreq').value,amount=+document.getElementById('fAmount')?.value||0,firstPayDate=document.getElementById('fDate')?.value||'';if(!name){showToast('Enter an income name');return}if(cadence!=='manual'&&amount<=0){showToast('Enter an income amount');return}if(cadence!=='manual'&&cadence!=='midMonthEnd'&&!firstPayDate){showToast('Choose a known payday');return}Object.assign(x,{name,amount:cadence==='manual'?0:amount,cadence,firstPayDate,secondPayDay:+document.getElementById('fSecond')?.value||15,midMonthDay:+document.getElementById('fMid')?.value||15,startDate:document.getElementById('fStartDate')?.value||'',endDate:document.getElementById('fEndDate')?.value||''});save();closeModal();showToast('Income updated')}
 function addManualIncomePayment(sourceIndex){const src=data.incomes?.[sourceIndex];const amount=+document.getElementById('fAmount')?.value||0,date=document.getElementById('fDate')?.value||'';if(!src||src.cadence!=='manual')return;if(amount<=0||!date){showToast('Enter the amount and date received');return}data.manualIncomePayments=data.manualIncomePayments||[];data.manualIncomePayments.push({id:'mi_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7),sourceId:sourceIndex,sourceName:src.name,amount,date,month:date.slice(0,7)});save();closeModal();showToast('Income added')}
 function removeManualIncomePayment(id){const p=(data.manualIncomePayments||[]).find(x=>String(x.id)===String(id));if(!p)return;if(confirm('Delete this income entry?')){data.manualIncomePayments=data.manualIncomePayments.filter(x=>String(x.id)!==String(id));save()}}
@@ -1579,20 +1592,54 @@ function toggleBillMonth(i){const b=data.bills?.[i];if(!b)return;const m=new Dat
 function setBillActual(i){const b=data.bills?.[i];if(!b)return;const m=new Date(),key=billOverrideKey(b,m),ov=billOverrideForMonth(b,m),current=(ov&&ov.amount!==undefined)?ov.amount:b.amount;const v=prompt(`Actual amount for ${b.name} this month (${monthKey(m)}):`,current);if(v===null)return;const amount=Number(v);if(!Number.isFinite(amount)||amount<0){showToast('Enter a valid amount');return}data.billOverrides=data.billOverrides||{};data.billOverrides[key]={amount};save();renderBills();renderCashflow();renderBudget();showToast('Monthly bill amount saved')}
 function saveBillEdit(i){const b=data.bills?.[i];if(!b)return;const name=document.getElementById('fName').value.trim(),amount=+document.getElementById('fAmount').value||0,method=document.getElementById('fMethod').value,creditCard=method==='credit'?(document.getElementById('fCreditCard')?.value||''):'';if(!name||amount<=0){showToast('Enter a bill name and amount');return}if(method==='credit'&&!creditCard){showToast('Choose a credit card');return}const billTags=normalizeTags(document.getElementById('fBillTags')?.value||'');saveBillTagsAsSaved(billTags);Object.assign(b,{name,amount,frequency:document.getElementById('fFreq').value,due:+document.getElementById('fDue').value||0,method,creditCard,type:document.getElementById('fType').value,tags:normalizeTags(document.getElementById('fBillTags')?.value||'')});save();closeModal();renderBills();renderCashflow();showToast('Bill updated')}
 
+let incomeMonth=monthKey();
+function shiftIncomeMonth(delta){incomeMonth=monthKey(addMonths(new Date(`${incomeMonth}-01T12:00:00`),Number(delta)||0));renderIncome()}
+function goIncomeToday(){incomeMonth=monthKey();renderIncome()}
 function renderIncome(){
- const now=new Date(),mk=monthKey(now);
+ const now=new Date(`${incomeMonth}-01T12:00:00`),mk=incomeMonth;
+ const label=now.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+ const labelEl=document.getElementById('incomeMonthLabel');if(labelEl)labelEl.textContent=label;
  const rows=(data.incomes||[]).map((i,n)=>{
    if(i.cadence==='manual'){
-     const payments=(data.manualIncomePayments||[]).filter(p=>p.sourceName===i.name&&p.month===mk).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+     const payments=(data.manualIncomePayments||[]).filter(p=>(p.sourceId!==undefined?String(p.sourceId)===String(n):p.sourceName===i.name)&&p.month===mk).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
      const total=payments.reduce((sum,p)=>sum+(Number(p.amount)||0),0);
      return `<div class="item"><div class="row"><div><div class="itemTitle">${esc(i.name)}</div><div class="sub">Manual / irregular · ${payments.length?`${payments.length} check${payments.length===1?'':'s'} this month · ${money(total)}`:'No checks entered this month'}</div>${payments.length?`<div style="margin-top:8px">${payments.map(p=>`<div class="sub" style="display:flex;gap:10px;align-items:center;justify-content:space-between;padding:3px 0"><span>${esc(String(p.date))} · <strong>${money(p.amount)}</strong></span><button class="editLink" onclick="removeManualIncomePayment('${esc(String(p.id))}')">Delete</button></div>`).join('')}</div>`:''}</div><div><button class="btn small" onclick="openModal('manualIncomePayment',${n})">＋ Add check</button><button class="btn small secondary" onclick="openModal('editIncome',${n})">Edit</button><button class="btn small danger" onclick="removeIncome(${n})">×</button></div></div></div>`;
    }
-   const ds=paydayDates(i,now);return `<div class="item"><div class="row"><div><div class="itemTitle">${esc(i.name)}</div><div class="sub">${money(i.amount)} · ${esc(i.cadence)} · ${ds.map(d=>d.toLocaleDateString()).join(', ')}</div></div><div><button class="btn small secondary" onclick="openModal('editIncome',${n})">Edit</button><button class="btn small danger" onclick="removeIncome(${n})">×</button></div></div></div>`
+   const ds=paydayDates(i,now).filter(d=>{
+     const start=i.startDate?new Date(i.startDate+'T00:00:00'):null;
+     const end=i.endDate?new Date(i.endDate+'T23:59:59'):null;
+     return (!start||d>=start)&&(!end||d<=end);
+   });
+   const paycheckRows=ds.map(d=>{
+     const key=dateOnly(d).toISOString().slice(0,10),ov=incomeOverrideFor(i,d),amt=paycheckAmountFor(i,d);
+     return `<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line)"><div><div><strong>${esc(d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}))}</strong></div><div class="sub">${ov?`One-time adjustment · scheduled ${money(i.amount)}`:'Scheduled paycheck'}</div></div><div style="display:flex;align-items:center;gap:8px"><strong>${money(amt)}</strong><button class="btn small secondary" onclick="openModal('editIncomePayment',{sourceIndex:${n},scheduledDate:'${esc(key)}'})">Edit</button></div></div>`;
+   }).join('');
+   return `<div class="item"><div class="row"><div><div class="itemTitle">${esc(i.name)}</div><div class="sub">${esc(i.cadence)} · Recurring amount ${money(i.amount)}</div></div><div><button class="btn small secondary" onclick="openModal('editIncome',${n})">Edit rule</button><button class="btn small danger" onclick="removeIncome(${n})">×</button></div></div>${paycheckRows||'<div class="sub" style="padding-top:8px">No paychecks this month</div>'}</div>`;
  }).join('');
- const bonuses=(data.bonusIncomes||[]).map((b,n)=>`<div class="item"><div class="row"><div><div class="itemTitle">${esc(b.name)}</div><div class="sub">${esc(b.month)} · Bonus</div></div><div><b>${money(b.amount)}</b><button class="btn small secondary" onclick="openModal('editBonus',${n})">Edit</button><button class="btn small danger" onclick="removeBonus(${n})">×</button></div></div></div>`).join('');
+ const bonuses=(data.bonusIncomes||[]).filter(b=>b.month===mk).map((b,n)=>{
+   const originalIndex=(data.bonusIncomes||[]).indexOf(b);
+   return `<div class="item"><div class="row"><div><div class="itemTitle">${esc(b.name)}</div><div class="sub">${esc(b.month)} · Bonus</div></div><div><b>${money(b.amount)}</b><button class="btn small secondary" onclick="openModal('editBonus',${originalIndex})">Edit</button><button class="btn small danger" onclick="removeBonus(${originalIndex})">×</button></div></div></div>`;
+ }).join('');
  document.getElementById('incomeTotalValue').textContent=money(monthlyIncome(now));
- document.getElementById('incomeList').innerHTML=(rows||'<div class="empty">No income sources yet.</div>')+(bonuses?`<div style="margin-top:18px"><div class="sectionTitle">Bonus income</div>${bonuses}</div>`:'');
+ const sections=(rows||'<div class="empty">No income sources yet.</div>')+(bonuses?`<div style="margin-top:18px"><div class="sectionTitle">Bonus income</div>${bonuses}</div>`:'');
+ document.getElementById('incomeList').innerHTML=sections;
 }
+
+function saveIncomePaymentOverride(sourceIndex,scheduledDate){
+ const src=data.incomes?.[sourceIndex],amount=Number(document.getElementById('fAmount')?.value);
+ if(!src||!scheduledDate||!Number.isFinite(amount)||amount<0){showToast('Enter a valid paycheck amount');return}
+ data.incomeOverrides=data.incomeOverrides||{};
+ const key=incomeOverrideKey(src.id,new Date(`${scheduledDate}T12:00:00`)),defaultAmount=Number(src.amount)||0;
+ if(Math.abs(amount-defaultAmount)<0.005) delete data.incomeOverrides[key];
+ else data.incomeOverrides[key]={amount,updatedAt:new Date().toISOString()};
+ save();closeModal();renderIncome();renderCashflow();renderBudget();showToast('Paycheck updated');
+}
+function resetIncomePaymentOverride(sourceIndex,scheduledDate){
+ const src=data.incomes?.[sourceIndex];if(!src)return;
+ delete data.incomeOverrides[incomeOverrideKey(src.id,new Date(`${scheduledDate}T12:00:00`))];
+ save();closeModal();renderIncome();renderCashflow();renderBudget();showToast('Paycheck reset to recurring amount');
+}
+
 function saveCategorySettings(){data.categories.forEach((c,i)=>{const n=document.getElementById('cn'+i),col=document.getElementById('cc'+i),ic=document.getElementById('ci'+i);if(n?.value.trim())c.name=n.value.trim();if(col?.value)c.color=col.value;if(ic?.value)c.icon=ic.value});persistData();closeModal();render();showToast('Category changes saved')}
 function saveSettings(){
   const input=document.getElementById('settingsSavings');
@@ -1610,12 +1657,131 @@ function saveSettings(){
   cloudSaveIfConnected();
   showToast('Settings saved');
 }
+
+/* V105.6.1 reconciliation */
+function ensureReconciliationData(){
+ data.reconciliations=(data.reconciliations&&typeof data.reconciliations==='object')?data.reconciliations:{};
+}
+function reconciliationAccounts(){
+ const out=[];
+ paymentAccounts().forEach(x=>out.push({id:x.id,name:x.name,type:'account'}));
+ availableCreditCards().forEach(x=>out.push({id:'card:'+x,name:x,type:'creditCard'}));
+ return out;
+}
+function reconcileKey(accountId,month){return `${accountId}\u001f${month}`;}
+function openReconcileModal(){
+ normalizePaymentData();ensureReconciliationData();
+ const accounts=reconciliationAccounts();
+ const current=monthKey();
+ const opts=accounts.map(a=>`<option value="${esc(a.id)}">${esc(a.name)}${a.type==='creditCard'?' · Credit card':''}</option>`).join('');
+ openCustomModal('End-of-month reconciliation',`<p class="muted" style="margin-top:0">Upload a transaction export for one account and month. The app will match amounts and nearby dates, then show anything that needs your eyes. It will not change your budget automatically.</p><label>Account</label><select id="reconAccount">${opts||'<option value="">No payment accounts or credit cards found</option>'}</select><label>Month</label><input id="reconMonth" type="month" value="${current}"><label>Statement / transaction export</label><input id="reconFile" type="file" accept=".csv,.txt,text/csv,text/plain"><div class="muted" style="font-size:11px;margin-top:6px">Best first-version format: CSV exported by your bank/card. PDF and screenshots can be added later once we know which statement formats you use.</div><div class="actions"><button type="button" class="btn ghost" onclick="closeModal()">Cancel</button><button type="button" class="btn" onclick="runReconciliationUpload()">Match transactions</button></div><div id="reconExisting" style="margin-top:10px"></div>`);
+ const a=document.getElementById('reconAccount'); if(a){a.addEventListener('change',renderReconcileExisting);}
+ const m=document.getElementById('reconMonth'); if(m)m.addEventListener('change',renderReconcileExisting);
+ renderReconcileExisting();
+}
+function parseMoney(v){
+ if(v===null||v===undefined)return null;
+ let s=String(v).trim();if(!s)return null;
+ let neg=/^\s*\(.*\)\s*$/.test(s)||/-$/.test(s);s=s.replace(/[,$$\s]/g,'').replace(/%$/,'');
+ s=s.replace(/^[+]/,'');
+ let n=Number(s);if(!Number.isFinite(n))return null;return neg?-Math.abs(n):n;
+}
+function normalizeStatementDate(v){
+ let s=String(v||'').trim();if(!s)return '';
+ let d=new Date(s);
+ if(!Number.isNaN(d.getTime()))return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+ const m=s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})$/);
+ if(m){let y=+m[3];if(y<100)y+=2000;return `${y}-${String(+m[1]).padStart(2,'0')}-${String(+m[2]).padStart(2,'0')}`;}
+ return '';
+}
+function csvRows(text){
+ const rows=[];let row=[],cell='',quoted=false;
+ for(let i=0;i<text.length;i++){const ch=text[i],next=text[i+1];if(ch==='"'){if(quoted&&next==='"'){cell+='"';i++;}else quoted=!quoted;}else if(ch===','&&!quoted){row.push(cell);cell='';}else if((ch==='\n'||ch==='\r')&&!quoted){if(ch==='\r'&&next==='\n')i++;row.push(cell);cell='';if(row.some(x=>String(x).trim()!==''))rows.push(row);row=[];}else cell+=ch;}
+ if(cell!==''||row.length){row.push(cell);if(row.some(x=>String(x).trim()!==''))rows.push(row);}return rows;
+}
+function parseStatementCSV(text,account,month){
+ const rows=csvRows(text.replace(/^\uFEFF/,''));if(rows.length<2)throw Error('No transaction rows found');
+ const headers=rows[0].map(x=>String(x).trim().toLowerCase());
+ const find=(patterns)=>{for(const p of patterns){const i=headers.findIndex(h=>p.test(h));if(i>=0)return i;}return -1;};
+ const dateI=find([/^date$/, /transaction.*date/, /posting.*date/, /posted/]);
+ const descI=find([/description/, /merchant/, /payee/, /name/, /memo/]);
+ const amountI=find([/^amount$/, /transaction amount/, /total/]);
+ const debitI=find([/^debit$/, /withdrawal/, /payment amount/, /charge/]);
+ const creditI=find([/^credit$/, /deposit/]);
+ if(dateI<0)throw Error('Could not find a date column');
+ if(amountI<0&&debitI<0&&creditI<0)throw Error('Could not find an amount column');
+ const entries=[];
+ rows.slice(1).forEach((r,idx)=>{
+  const date=normalizeStatementDate(r[dateI]);if(!date||date.slice(0,7)!==month)return;
+  const desc=String(r[descI>=0?descI:0]||'').trim();
+  let amount=null,kind='charge';
+  if(amountI>=0){amount=parseMoney(r[amountI]); if(account.type==='account'){if(amount===null)return;if(amount>=0){kind='debit';}else{kind='credit';amount=Math.abs(amount);}}else{if(amount===null||amount<=0)return;kind='charge';}}
+  else {const debit=parseMoney(r[debitI]);const credit=parseMoney(r[creditI]);if(account.type==='creditCard'){if(debit!==null&&debit>0){amount=Math.abs(debit);kind='charge';}else return;}else{if(debit!==null&&debit!==0){amount=Math.abs(debit);kind='debit';}else return;}}
+  if(amount===null||amount<=0)return;
+  entries.push({id:`st-${Date.now()}-${idx}-${Math.random().toString(36).slice(2,7)}`,date,description:desc,amount:Math.round(amount*100)/100,kind,matchId:'',status:'unmatched'});
+ });
+ return entries;
+}
+function daysBetween(a,b){const da=dateOnly(a),db=dateOnly(b);return Math.round(Math.abs(da-db)/86400000);}
+function reconDescriptionScore(a,b){
+ const clean=s=>new Set(String(s||'').toLowerCase().replace(/[^a-z0-9 ]/g,' ').split(/\s+/).filter(x=>x.length>2&&!['the','and','inc','llc','com'].includes(x)));
+ const A=clean(a),B=clean(b);if(!A.size||!B.size)return 0;let hit=0;A.forEach(x=>{if(B.has(x))hit++;});return hit/Math.max(A.size,B.size);
+}
+function reconciliationBillCandidate(b,month){const day=Math.min(Math.max(Number(b.due)||1,1),new Date(Number(month.slice(0,4)),Number(month.slice(5,7)),0).getDate());return {id:`bill:${b.id||b.name}:${month}`,amount:billAmountForMonth(b,new Date(`${month}-01T12:00:00`)),date:`${month}-${String(day).padStart(2,'0')}`,note:b.name||'Bill',category:'Bill',isBill:true,billId:b.id};}
+function reconciliationTransactions(accountId,month){
+ const account=reconciliationAccounts().find(a=>a.id===accountId);if(!account)return[];
+ if(account.type==='creditCard'){
+   const txs=(data.transactions||[]).filter(t=>t.paymentMethod==='creditCard'&&sameCard(t.creditCard,account.name)&&String(t.date||'').slice(0,7)===month);
+   const bills=(data.bills||[]).filter(b=>b.method==='credit'&&sameCard(b.creditCard,account.name)&&!billIsSkippedForMonth(b,new Date(`${month}-01T12:00:00`))).map(b=>reconciliationBillCandidate(b,month));
+   return [...txs,...bills];
+ }
+ const txs=(data.transactions||[]).filter(t=>t.paymentMethod!=='creditCard'&&(t.paymentSource||'checking')===account.id&&String(t.date||'').slice(0,7)===month);
+ const bills=account.id==='checking'?(data.bills||[]).filter(b=>b.method==='checking'||b.method==='automatic').filter(b=>!billIsSkippedForMonth(b,new Date(`${month}-01T12:00:00`))).map(b=>reconciliationBillCandidate(b,month)):[];
+ return [...txs,...bills];
+}
+function matchReconciliationEntries(entries,txs){
+ const used=new Set();
+ entries.forEach(e=>{
+  const candidates=txs.filter(t=>!used.has(String(t.id))&&Math.abs((Number(t.amount)||0)-e.amount)<0.005).map(t=>({t,days:daysBetween(e.date,t.date),score:reconDescriptionScore(e.description,t.note||'')})).filter(x=>x.days<=4).sort((a,b)=>(a.days-b.days)||(b.score-a.score));
+  if(!candidates.length)return;
+  const best=candidates[0],second=candidates[1];
+  const sameDaySameAmount=candidates.filter(x=>x.days===0);
+  const clearlyUnique=sameDaySameAmount.length===1;
+  if(best.days===0&&clearlyUnique){e.matchId=String(best.t.id);e.status='matched';used.add(String(best.t.id));}
+  else if(best.days<=4){e.matchId=String(best.t.id);e.status='review';used.add(String(best.t.id));}
+ });
+ return entries;
+}
+async function runReconciliationUpload(){
+ const accountId=document.getElementById('reconAccount')?.value,month=document.getElementById('reconMonth')?.value,file=document.getElementById('reconFile')?.files?.[0];
+ if(!accountId||!month||!file){showToast('Choose an account, month, and CSV file');return;}
+ try{const text=await file.text();const account=reconciliationAccounts().find(a=>a.id===accountId);const entries=parseStatementCSV(text,account,month);if(!entries.length){showToast('No outgoing transactions found for that month');return;}const txs=reconciliationTransactions(accountId,month);matchReconciliationEntries(entries,txs);ensureReconciliationData();data.reconciliations[reconcileKey(accountId,month)]={accountId,month,fileName:file.name,updatedAt:new Date().toISOString(),entries};save();renderReconcileResults(accountId,month);}catch(err){showToast(err?.message||'Could not read that statement');}
+}
+function reconStatusLabel(e){if(e.status==='matched')return 'Matched';if(e.status==='review')return 'Review';if(e.status==='added')return 'Added';return 'Unmatched';}
+function reconTxForEntry(e,accountId,month){return (reconciliationTransactions(accountId,month)||[]).find(t=>String(t.id)===String(e.matchId));}
+function renderReconcileExisting(){
+ const box=document.getElementById('reconExisting');if(!box)return;const accountId=document.getElementById('reconAccount')?.value,month=document.getElementById('reconMonth')?.value;if(!accountId||!month){box.innerHTML='';return;}ensureReconciliationData();const rec=data.reconciliations[reconcileKey(accountId,month)];if(!rec){box.innerHTML='';return;}box.innerHTML=`<div class="backupBox"><strong>Saved reconciliation found</strong><br><span class="muted">${esc(rec.fileName||'Previous statement')} · ${rec.entries?.length||0} statement transactions</span><div style="margin-top:8px"><button type="button" class="btn small" onclick="renderReconcileResults('${esc(accountId)}','${esc(month)}')">Review saved results</button></div></div>`;
+}
+function renderReconcileResults(accountId,month){
+ const rec=data.reconciliations?.[reconcileKey(accountId,month)];if(!rec)return;const txs=reconciliationTransactions(accountId,month),entries=rec.entries||[],matchedIds=new Set(entries.filter(e=>e.matchId).map(e=>String(e.matchId)));
+ const matched=entries.filter(e=>e.status==='matched').length,review=entries.filter(e=>e.status==='review').length,unmatched=entries.filter(e=>e.status==='unmatched').length,missing=txs.filter(t=>!matchedIds.has(String(t.id))).length;
+ const rows=entries.map(e=>{const t=reconTxForEntry(e,accountId,month);const cls=e.status==='matched'?'background:#eef8ef':e.status==='review'?'background:#fff8df':'background:#fff0ef';const action=t?`<button type="button" class="btn small secondary" onclick="reviewReconcileEntry('${esc(e.id)}','${esc(accountId)}','${esc(month)}')">Review</button>`:`<button type="button" class="btn small secondary" onclick="markReconcileReviewed('${esc(e.id)}','${esc(accountId)}','${esc(month)}')">Mark reviewed</button>`;return `<div style="padding:10px;border-radius:12px;${cls};margin-bottom:7px"><div class="row"><div><strong>${esc(e.description||'Statement transaction')}</strong><div class="muted" style="font-size:11px">${esc(e.date)} · ${reconStatusLabel(e)}${t?` · App: ${esc(t.date)} · ${esc(t.note||t.category||'Expense')}`:''}</div></div><strong>${money(e.amount)}</strong></div><div style="display:flex;justify-content:flex-end;margin-top:7px">${action}</div></div>`}).join('');
+ const missingRows=txs.filter(t=>!matchedIds.has(String(t.id))).map(t=>{const action=t.isBill?'<span class="muted" style="font-size:11px">Planned bill · review in Bills</span>':`<button type="button" class="btn small secondary" onclick="openModal('editExpense','${esc(String(t.id))}')">Review app transaction</button>`;return `<div style="padding:10px;border-radius:12px;background:#fff8df;margin-bottom:7px"><div class="row"><div><strong>${esc(t.note||t.category||'Expense')}</strong><div class="muted" style="font-size:11px">${esc(t.date)} · App ${t.isBill?'bill':'transaction'} not matched</div></div><strong>${money(t.amount)}</strong></div><div style="display:flex;justify-content:flex-end;margin-top:7px">${action}</div></div>`}).join('');
+ openCustomModal('Reconciliation results',`<div class="backupBox"><strong>${esc(rec.fileName||'Statement')}</strong><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px;text-align:center"><div><strong>${matched}</strong><div class="muted" style="font-size:11px">Matched</div></div><div><strong>${review}</strong><div class="muted" style="font-size:11px">Review</div></div><div><strong>${unmatched}</strong><div class="muted" style="font-size:11px">Unmatched</div></div><div><strong>${missing}</strong><div class="muted" style="font-size:11px">App only</div></div></div></div><h3 style="margin:16px 0 8px">Statement transactions</h3>${rows||'<div class="empty">No statement transactions.</div>'}<h3 style="margin:18px 0 8px">App transactions not matched</h3>${missingRows||'<div class="empty">Everything in the app has a statement match.</div>'}<div class="actions"><button type="button" class="btn ghost" onclick="openReconcileModal()">Back</button><button type="button" class="btn" onclick="closeModal()">Done</button></div>`);
+}
+function reviewReconcileEntry(entryId,accountId,month){
+ const rec=data.reconciliations?.[reconcileKey(accountId,month)],e=rec?.entries?.find(x=>String(x.id)===String(entryId));if(!e)return;const tx=reconTxForEntry(e,accountId,month);if(!tx){markReconcileReviewed(entryId,accountId,month);return;}
+ openCustomModal('Review possible match',`<div class="backupBox"><strong>Statement</strong><br>${esc(e.date)} · ${esc(e.description||'')} · <strong>${money(e.amount)}</strong><hr><strong>App transaction</strong><br>${esc(tx.date)} · ${esc(tx.note||tx.category||'Expense')} · <strong>${money(tx.amount)}</strong>${daysBetween(e.date,tx.date)?`<div class="muted" style="font-size:11px;margin-top:6px">Dates differ by ${daysBetween(e.date,tx.date)} day(s).</div>`:''}</div><div class="actions"><button type="button" class="btn ghost" onclick="markReconcileReviewed('${esc(entryId)}','${esc(accountId)}','${esc(month)}')">Leave unmatched</button><button type="button" class="btn" onclick="confirmReconcileMatch('${esc(entryId)}','${esc(accountId)}','${esc(month)}')">Confirm match</button></div>`);
+}
+function confirmReconcileMatch(entryId,accountId,month){const rec=data.reconciliations?.[reconcileKey(accountId,month)],e=rec?.entries?.find(x=>String(x.id)===String(entryId));if(!e)return;e.status='matched';rec.updatedAt=new Date().toISOString();save();renderReconcileResults(accountId,month);}
+function markReconcileReviewed(entryId,accountId,month){const rec=data.reconciliations?.[reconcileKey(accountId,month)],e=rec?.entries?.find(x=>String(x.id)===String(entryId));if(!e)return;e.status='unmatched';e.reviewed=true;rec.updatedAt=new Date().toISOString();save();renderReconcileResults(accountId,month);}
+
 function showView(v){currentView=v;document.querySelectorAll('main[id^="view-"]').forEach(x=>x.classList.toggle('hidden',x.id!=="view-"+v));document.querySelectorAll('.nav button,.mobileNav button[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===v));closeMobileMore();if(v==='budget')renderBudget();if(v==='bills')renderBills();if(v==='income')renderIncome();if(v==='spending')renderAnalytics();if(v==='cashflow')renderCashflow();if(v==='dashboard')renderDashboard()}
 function toggleMobileMore(){const m=document.getElementById('mobileMoreMenu');if(m)m.classList.toggle('hidden')}
 function closeMobileMore(){const m=document.getElementById('mobileMoreMenu');if(m)m.classList.add('hidden')}
 function render(){if(!data.setupComplete)return;normalizePaymentData();ensureExpenseOrder();ensureWeeklyRollover();document.getElementById('app').classList.remove('hidden');document.getElementById('setupScreen').classList.add('hidden');document.getElementById('settingsSavings').value=data.savingsGoal||0;const versionLabel=document.getElementById('appVersionLabel');if(versionLabel)versionLabel.textContent=APP_VERSION;renderDashboard();renderBudget();renderBills();renderIncome();renderAnalytics();renderCashflow();showView(currentView)}
 function exportData(){const backup={app:'Household Budget',version:1,exportedAt:new Date().toISOString(),data};const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'}),filename='household-budget-backup-'+dateValue()+'.json';const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup exported')}
-function importData(event){const f=event.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.data||!Array.isArray(x.data.incomes)||!Array.isArray(x.data.categories))throw Error();data={...structuredClone(blank),...x.data,setupComplete:true};data.categories=(data.categories||[]).map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));data.people=Array.from(new Set((data.people||['Shared','Lindsay','Matthew']).filter(Boolean)));if(!data.people.includes('Shared'))data.people.unshift('Shared');normalizePaymentData();ensureIds();persistData();event.target.value='';render();showToast('Backup imported')}catch(e){showToast('That backup could not be imported')}};r.readAsText(f)}
+function importData(event){const f=event.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.data||!Array.isArray(x.data.incomes)||!Array.isArray(x.data.categories))throw Error();data={...structuredClone(blank),...x.data,setupComplete:true};data.reconciliations=(data.reconciliations&&typeof data.reconciliations==='object')?data.reconciliations:{};data.categories=(data.categories||[]).map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));data.people=Array.from(new Set((data.people||['Shared','Lindsay','Matthew']).filter(Boolean)));if(!data.people.includes('Shared'))data.people.unshift('Shared');normalizePaymentData();ensureIds();persistData();event.target.value='';render();showToast('Backup imported')}catch(e){showToast('That backup could not be imported')}};r.readAsText(f)}
 function resetAll(){if(confirm('Clear all household budget data from this device?')){localStorage.removeItem(KEY);location.reload()}}
 
 const SETUP_DRAFT_KEY='householdBudgetSetupDraft_v1';
@@ -1659,16 +1825,90 @@ function setupAddCategory(){const n=prompt('Category name');if(!n)return;const v
 const setupSuggestedCategories=['Groceries','Dining out','Gas & transportation','Entertainment','Household','Medical','Clothing','Personal care','Pets','Kids','Gifts','Miscellaneous'];
 function addSetupCategory(name){const n=(name||'').trim();if(!n||setupCats.some(c=>c.name.toLowerCase()===n.toLowerCase()))return false;setupCats.push({id:'cat_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7),name:n,budget:0,type:'fixed',percent:0,color:colors[setupCats.length%colors.length],icon:'money',allocationMode:'monthly'});return true}
 function toggleSetupSuggestedCategory(name,checked){if(checked)addSetupCategory(name);else setupCats=setupCats.filter(c=>c.name.toLowerCase()!==name.toLowerCase());renderSetupCategoryChoices();renderSetupCats();saveSetupDraft()}
-function renderSetupCategoryChoices(){const box=document.getElementById('setupCategoryChoices');if(!box)return;box.innerHTML=setupSuggestedCategories.map(name=>`<label class="setupCategoryChoice"><input type="checkbox" ${setupCats.some(c=>c.name.toLowerCase()===name.toLowerCase())?'checked':''} onchange='toggleSetupSuggestedCategory(${JSON.stringify(name)},this.checked)'><span>${esc(name)}</span></label>`).join('')}
+function renderSetupCategoryChoices(){
+ const box=document.getElementById('setupCategoryChoices');
+ const status=document.getElementById('setupCategoryChoicesStatus');
+ if(!box)return;
+ if(!Array.isArray(setupSuggestedCategories)||!setupSuggestedCategories.length){
+  box.innerHTML='<div class="empty">Suggested categories could not be loaded.</div>';
+  if(status)status.textContent='You can still add your own category below.';
+  return;
+ }
+ box.innerHTML='';
+ setupSuggestedCategories.forEach(name=>{
+  const label=document.createElement('label');
+  label.className='setupCategoryChoice';
+  const input=document.createElement('input');
+  input.type='checkbox';
+  input.checked=setupCats.some(c=>String(c.name).toLowerCase()===String(name).toLowerCase());
+  input.addEventListener('change',()=>toggleSetupSuggestedCategory(name,input.checked));
+  const span=document.createElement('span');
+  span.textContent=name;
+  label.append(input,span);
+  box.appendChild(label);
+ });
+ if(status)status.textContent=`${setupSuggestedCategories.length} suggestions available.`;
+}
 function renderSetupCats(){const el=document.getElementById('setupCategories');if(!el)return;el.innerHTML=setupCats.map(c=>`<div class="item"><div class="row"><span><span class="swatch" style="background:${c.color}"></span> ${esc(c.name)}</span><button type="button" class="editLink" onclick="removeSetupCategory('${esc(c.id)}')">Remove</button></div></div>`).join('')||'<div class="empty">Choose at least one category above, or add your own.</div>'}
 function removeSetupCategory(id){setupCats=setupCats.filter(c=>c.id!==id);renderSetupCategoryChoices();renderSetupCats();saveSetupDraft()}
 function setupAddCustomCategory(){const input=document.getElementById('setupCustomCategory');const n=(input?.value||'').trim();if(!n){showToast('Enter a category name');return}if(!addSetupCategory(n)){showToast('That category is already selected');return}input.value='';renderSetupCategoryChoices();renderSetupCats();saveSetupDraft()}
 function setupAddCategory(){setupAddCustomCategory()}
 function showSetupWelcome(){const v=document.getElementById('setupVersionLabel');if(v)v.textContent=APP_VERSION;document.querySelectorAll('.setupStep').forEach(s=>s.classList.remove('active'));document.getElementById('setupWelcome').classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
 function startNewBudget(){document.querySelectorAll('.setupStep').forEach(s=>s.classList.remove('active'));document.getElementById('setup1').classList.add('active');if(!document.querySelector('#setupIncomeList .setupIncomeCard')){restoreSetupDraft();if(!document.querySelector('#setupIncomeList .setupIncomeCard'))setupAddIncome();}window.scrollTo({top:0,behavior:'smooth'})}
-function setupNext(step){saveSetupDraft();if(step===2){collectSetupIncomes();if(!setupIncomes.length){showToast('Add at least one income source');return}renderSetupCategoryChoices();renderSetupCats()}if(step===3&&!setupCats.length){showToast('Add at least one spending category');return}document.querySelectorAll('.setupStep').forEach(s=>s.classList.remove('active'));document.getElementById('setup'+step).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+function setupNext(step){
+ saveSetupDraft();
+ if(step===2){
+  collectSetupIncomes();
+  if(!setupIncomes.length){showToast('Add at least one income source');return}
+  // Render immediately before showing the screen so mobile Safari never sees a blank category list.
+  renderSetupCategoryChoices();
+  renderSetupCats();
+ }
+ if(step===3&&!setupCats.length){showToast('Add at least one spending category');return}
+ document.querySelectorAll('.setupStep').forEach(s=>s.classList.remove('active'));
+ const target=document.getElementById('setup'+step);
+ if(!target){showToast('Setup step could not be opened');return}
+ target.classList.add('active');
+ if(step===2){
+  // A second render on the next frame is a deliberate Safari/iOS fallback.
+  requestAnimationFrame(()=>{renderSetupCategoryChoices();renderSetupCats();});
+ }
+ window.scrollTo({top:0,behavior:'smooth'});
+}
 function finishSetup(){collectSetupIncomes();if(!setupIncomes.length){showToast('Add at least one income source');setupNext(1);return}if(!setupCats.length){showToast('Add at least one spending category');setupNext(2);return}data.incomes=setupIncomes;data.categories=setupCats;data.setupComplete=true;data.lastMonth=monthKey();clearSetupDraft();save()}
-function init(){ensureIds();normalizePaymentData();const v=document.getElementById('setupVersionLabel');if(v)v.textContent=APP_VERSION;const addBtn=document.getElementById('setupAddIncomeBtn');if(addBtn&&!addBtn.dataset.bound){addBtn.dataset.bound='1';addBtn.addEventListener('click',()=>setupAddIncome());}if(!data.setupComplete){document.getElementById('setupScreen').classList.remove('hidden');restoreSetupDraft();showSetupWelcome();renderSetupCategoryChoices();renderSetupCats()}else render()}
+function init(){
+ ensureIds();
+ normalizePaymentData();
+ const v=document.getElementById('setupVersionLabel');
+ if(v)v.textContent=APP_VERSION;
+ const addBtn=document.getElementById('setupAddIncomeBtn');
+ if(addBtn&&!addBtn.dataset.bound){
+  addBtn.dataset.bound='1';
+  addBtn.addEventListener('click',()=>setupAddIncome());
+ }
+ const customInput=document.getElementById('setupCustomCategory');
+ const customBtn=document.getElementById('setupAddCustomCategoryBtn');
+ if(customBtn&&!customBtn.dataset.bound){
+  customBtn.dataset.bound='1';
+  customBtn.addEventListener('click',()=>setupAddCustomCategory());
+ }
+ if(customInput&&!customInput.dataset.bound){
+  customInput.dataset.bound='1';
+  customInput.addEventListener('keydown',event=>{
+   if(event.key==='Enter'){
+    event.preventDefault();
+    setupAddCustomCategory();
+   }
+  });
+ }
+ if(!data.setupComplete){
+  document.getElementById('setupScreen').classList.remove('hidden');
+  restoreSetupDraft();
+  showSetupWelcome();
+  renderSetupCategoryChoices();
+  renderSetupCats();
+ }else render();
+}
 init();
 initCloud();
 </script>
