@@ -371,7 +371,7 @@ body.modal-open .modal{z-index:130!important}
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
 <script>
 const KEY='householdBudgetAlpha_v1';
-const APP_VERSION='V105.6.3';
+const APP_VERSION='V105.6.4';
 const colors=['#4F8EF7','#F4A300','#C65CEB','#35AFA0','#E85D75','#7A6FF0','#55A630','#F28482'];
 const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],manualIncomePayments:[],bonusIncomes:[],bills:[],billOverrides:{},categories:[],transactions:[],categoryCarry:{},rolloverDecisions:{},lastMonth:null,people:['Shared','Lindsay','Matthew'],creditCards:[],creditCardPayments:[],creditCardHistory:{},creditCardOverrides:{},incomeOverrides:{},paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}],expenseOrder:[],categoryBudgetOverrides:{},reconciliations:{}};
 let data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
@@ -1910,6 +1910,9 @@ function init(){
  }else render();
 }
 init();
-initCloud();
+// V105.6.4: Cloud auto-sync is intentionally paused while we harden conflict handling.
+// Local storage is the sole source of truth on load, so a stale remote snapshot
+// cannot overwrite a restored or newly entered budget.
+
 </script>
 </body></html>
