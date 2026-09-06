@@ -220,7 +220,7 @@ body.modal-open .modal{z-index:130!important}
 <body>
 
 <div id="setupScreen" class="setup hidden"><div class="card">
-<div class="eyebrow">HOUSEHOLD BUDGET · <span id="setupVersionLabel">V105.5.1</span></div><h1>Welcome to Household Budget.</h1>
+<div class="eyebrow">HOUSEHOLD BUDGET · <span id="setupVersionLabel">V106.0.3</span></div><h1>Welcome to Household Budget.</h1>
 <p>Choose how you want to get started.</p>
 <div id="setupWelcome" class="setupStep active">
   <div style="display:grid;gap:10px;margin-top:18px">
@@ -371,7 +371,7 @@ body.modal-open .modal{z-index:130!important}
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
 <script>
 const KEY='householdBudgetAlpha_v1';
-const APP_VERSION='V106.0.0';
+const APP_VERSION='V106.0.3';
 const colors=['#4F8EF7','#F4A300','#C65CEB','#35AFA0','#E85D75','#7A6FF0','#55A630','#F28482'];
 const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],incomeOverrides:{},manualIncomePayments:[],bonusIncomes:[],bills:[],billOverrides:{},categories:[],transactions:[],categoryCarry:{},rolloverDecisions:{},lastMonth:null,people:['Shared','Lindsay','Matthew'],creditCards:[],creditCardPayments:[],creditCardHistory:{},creditCardOverrides:{},paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}],expenseOrder:[],categoryBudgetOverrides:{}};
 let data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
@@ -609,14 +609,15 @@ async function cloudSaveIfConnected(){
   try{
     while(cloud.savePending){
       cloud.savePending=false;
-      const localSnapshot=clone(data),base=clone(cloud.baseData||data),expectedRevision=Number(cloud.baseRevision||0);
+      const localSnapshot=clone(data),hasBase=!!cloud.baseData,base=clone(cloud.baseData||structuredClone(blank)),expectedRevision=Number(cloud.baseRevision||0);
       let committedData=null,committedRevision=expectedRevision;
       await cloud.db.runTransaction(async tx=>{
         const ref=cloud.db.collection('households').doc(cloud.householdId),snap=await tx.get(ref);
         if(!snap.exists)throw new Error('Shared household not found');
         const remote=snap.data(),remoteRevision=Number(remote.revision||0),remoteData=prepareIncoming(remote);
         let merged;
-        if(remoteRevision===expectedRevision)merged=localSnapshot;
+        if(remoteRevision===expectedRevision && hasBase) merged=localSnapshot;
+        else if(remoteRevision===expectedRevision && !hasBase) merged=mergeThreeWay(structuredClone(blank),localSnapshot,remoteData);
         else merged=mergeThreeWay(base,localSnapshot,remoteData);
         ensureIdsFor(merged);normalizePaymentDataFor(merged);
         const nextRevision=Math.max(remoteRevision,expectedRevision)+1;
@@ -707,9 +708,6 @@ function showToast(t){const e=document.getElementById('toast');e.textContent=t;e
 function ensureIds(){let before=JSON.stringify(data);ensureIdsFor(data);data.categories=(data.categories||[]).map((c,i)=>({...c,id:c.id||`cat_${Date.now().toString(36)}_${i}_${Math.random().toString(36).slice(2,7)}`}));data.bills=(data.bills||[]).map(b=>({...b,tags:normalizeTags(b.tags||[])}));if(JSON.stringify(data)!==before){localStorage.setItem(KEY,JSON.stringify(data));if(cloud.ready&&cloud.householdId){cloud.localDirty=true;saveCloudSyncState();cloudSaveIfConnected()}}}
 ensureIds();
 
-// V68: reconnect to the saved/default Firebase project when this device already has a budget.
-if(data.setupComplete) initCloud();
-
 let incomeViewMonth=monthKey();
 function incomeOverrideKey(incomeId,scheduledDate){return `${incomeId}__${scheduledDate}`}
 function incomeOverrideFor(incomeId,scheduledDate){return (data.incomeOverrides||{})[incomeOverrideKey(incomeId,scheduledDate)]||null}
@@ -748,7 +746,7 @@ function saveIncomePaycheckEdit(key){
   const amount=Number(document.getElementById('fAmount')?.value),date=document.getElementById('fDate')?.value||draft.scheduledDate;
   if(!Number.isFinite(amount)||amount<0||!date){showToast('Enter a valid amount and date');return}
   data.incomeOverrides=data.incomeOverrides||{};const rule=(data.incomes||[]).find(x=>String(x.id)===String(draft.incomeId));
-  data.incomeOverrides[key]={id:key,incomeId:draft.incomeId,sourceName:rule?.name||'',scheduledDate:draft.scheduledDate,amount:Math.round(amount*100)/100,date,edited:true,updatedAt:Date.now()};incomeEditDraft=null;save();closeModal();renderIncome();showToast('Paycheck updated')
+  data.incomeOverrides[key]={id:key,incomeId:draft.incomeId,sourceName:rule?.name||'',scheduledDate:draft.scheduledDate,amount:Math.round(amount*100)/100,date,edited:true,updatedAt:Date.now()};incomeEditDraft=null;persistData();closeModal();renderIncome();showToast('Paycheck updated')
 }
 function clearIncomePaycheckEdit(key){if(data.incomeOverrides?.[key]){delete data.incomeOverrides[key];save();}incomeEditDraft=null;closeModal();renderIncome();showToast('Paycheck reset to rule')}
 function ensureIncomeOverrides(){
@@ -857,13 +855,14 @@ function weekCarry(c,d=new Date()){return +(data.categoryWeekCarry?.[c.name]?.[w
 function weekAvailable(c,d=new Date()){return weeklyBudgetForWeek(c,d)+weekCarry(c,d)}
 function weekBalance(c,d=new Date()){return weekAvailable(c,d)-spentForWeek(c,d)}
 function ensureWeeklyRollover(){
- data.categoryWeekCarry=data.categoryWeekCarry||{};
+ let changed=false;
+ if(!data.categoryWeekCarry||typeof data.categoryWeekCarry!=='object'){data.categoryWeekCarry={};changed=true;}
  const starts=(data.transactions||[]).map(t=>startWeek(dateOnly(t.date))).filter(Boolean);
- if(!starts.length)return;
+ if(!starts.length){if(changed)persistData();return;}
  const current=startWeek(new Date());
  const earliest=new Date(Math.min(...starts.map(x=>x.getTime())));
  (data.categories||[]).forEach(c=>{
-   data.categoryWeekCarry[c.name]=data.categoryWeekCarry[c.name]||{};
+   if(!data.categoryWeekCarry[c.name]){data.categoryWeekCarry[c.name]={};changed=true;}
    let w=new Date(earliest);
    while(w<current){
      const next=addDays(w,7), nk=weekKey(next);
@@ -875,11 +874,12 @@ function ensureWeeklyRollover(){
        // household level instead of carrying a category deficit forward.
        const sameMonth=next.getMonth()===w.getMonth()&&next.getFullYear()===w.getFullYear();
        data.categoryWeekCarry[c.name][nk]=sameMonth?+balance.toFixed(2):0;
+       changed=true;
      }
      w=next;
    }
  });
- persistData();
+ if(changed)persistData();
 }
 function weeklyBudgetForWeek(c,d=new Date()){const s=startWeek(d),e=addDays(s,6);let total=0;for(let x=new Date(s);x<=e;x=addDays(x,1)){total+=monthlyCategoryBudget(c,x)/new Date(x.getFullYear(),x.getMonth()+1,0).getDate()}return total}
 function spentForWeek(c,d=new Date()){const s=startWeek(d),e=addDays(s,6);return (data.transactions||[]).filter(t=>t.category===c.name&&countsTowardBudget(t)).reduce((sum,t)=>{const x=dateOnly(t.date);return sum+(x>=s&&x<=e?t.amount:0)},0)}
@@ -1588,7 +1588,7 @@ function normalizePaymentData(){
   if(t.paymentMethod==='cash'){ensureSource('cash','Cash');t.paymentMethod='debit';t.paymentSource=t.paymentSource||'cash';}
   if(t.paymentMethod==='appleCash'){ensureSource('apple-cash','Apple Cash');t.paymentMethod='debit';t.paymentSource=t.paymentSource||'apple-cash';}
   if(!t.paymentMethod)t.paymentMethod='debit';
-  if(t.paymentMethod==='debit'&&!t.paymentSource)t.paymentSource='checking';
+  if(t.paymentMethod==='debit'&&!t.paymentSource&&!t.paymentSourceName)t.paymentSource='checking';
   if(t.paymentMethod==='debit'){const src=data.paymentSources.find(x=>x.id===t.paymentSource);if(src)t.paymentSourceName=src.name;}
   if(t.paymentMethod!=='creditCard')t.creditCard='';
  });
@@ -1658,12 +1658,16 @@ function addExpense(event){
  if(event?.preventDefault)event.preventDefault();
  const amount=+document.getElementById('fAmount').value||0,category=document.getElementById('fCat').value,date=document.getElementById('fDate').value||dateValue(),note=document.getElementById('fNote').value.trim(),who=document.getElementById('fWho').value,tags=normalizeTags(document.getElementById('fTags')?.value||''),paymentMethod=document.getElementById('fPaymentMethod')?.value||'debit',paymentSource=paymentMethod==='creditCard'?'':(document.getElementById('fPaymentSource')?.value||'checking'),creditCard=paymentMethod==='creditCard'?(document.getElementById('fCreditCard')?.value||''):'';
  if(!amount||!category||!date){showToast('Enter amount, date, and category');return false}
- if(paymentMethod==='creditCard'&&!creditCard){showToast('Choose a credit card');return false}data.savedTags=Array.isArray(data.savedTags)?data.savedTags:[];tags.forEach(tag=>{if(!data.savedTags.some(x=>x.toLowerCase()===tag.toLowerCase()))data.savedTags.push(tag)});const countsTowardBudget=document.getElementById('fCountsTowardBudget')?.checked!==false;const newId=`tx-${Date.now()}-${Math.random().toString(36).slice(2,9)}`;const paymentSourceName=paymentMethod==='creditCard'?'':(paymentAccounts().find(x=>x.id===paymentSource)?.name||'Checking');data.transactions.push({id:newId,amount,category,note,person:who,who,date,tags,paymentMethod,paymentSource,paymentSourceName,creditCard,countsTowardBudget});ensureExpenseOrder();data.expenseOrder=data.expenseOrder.filter(id=>id!==newId);data.expenseOrder.unshift(newId);const stay=currentView;currentView=stay;save();closeModal();showView(stay);showToast('Expense added');return false;
+ if(paymentMethod==='creditCard'&&(!creditCard||!availableCreditCards().includes(creditCard))){showToast('Choose a credit card');return false}data.savedTags=Array.isArray(data.savedTags)?data.savedTags:[];tags.forEach(tag=>{if(!data.savedTags.some(x=>x.toLowerCase()===tag.toLowerCase()))data.savedTags.push(tag)});const countsTowardBudget=document.getElementById('fCountsTowardBudget')?.checked!==false;const newId=`tx-${Date.now()}-${Math.random().toString(36).slice(2,9)}`;const paymentSourceName=paymentMethod==='creditCard'?'':(paymentAccounts().find(x=>x.id===paymentSource)?.name||'Checking');data.transactions.push({id:newId,amount,category,note,person:who,who,date,tags,paymentMethod,paymentSource,paymentSourceName,creditCard,countsTowardBudget});ensureExpenseOrder();data.expenseOrder=data.expenseOrder.filter(id=>id!==newId);data.expenseOrder.unshift(newId);const stay=currentView;currentView=stay;save();closeModal();showView(stay);showToast('Expense added');return false;
 }
 function saveExpenseEditById(e,id){
  e.preventDefault();const t=data.transactions.find(x=>String(x.id)===String(id));if(!t){showToast('Expense not found');return false}
- const amount=+document.getElementById('fAmount').value||0;if(!amount){showToast('Enter an amount');return false}
- t.amount=amount;t.date=document.getElementById('fDate').value||dateValue();t.category=document.getElementById('fCat').value;t.who=document.getElementById('fWho').value;t.person=t.who;t.note=document.getElementById('fNote').value.trim();t.tags=normalizeTags(document.getElementById('fTags')?.value||'');data.savedTags=Array.isArray(data.savedTags)?data.savedTags:[];t.tags.forEach(tag=>{if(!data.savedTags.some(x=>x.toLowerCase()===tag.toLowerCase()))data.savedTags.push(tag)});t.paymentMethod=document.getElementById('fPaymentMethod')?.value||'debit';t.paymentSource=t.paymentMethod==='creditCard'?'':(document.getElementById('fPaymentSource')?.value||'checking');t.paymentSourceName=t.paymentMethod==='creditCard'?'':(paymentAccounts().find(x=>x.id===t.paymentSource)?.name||t.paymentSourceName||'Checking');t.creditCard=t.paymentMethod==='creditCard'?(document.getElementById('fCreditCard')?.value||''):'';t.countsTowardBudget=document.getElementById('fCountsTowardBudget')?.checked!==false;if(t.paymentMethod==='creditCard'&&!t.creditCard){showToast('Choose a credit card');return false}const stay=currentView;currentView=stay;save();closeModal();showView(stay);showToast('Expense updated');return false;
+ const amount=+document.getElementById('fAmount').value||0,date=document.getElementById('fDate').value||dateValue(),category=document.getElementById('fCat').value,who=document.getElementById('fWho').value,note=document.getElementById('fNote').value.trim(),tags=normalizeTags(document.getElementById('fTags')?.value||''),paymentMethod=document.getElementById('fPaymentMethod')?.value||'debit',paymentSource=paymentMethod==='creditCard'?'':(document.getElementById('fPaymentSource')?.value||'checking'),creditCard=paymentMethod==='creditCard'?(document.getElementById('fCreditCard')?.value||''):'';
+ if(!amount||!date||!category){showToast('Enter amount, date, and category');return false}
+ if(paymentMethod==='creditCard'&&(!creditCard||!availableCreditCards().includes(creditCard))){showToast('Choose a credit card');return false}
+ t.amount=amount;t.date=date;t.category=category;t.who=who;t.person=who;t.note=note;t.tags=tags;t.paymentMethod=paymentMethod;t.paymentSource=paymentSource;t.paymentSourceName=paymentMethod==='creditCard'?'':(paymentAccounts().find(x=>x.id===paymentSource)?.name||t.paymentSourceName||'Checking');t.creditCard=creditCard;t.countsTowardBudget=document.getElementById('fCountsTowardBudget')?.checked!==false;
+ data.savedTags=Array.isArray(data.savedTags)?data.savedTags:[];tags.forEach(tag=>{if(!data.savedTags.some(x=>x.toLowerCase()===tag.toLowerCase()))data.savedTags.push(tag)});
+ const stay=currentView;currentView=stay;save();closeModal();showView(stay);showToast('Expense updated');return false;
 }
 function deleteExpenseById(id){const i=data.transactions.findIndex(x=>String(x.id)===String(id));if(i<0)return;if(confirm('Delete this expense?')){const removedId=String(data.transactions[i].id);data.transactions.splice(i,1);data.expenseOrder=Array.isArray(data.expenseOrder)?data.expenseOrder.filter(x=>String(x)!==removedId):[];save();closeModal();showToast('Expense deleted')}}
 function addIncome(){const name=document.getElementById('fName').value.trim(),cadence=document.getElementById('fFreq').value,amount=+document.getElementById('fAmount')?.value||0,firstPayDate=document.getElementById('fDate')?.value||'';if(!name){showToast('Enter an income name');return}if(cadence!=='manual'&&amount<=0){showToast('Enter an income amount');return}if(cadence!=='manual'&&cadence!=='midMonthEnd'&&!firstPayDate){showToast('Choose a known payday');return}data.incomes.push({id:`income-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,name,amount:cadence==='manual'?0:amount,cadence,firstPayDate,secondPayDay:+document.getElementById('fSecond')?.value||15,midMonthDay:+document.getElementById('fMid')?.value||15,startDate:document.getElementById('fStartDate')?.value||'',endDate:document.getElementById('fEndDate')?.value||''});save();closeModal();showToast(cadence==='manual'?'Income source added':'Income added')}
