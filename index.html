@@ -374,7 +374,7 @@ body.modal-open .modal{z-index:130!important}
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
 <script>
 const KEY='householdBudgetAlpha_v1';
-const APP_VERSION='V106.1.0';
+const APP_VERSION='V106.1.1';
 const colors=['#4F8EF7','#F4A300','#C65CEB','#35AFA0','#E85D75','#7A6FF0','#55A630','#F28482'];
 const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],incomeOverrides:{},manualIncomePayments:[],bonusIncomes:[],bills:[],billOverrides:{},categories:[],transactions:[],categoryCarry:{},rolloverDecisions:{},lastMonth:null,people:['Shared'],creditCards:[],creditCardPayments:[],creditCardHistory:{},creditCardOverrides:{},paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}],expenseOrder:[],categoryBudgetOverrides:{}};
 let data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
@@ -689,10 +689,38 @@ async function joinSharedHousehold(){
   try{
     const snap=await cloud.db.collection('households').doc(id).get();
     if(!snap.exists){showToast('Household not found');return}
-    const remote=snap.data();if(String(remote.joinCode||'').toUpperCase()!==code||!remote.data){showToast('That household code is not valid');return}
+    const remote=snap.data();
+    if(String(remote.joinCode||'').toUpperCase()!==code||!remote.data){showToast('That household code is not valid');return}
     if(!confirm('Joining will replace this device’s current budget with the shared household budget. Continue?'))return;
-    data={...structuredClone(blank),...remote.data,setupComplete:true};cloud.baseRevision=Number(remote.revision||0);cloud.baseData=clone(data);cloud.localDirty=false;data.categories=(data.categories||[]).map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));data.people=Array.from(new Set((data.people||['Shared']).filter(Boolean)));if(!data.people.includes('Shared'))data.people.unshift('Shared');ensureIds();localStorage.setItem(KEY,JSON.stringify(data));cloud.householdId=id;cloud.baseRevision=Number(remote.revision||0);cloud.baseData=clone(data);cloud.localDirty=false;saveCloudSyncState();saveSharingMeta({householdId:id,name:remote.name||'Household',code});subscribeToHousehold();closeModal();render();updateSharingUI();showToast('Joined shared household');
-  }catch(e){console.error(e);showToast('Could not join household')}
+
+    // Adopt the fetched household copy as the local source of truth first.
+    // Set the household ID before touching sync state so no stale household
+    // metadata can interfere with the join.
+    const incoming=prepareIncoming(remote);
+    if(!incoming.setupComplete){incoming.setupComplete=true}
+    cloud.householdId=id;
+    if(cloud.unsubscribe)cloud.unsubscribe();
+    cloud.unsubscribe=null;
+    data=incoming;
+    ensureIncomeOverrides();
+    normalizePaymentData();
+    ensureIds();
+    localStorage.setItem(KEY,JSON.stringify(data));
+
+    cloud.baseRevision=Number(remote.revision||0);
+    cloud.baseData=clone(data);
+    cloud.localDirty=false;
+    saveSharingMeta({householdId:id,name:remote.name||'Household',code});
+    saveCloudSyncState();
+    subscribeToHousehold();
+    closeModal();
+    render();
+    updateSharingUI();
+    showToast('Joined shared household');
+  }catch(e){
+    console.error('Could not join household',e);
+    showToast('Could not join household');
+  }
 }
 function openJoinHousehold(fromSetup=false){
   openCustomModal('Join a household',`<p class="muted">Enter the 8-character code from the device that created the household.</p><label>Household code</label><input id="joinHouseholdCode" maxlength="8" autocapitalize="characters" placeholder="ABCD2345"><div class="actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="joinSharedHousehold()">Join household</button></div>`);
