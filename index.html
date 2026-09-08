@@ -220,7 +220,7 @@ body.modal-open .modal{z-index:130!important}
 <body>
 
 <div id="setupScreen" class="setup hidden"><div class="card">
-<div class="eyebrow">HOUSEHOLD BUDGET · <span id="setupVersionLabel">V106.1.2</span></div><h1>Welcome to Household Budget.</h1>
+<div class="eyebrow">HOUSEHOLD BUDGET · <span id="setupVersionLabel">V106.1.5</span></div><h1>Welcome to Household Budget.</h1>
 <p>Choose how you want to get started.</p>
 <div id="setupWelcome" class="setupStep active">
   <div style="display:grid;gap:10px;margin-top:18px">
@@ -364,7 +364,7 @@ body.modal-open .modal{z-index:130!important}
 
 <main id="view-bills" class="hidden"><div class="card"><div class="row"><div><div class="sectionTitle">Bills & fixed expenses</div><div class="muted" style="font-size:13px;margin-top:3px">Everything here is part of the monthly budget.</div></div><button class="btn small" onclick="openModal('bill')">＋ Add bill</button></div><div id="billTotal" class="billTotal"><div class="label">MONTHLY BILL TOTAL</div><div id="billTotalValue" class="value">$0</div><div class="note">Annual bills are shown as their monthly equivalent.</div></div><div id="billList"></div></div></main>
 
-<main id="view-settings" class="hidden"><div class="card"><div class="sectionTitle">Budget settings</div><div class="muted" style="font-size:12px;margin-top:4px">App version <strong id="appVersionLabel">V106.1.2</strong></div><label>Savings goal</label><input id="settingsSavings" type="number" step="0.01"><div class="actions"><button class="btn" onclick="saveSettings()">Save settings</button></div></div><div class="card"><div class="sectionTitle">Share</div><p id="sharingStatus" class="muted">This budget is currently stored on this device only.</p><div id="sharingHouseholdInfo" class="backupBox hidden"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="openShareModal()">Share</button><button class="btn secondary" onclick="forceSyncNow()">↻ Sync now</button><button id="leaveHouseholdBtn" class="btn danger hidden" onclick="leaveSharedHousehold()">Stop sharing</button></div><p class="muted" style="font-size:11px;margin-top:10px">Share this budget between devices using a private household code. The existing backup system still works as a safety net.</p></div><div class="card"><div class="sectionTitle">Data</div><p class="muted">Export a backup before changing devices or browsers. Backups are also useful if you ever want an offline copy of your budget.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary" onclick="exportData()">Export Backup</button><button class="btn secondary" onclick="document.getElementById('importFile').click()">Import Backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"><button class="btn danger" onclick="resetAll()">Clear all data</button></div></div><div class="card"><div class="sectionTitle">Categories</div><div class="muted" style="font-size:13px;margin-bottom:10px">Choose the color, icon, and order for each spending category.</div><button class="btn" onclick="openCategorySettings()">Manage categories</button></div><div class="legalFooter">Household Budget • © 2026 Lindsay Shay</div></main>
+<main id="view-settings" class="hidden"><div class="card"><div class="sectionTitle">Budget settings</div><div class="muted" style="font-size:12px;margin-top:4px">App version <strong id="appVersionLabel">V106.1.5</strong></div><label>Savings goal</label><input id="settingsSavings" type="number" step="0.01"><div class="actions"><button class="btn" onclick="saveSettings()">Save settings</button></div></div><div class="card"><div class="sectionTitle">Share</div><p id="sharingStatus" class="muted">This budget is currently stored on this device only.</p><div id="sharingHouseholdInfo" class="backupBox hidden"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="openShareModal()">Share</button><button class="btn secondary" onclick="forceSyncNow()">↻ Sync now</button><button id="leaveHouseholdBtn" class="btn danger hidden" onclick="leaveSharedHousehold()">Stop sharing</button></div><p class="muted" style="font-size:11px;margin-top:10px">Share this budget between devices using a private household code. The existing backup system still works as a safety net.</p></div><div class="card"><div class="sectionTitle">Data</div><p class="muted">Export a backup before changing devices or browsers. Backups are also useful if you ever want an offline copy of your budget.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary" onclick="exportData()">Export Backup</button><button class="btn secondary" onclick="document.getElementById('importFile').click()">Import Backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"><button class="btn danger" onclick="resetAll()">Clear all data</button></div></div><div class="card"><div class="sectionTitle">Categories</div><div class="muted" style="font-size:13px;margin-bottom:10px">Choose the color, icon, and order for each spending category.</div><button class="btn" onclick="openCategorySettings()">Manage categories</button></div><div class="legalFooter">Household Budget • © 2026 Lindsay Shay</div></main>
 </div>
 
 <div id="modalWrap" class="modalWrap" onclick="if(event.target===this)closeModal()"><div class="modal"><button class="close" onclick="closeModal()">×</button><div id="modalTitle" class="modalTitle"></div><div id="modalBody"></div></div></div><div id="toast" class="toast"></div>
@@ -374,10 +374,11 @@ body.modal-open .modal{z-index:130!important}
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
 <script>
 const KEY='householdBudgetAlpha_v1';
-const APP_VERSION='V106.1.4';
+const APP_VERSION='V106.1.5';
+let cloud={app:null,db:null,auth:null,uid:null,householdId:null,unsubscribe:null,ready:false,writing:false,savePending:false,lastLocalMutationAt:0,baseRevision:0,baseData:null,localDirty:false,joining:false};
 const colors=['#4F8EF7','#F4A300','#C65CEB','#35AFA0','#E85D75','#7A6FF0','#55A630','#F28482'];
 const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],incomeOverrides:{},manualIncomePayments:[],bonusIncomes:[],bills:[],billOverrides:{},categories:[],transactions:[],categoryCarry:{},rolloverDecisions:{},lastMonth:null,people:['Shared'],creditCards:[],creditCardPayments:[],creditCardHistory:{},creditCardOverrides:{},paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}],expenseOrder:[],categoryBudgetOverrides:{}};
-let data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
+var data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
 data.incomes=data.incomes||[];data.incomeOverrides=(data.incomeOverrides&&typeof data.incomeOverrides==='object')?data.incomeOverrides:{};data.manualIncomePayments=Array.isArray(data.manualIncomePayments)?data.manualIncomePayments:[];data.billOverrides=(data.billOverrides&&typeof data.billOverrides==='object')?data.billOverrides:{};data.bonusIncomes=data.bonusIncomes||[];data.bills=data.bills||[];data.transactions=data.transactions||[];data.categories=data.categories||[];data.creditCards=Array.isArray(data.creditCards)?data.creditCards:[];data.creditCardPayments=Array.isArray(data.creditCardPayments)?data.creditCardPayments:[];data.creditCardHistory=(data.creditCardHistory&&typeof data.creditCardHistory==='object')?data.creditCardHistory:{};data.creditCardOverrides=(data.creditCardOverrides&&typeof data.creditCardOverrides==='object')?data.creditCardOverrides:{};data.paymentSources=Array.isArray(data.paymentSources)&&data.paymentSources.length?data.paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}];data.savedTags=Array.isArray(data.savedTags)?data.savedTags.map(x=>String(x).trim()).filter(Boolean):[];data.bills=data.bills.map(b=>({...b,tags:normalizeTags(b.tags||[])}));
 data.categoryBudgetOverrides=(data.categoryBudgetOverrides&&typeof data.categoryBudgetOverrides==='object')?data.categoryBudgetOverrides:{};
 data.categories=data.categories.map((c,i)=>{
@@ -489,7 +490,6 @@ const CLOUD_SYNC_STATE_KEY='householdBudgetCloudSync_v2';
 // V68: use the app's Firebase project by default. Users can still replace this
 // configuration through the advanced setup screen if they are running their own copy.
 const DEFAULT_FIREBASE_CONFIG={apiKey:'AIzaSyBVA_XFb5vh9FXZWhLkXAr1NvJN0uAWXrY',authDomain:'household-budget-9f412.firebaseapp.com',projectId:'household-budget-9f412',storageBucket:'household-budget-9f412.firebasestorage.app',messagingSenderId:'233650112540',appId:'1:233650112540:web:01dc5e869a1977a6acdb7d'};
-let cloud={app:null,db:null,auth:null,uid:null,householdId:null,unsubscribe:null,ready:false,writing:false,savePending:false,lastLocalMutationAt:0,baseRevision:0,baseData:null,localDirty:false,joining:false};
 function getSharingConfig(){try{const saved=JSON.parse(localStorage.getItem(SHARING_CONFIG_KEY)||'null');return validFirebaseConfig(saved)?saved:DEFAULT_FIREBASE_CONFIG}catch(e){return DEFAULT_FIREBASE_CONFIG}}
 function getSharingMeta(){try{return JSON.parse(localStorage.getItem(SHARING_META_KEY)||'null')}catch(e){return null}}
 function saveSharingMeta(x){localStorage.setItem(SHARING_META_KEY,JSON.stringify(x))}
@@ -884,6 +884,7 @@ function fixedCategoryTotal(m=new Date()){return (data.categories||[]).reduce((s
 function baseMonthlyAvailable(m=new Date()){return monthlyIncome(m)-monthlyBills(m)-(+data.savingsGoal||0)}
 function householdSpendingForMonth(m=new Date()){return txForMonth(m).reduce((sum,t)=>sum+(countsTowardBudget(t)?(Number(t.amount)||0):0),0)}
 function householdMonthOverUnder(m=new Date()){return monthlyAvailable(m)-householdSpendingForMonth(m)}
+function overallMonthBalance(m=new Date()){return householdMonthOverUnder(m)}
 function monthKeyFromDate(d){return monthKey(d)}
 function previousMonth(m=new Date()){return addMonths(new Date(m.getFullYear(),m.getMonth(),1,12),-1)}
 function householdDebtAtStart(m=new Date()){
@@ -1817,8 +1818,35 @@ async function restoreImportedDataToCloud(imported){
     return committedRevision;
   }finally{cloud.writing=false}
 }
+function prepareImportedBackup(source){
+  const imported={...structuredClone(blank),...structuredClone(source),setupComplete:true};
+  imported.incomes=Array.isArray(imported.incomes)?imported.incomes:[];
+  imported.incomeOverrides=(imported.incomeOverrides&&typeof imported.incomeOverrides==='object')?imported.incomeOverrides:{};
+  imported.manualIncomePayments=Array.isArray(imported.manualIncomePayments)?imported.manualIncomePayments:[];
+  imported.bonusIncomes=Array.isArray(imported.bonusIncomes)?imported.bonusIncomes:[];
+  imported.bills=Array.isArray(imported.bills)?imported.bills:[];
+  imported.billOverrides=(imported.billOverrides&&typeof imported.billOverrides==='object')?imported.billOverrides:{};
+  imported.transactions=Array.isArray(imported.transactions)?imported.transactions:[];
+  imported.categories=Array.isArray(imported.categories)?imported.categories:[];
+  imported.people=Array.from(new Set((Array.isArray(imported.people)?imported.people:['Shared']).filter(Boolean).map(String)));
+  if(!imported.people.includes('Shared'))imported.people.unshift('Shared');
+  imported.categoryCarry=(imported.categoryCarry&&typeof imported.categoryCarry==='object')?imported.categoryCarry:{};
+  imported.rolloverDecisions=(imported.rolloverDecisions&&typeof imported.rolloverDecisions==='object')?imported.rolloverDecisions:{};
+  imported.categoryBudgetOverrides=(imported.categoryBudgetOverrides&&typeof imported.categoryBudgetOverrides==='object')?imported.categoryBudgetOverrides:{};
+  imported.creditCards=Array.isArray(imported.creditCards)?imported.creditCards:[];
+  imported.creditCardPayments=Array.isArray(imported.creditCardPayments)?imported.creditCardPayments:[];
+  imported.creditCardHistory=(imported.creditCardHistory&&typeof imported.creditCardHistory==='object')?imported.creditCardHistory:{};
+  imported.creditCardOverrides=(imported.creditCardOverrides&&typeof imported.creditCardOverrides==='object')?imported.creditCardOverrides:{};
+  imported.paymentSources=Array.isArray(imported.paymentSources)&&imported.paymentSources.length?imported.paymentSources:structuredClone(blank.paymentSources);
+  imported.savedTags=Array.isArray(imported.savedTags)?imported.savedTags.map(x=>String(x).trim()).filter(Boolean):[];
+  imported.categories=imported.categories.map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));
+  normalizePaymentDataFor(imported);
+  ensureIdsFor(imported);
+  return imported;
+}
 async function importData(event){
   const f=event.target.files?.[0];if(!f)return;
+  const previousData=clone(data),previousHouseholdId=cloud.householdId,previousMeta=getSharingMeta();
   cloud.joining=true;
   if(cloud.unsubscribe){cloud.unsubscribe();cloud.unsubscribe=null;}
   try{
@@ -1826,62 +1854,48 @@ async function importData(event){
     const x=JSON.parse(text);
     const source=(x&&x.data&&typeof x.data==='object'&&!Array.isArray(x.data))?x.data:x;
     if(!source||typeof source!=='object'||Array.isArray(source))throw new Error('Invalid backup');
-    const imported={...structuredClone(blank),...structuredClone(source),setupComplete:true};
-    imported.incomes=Array.isArray(imported.incomes)?imported.incomes:[];
-    imported.incomeOverrides=(imported.incomeOverrides&&typeof imported.incomeOverrides==='object')?imported.incomeOverrides:{};
-    imported.manualIncomePayments=Array.isArray(imported.manualIncomePayments)?imported.manualIncomePayments:[];
-    imported.bonusIncomes=Array.isArray(imported.bonusIncomes)?imported.bonusIncomes:[];
-    imported.bills=Array.isArray(imported.bills)?imported.bills:[];
-    imported.billOverrides=(imported.billOverrides&&typeof imported.billOverrides==='object')?imported.billOverrides:{};
-    imported.transactions=Array.isArray(imported.transactions)?imported.transactions:[];
-    imported.categories=Array.isArray(imported.categories)?imported.categories:[];
-    imported.people=Array.from(new Set((Array.isArray(imported.people)?imported.people:['Shared']).filter(Boolean)));
-    if(!imported.people.includes('Shared'))imported.people.unshift('Shared');
-    imported.categoryCarry=(imported.categoryCarry&&typeof imported.categoryCarry==='object')?imported.categoryCarry:{};
-    imported.rolloverDecisions=(imported.rolloverDecisions&&typeof imported.rolloverDecisions==='object')?imported.rolloverDecisions:{};
-    imported.categoryBudgetOverrides=(imported.categoryBudgetOverrides&&typeof imported.categoryBudgetOverrides==='object')?imported.categoryBudgetOverrides:{};
-    imported.creditCards=Array.isArray(imported.creditCards)?imported.creditCards:[];
-    imported.creditCardPayments=Array.isArray(imported.creditCardPayments)?imported.creditCardPayments:[];
-    imported.creditCardHistory=(imported.creditCardHistory&&typeof imported.creditCardHistory==='object')?imported.creditCardHistory:{};
-    imported.creditCardOverrides=(imported.creditCardOverrides&&typeof imported.creditCardOverrides==='object')?imported.creditCardOverrides:{};
-    imported.paymentSources=Array.isArray(imported.paymentSources)&&imported.paymentSources.length?imported.paymentSources:structuredClone(blank.paymentSources);
-    imported.categories=imported.categories.map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));
-    data=imported;
-    normalizePaymentData();
-    ensureIds();
-    ensureIncomeOverrides();
-    localStorage.setItem(KEY,JSON.stringify(data));
+    const imported=prepareImportedBackup(source);
 
-    if(cloud.ready&&cloud.householdId){
-      const okay=confirm('Import this backup into the current shared household too? This will replace the shared household copy with the backup.');
-      if(!okay){
-        cloud.baseData=null;cloud.baseRevision=0;cloud.localDirty=false;clearCloudSyncState();
-        render();showToast('Backup restored on this device only');return;
-      }
-      try{
+    // Restore locally first. Import must work even when Firebase is unavailable.
+    data=imported;
+    localStorage.setItem(KEY,JSON.stringify(data));
+    cloud.baseData=null;cloud.baseRevision=0;cloud.localDirty=false;
+    clearCloudSyncState();
+    render();
+
+    if(cloud.ready&&previousHouseholdId){
+      const okay=confirm('Backup restored on this device. Replace the shared household with this backup too?');
+      if(okay){
+        cloud.householdId=previousHouseholdId;
         await restoreImportedDataToCloud(data);
-      }catch(syncError){
-        console.error('Backup cloud restore failed',syncError);
-        cloud.baseData=null;cloud.baseRevision=0;cloud.localDirty=true;
-        saveCloudSyncState();
-        render();
-        showToast('Backup restored here; shared copy could not be updated');
+      }else{
+        // A device-only restore cannot remain subscribed to the old remote copy,
+        // or the next snapshot would immediately undo the restore.
+        cloud.householdId=null;
+        cloud.baseData=null;cloud.baseRevision=0;cloud.localDirty=false;
+        localStorage.removeItem(SHARING_META_KEY);
+        clearCloudSyncState();
+        updateSharingUI();
+        showToast('Backup restored on this device; sharing stopped here');
         return;
       }
-    }else{
-      cloud.baseData=null;cloud.baseRevision=0;cloud.localDirty=false;
-      clearCloudSyncState();
     }
     render();
-    event.target.value='';
-    showToast(cloud.ready&&cloud.householdId?'Backup restored and shared':'Backup imported');
+    updateSharingUI();
+    showToast(cloud.ready&&cloud.householdId?'Backup restored and shared':'Backup restored');
   }catch(e){
     console.error('Backup import failed',e);
+    // A failed import never leaves a half-restored object behind.
+    data=previousData;
+    cloud.householdId=previousHouseholdId;
+    if(previousMeta)saveSharingMeta(previousMeta);
+    localStorage.setItem(KEY,JSON.stringify(data));
     showToast('That backup could not be imported');
   }finally{
     cloud.joining=false;
-    if(cloud.ready&&cloud.householdId)subscribeToHousehold();
     event.target.value='';
+    if(cloud.ready&&cloud.householdId)subscribeToHousehold();
+    updateSharingUI();
   }
 }
 function resetAll(){if(confirm('Clear all household budget data from this device?')){localStorage.removeItem(KEY);location.reload()}}
