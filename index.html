@@ -220,7 +220,7 @@ body.modal-open .modal{z-index:130!important}
 <body>
 
 <div id="setupScreen" class="setup hidden"><div class="card">
-<div class="eyebrow">HOUSEHOLD BUDGET · <span id="setupVersionLabel">V106.1.0</span></div><h1>Welcome to Household Budget.</h1>
+<div class="eyebrow">HOUSEHOLD BUDGET · <span id="setupVersionLabel">V106.1.2</span></div><h1>Welcome to Household Budget.</h1>
 <p>Choose how you want to get started.</p>
 <div id="setupWelcome" class="setupStep active">
   <div style="display:grid;gap:10px;margin-top:18px">
@@ -364,7 +364,7 @@ body.modal-open .modal{z-index:130!important}
 
 <main id="view-bills" class="hidden"><div class="card"><div class="row"><div><div class="sectionTitle">Bills & fixed expenses</div><div class="muted" style="font-size:13px;margin-top:3px">Everything here is part of the monthly budget.</div></div><button class="btn small" onclick="openModal('bill')">＋ Add bill</button></div><div id="billTotal" class="billTotal"><div class="label">MONTHLY BILL TOTAL</div><div id="billTotalValue" class="value">$0</div><div class="note">Annual bills are shown as their monthly equivalent.</div></div><div id="billList"></div></div></main>
 
-<main id="view-settings" class="hidden"><div class="card"><div class="sectionTitle">Budget settings</div><div class="muted" style="font-size:12px;margin-top:4px">App version <strong id="appVersionLabel">V106.1.0</strong></div><label>Savings goal</label><input id="settingsSavings" type="number" step="0.01"><div class="actions"><button class="btn" onclick="saveSettings()">Save settings</button></div></div><div class="card"><div class="sectionTitle">Share</div><p id="sharingStatus" class="muted">This budget is currently stored on this device only.</p><div id="sharingHouseholdInfo" class="backupBox hidden"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="openShareModal()">Share</button><button class="btn secondary" onclick="forceSyncNow()">↻ Sync now</button><button id="leaveHouseholdBtn" class="btn danger hidden" onclick="leaveSharedHousehold()">Stop sharing</button></div><p class="muted" style="font-size:11px;margin-top:10px">Share this budget between devices using a private household code. The existing backup system still works as a safety net.</p></div><div class="card"><div class="sectionTitle">Data</div><p class="muted">Export a backup before changing devices or browsers. Backups are also useful if you ever want an offline copy of your budget.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary" onclick="exportData()">Export Backup</button><button class="btn secondary" onclick="document.getElementById('importFile').click()">Import Backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"><button class="btn danger" onclick="resetAll()">Clear all data</button></div></div><div class="card"><div class="sectionTitle">Categories</div><div class="muted" style="font-size:13px;margin-bottom:10px">Choose the color, icon, and order for each spending category.</div><button class="btn" onclick="openCategorySettings()">Manage categories</button></div><div class="legalFooter">Household Budget • © 2026 Lindsay Shay</div></main>
+<main id="view-settings" class="hidden"><div class="card"><div class="sectionTitle">Budget settings</div><div class="muted" style="font-size:12px;margin-top:4px">App version <strong id="appVersionLabel">V106.1.2</strong></div><label>Savings goal</label><input id="settingsSavings" type="number" step="0.01"><div class="actions"><button class="btn" onclick="saveSettings()">Save settings</button></div></div><div class="card"><div class="sectionTitle">Share</div><p id="sharingStatus" class="muted">This budget is currently stored on this device only.</p><div id="sharingHouseholdInfo" class="backupBox hidden"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="openShareModal()">Share</button><button class="btn secondary" onclick="forceSyncNow()">↻ Sync now</button><button id="leaveHouseholdBtn" class="btn danger hidden" onclick="leaveSharedHousehold()">Stop sharing</button></div><p class="muted" style="font-size:11px;margin-top:10px">Share this budget between devices using a private household code. The existing backup system still works as a safety net.</p></div><div class="card"><div class="sectionTitle">Data</div><p class="muted">Export a backup before changing devices or browsers. Backups are also useful if you ever want an offline copy of your budget.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary" onclick="exportData()">Export Backup</button><button class="btn secondary" onclick="document.getElementById('importFile').click()">Import Backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"><button class="btn danger" onclick="resetAll()">Clear all data</button></div></div><div class="card"><div class="sectionTitle">Categories</div><div class="muted" style="font-size:13px;margin-bottom:10px">Choose the color, icon, and order for each spending category.</div><button class="btn" onclick="openCategorySettings()">Manage categories</button></div><div class="legalFooter">Household Budget • © 2026 Lindsay Shay</div></main>
 </div>
 
 <div id="modalWrap" class="modalWrap" onclick="if(event.target===this)closeModal()"><div class="modal"><button class="close" onclick="closeModal()">×</button><div id="modalTitle" class="modalTitle"></div><div id="modalBody"></div></div></div><div id="toast" class="toast"></div>
@@ -374,7 +374,7 @@ body.modal-open .modal{z-index:130!important}
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
 <script>
 const KEY='householdBudgetAlpha_v1';
-const APP_VERSION='V106.1.1';
+const APP_VERSION='V106.1.2';
 const colors=['#4F8EF7','#F4A300','#C65CEB','#35AFA0','#E85D75','#7A6FF0','#55A630','#F28482'];
 const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],incomeOverrides:{},manualIncomePayments:[],bonusIncomes:[],bills:[],billOverrides:{},categories:[],transactions:[],categoryCarry:{},rolloverDecisions:{},lastMonth:null,people:['Shared'],creditCards:[],creditCardPayments:[],creditCardHistory:{},creditCardOverrides:{},paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}],expenseOrder:[],categoryBudgetOverrides:{}};
 let data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
@@ -489,7 +489,7 @@ const CLOUD_SYNC_STATE_KEY='householdBudgetCloudSync_v2';
 // V68: use the app's Firebase project by default. Users can still replace this
 // configuration through the advanced setup screen if they are running their own copy.
 const DEFAULT_FIREBASE_CONFIG={apiKey:'AIzaSyBVA_XFb5vh9FXZWhLkXAr1NvJN0uAWXrY',authDomain:'household-budget-9f412.firebaseapp.com',projectId:'household-budget-9f412',storageBucket:'household-budget-9f412.firebasestorage.app',messagingSenderId:'233650112540',appId:'1:233650112540:web:01dc5e869a1977a6acdb7d'};
-let cloud={app:null,db:null,auth:null,uid:null,householdId:null,unsubscribe:null,ready:false,writing:false,savePending:false,lastLocalMutationAt:0,baseRevision:0,baseData:null,localDirty:false};
+let cloud={app:null,db:null,auth:null,uid:null,householdId:null,unsubscribe:null,ready:false,writing:false,savePending:false,lastLocalMutationAt:0,baseRevision:0,baseData:null,localDirty:false,joining:false};
 function getSharingConfig(){try{const saved=JSON.parse(localStorage.getItem(SHARING_CONFIG_KEY)||'null');return validFirebaseConfig(saved)?saved:DEFAULT_FIREBASE_CONFIG}catch(e){return DEFAULT_FIREBASE_CONFIG}}
 function getSharingMeta(){try{return JSON.parse(localStorage.getItem(SHARING_META_KEY)||'null')}catch(e){return null}}
 function saveSharingMeta(x){localStorage.setItem(SHARING_META_KEY,JSON.stringify(x))}
@@ -557,7 +557,7 @@ function ensureIdsFor(target){
 }
 function syncRecordBase(){cloud.baseData=clone(data);saveCloudSyncState()}
 
-async function initCloud(){
+async function initCloud(autoSubscribe=true){
   const cfg=getSharingConfig();
   if(!validFirebaseConfig(cfg)||typeof firebase==='undefined')return false;
   try{
@@ -567,7 +567,7 @@ async function initCloud(){
     const meta=getSharingMeta();cloud.householdId=meta?.householdId||null;
     if(cloud.householdId)loadCloudSyncState();
     cloud.ready=!!cloud.uid;
-    if(cloud.ready&&cloud.householdId)subscribeToHousehold();
+    if(autoSubscribe&&cloud.ready&&cloud.householdId)subscribeToHousehold();
     updateSharingUI();
     return cloud.ready;
   }catch(e){console.error('Sharing setup failed',e);showToast('Cloud sharing could not connect');updateSharingUI();return false}
@@ -579,6 +579,7 @@ function subscribeToHousehold(){
   if(cloud.unsubscribe)cloud.unsubscribe();
   const ref=cloud.db.collection('households').doc(cloud.householdId);
   cloud.unsubscribe=ref.onSnapshot(async snap=>{
+    if(cloud.joining)return;
     if(!snap.exists)return;
     const remote=snap.data();if(!remote.joinCode||!remote.data)return;
     // Do not let an in-flight listener snapshot repaint local edits while the
@@ -682,45 +683,45 @@ async function createSharedHousehold(){
   }catch(e){console.error(e);if(btn){btn.disabled=false;btn.textContent='Create shared budget'}showToast('Could not create household. Check your sharing connection.');}
 }
 async function joinSharedHousehold(){
-  if(!await initCloud()){openSharingSetup();return}
+  // Joining must not auto-subscribe to an old household first. Otherwise a
+  // stale listener can publish this device's local copy before the new join
+  // has completed.
+  if(!await initCloud(false)){openSharingSetup();return}
   const code=(document.getElementById('joinHouseholdCode')?.value||'').trim().toUpperCase();
   if(!/^[A-Z0-9]{8}$/.test(code)){showToast('Enter the 8-character household code');return}
   const id=code.toLowerCase();
   try{
+    cloud.joining=true;
+    if(cloud.unsubscribe){cloud.unsubscribe();cloud.unsubscribe=null;}
     const snap=await cloud.db.collection('households').doc(id).get();
     if(!snap.exists){showToast('Household not found');return}
     const remote=snap.data();
     if(String(remote.joinCode||'').toUpperCase()!==code||!remote.data){showToast('That household code is not valid');return}
     if(!confirm('Joining will replace this device’s current budget with the shared household budget. Continue?'))return;
 
-    // Adopt the fetched household copy as the local source of truth first.
-    // Set the household ID before touching sync state so no stale household
-    // metadata can interfere with the join.
-    const incoming=prepareIncoming(remote);
-    if(!incoming.setupComplete){incoming.setupComplete=true}
-    cloud.householdId=id;
-    if(cloud.unsubscribe)cloud.unsubscribe();
-    cloud.unsubscribe=null;
-    data=incoming;
-    ensureIncomeOverrides();
-    normalizePaymentData();
-    ensureIds();
-    localStorage.setItem(KEY,JSON.stringify(data));
+    // A join is an explicit replacement. The verified cloud copy becomes the
+    // local data and the sync baseline; it is never merged with stale local data.
+    const incoming={...structuredClone(blank),...structuredClone(remote.data),setupComplete:true};
+    incoming.categories=(incoming.categories||[]).map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));
+    incoming.people=Array.from(new Set((incoming.people||['Shared']).filter(Boolean)));
+    if(!incoming.people.includes('Shared'))incoming.people.unshift('Shared');
+    ensureIdsFor(incoming);
 
+    data=incoming;
+    cloud.householdId=id;
     cloud.baseRevision=Number(remote.revision||0);
     cloud.baseData=clone(data);
     cloud.localDirty=false;
+    localStorage.setItem(KEY,JSON.stringify(data));
     saveSharingMeta({householdId:id,name:remote.name||'Household',code});
     saveCloudSyncState();
-    subscribeToHousehold();
     closeModal();
     render();
     updateSharingUI();
+    subscribeToHousehold();
     showToast('Joined shared household');
-  }catch(e){
-    console.error('Could not join household',e);
-    showToast('Could not join household');
-  }
+  }catch(e){console.error('Could not join household',e);showToast('Could not join household')}
+  finally{cloud.joining=false;}
 }
 function openJoinHousehold(fromSetup=false){
   openCustomModal('Join a household',`<p class="muted">Enter the 8-character code from the device that created the household.</p><label>Household code</label><input id="joinHouseholdCode" maxlength="8" autocapitalize="characters" placeholder="ABCD2345"><div class="actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="joinSharedHousehold()">Join household</button></div>`);
