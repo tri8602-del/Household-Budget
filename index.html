@@ -220,7 +220,7 @@ body.modal-open .modal{z-index:130!important}
 <body>
 
 <div id="setupScreen" class="setup hidden"><div class="card">
-<div class="eyebrow">HOUSEHOLD BUDGET · <span id="setupVersionLabel">V106.0.9</span></div><h1>Welcome to Household Budget.</h1>
+<div class="eyebrow">HOUSEHOLD BUDGET · <span id="setupVersionLabel">V106.1.0</span></div><h1>Welcome to Household Budget.</h1>
 <p>Choose how you want to get started.</p>
 <div id="setupWelcome" class="setupStep active">
   <div style="display:grid;gap:10px;margin-top:18px">
@@ -364,7 +364,7 @@ body.modal-open .modal{z-index:130!important}
 
 <main id="view-bills" class="hidden"><div class="card"><div class="row"><div><div class="sectionTitle">Bills & fixed expenses</div><div class="muted" style="font-size:13px;margin-top:3px">Everything here is part of the monthly budget.</div></div><button class="btn small" onclick="openModal('bill')">＋ Add bill</button></div><div id="billTotal" class="billTotal"><div class="label">MONTHLY BILL TOTAL</div><div id="billTotalValue" class="value">$0</div><div class="note">Annual bills are shown as their monthly equivalent.</div></div><div id="billList"></div></div></main>
 
-<main id="view-settings" class="hidden"><div class="card"><div class="sectionTitle">Budget settings</div><div class="muted" style="font-size:12px;margin-top:4px">App version <strong id="appVersionLabel">V106.0.9</strong></div><label>Savings goal</label><input id="settingsSavings" type="number" step="0.01"><div class="actions"><button class="btn" onclick="saveSettings()">Save settings</button></div></div><div class="card"><div class="sectionTitle">Share</div><p id="sharingStatus" class="muted">This budget is currently stored on this device only.</p><div id="sharingHouseholdInfo" class="backupBox hidden"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="openShareModal()">Share</button><button class="btn secondary" onclick="forceSyncNow()">↻ Sync now</button><button id="leaveHouseholdBtn" class="btn danger hidden" onclick="leaveSharedHousehold()">Stop sharing</button></div><p class="muted" style="font-size:11px;margin-top:10px">Share this budget between devices using a private household code. The existing backup system still works as a safety net.</p></div><div class="card"><div class="sectionTitle">Data</div><p class="muted">Export a backup before changing devices or browsers. Backups are also useful if you ever want an offline copy of your budget.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary" onclick="exportData()">Export Backup</button><button class="btn secondary" onclick="document.getElementById('importFile').click()">Import Backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"><button class="btn danger" onclick="resetAll()">Clear all data</button></div></div><div class="card"><div class="sectionTitle">Categories</div><div class="muted" style="font-size:13px;margin-bottom:10px">Choose the color, icon, and order for each spending category.</div><button class="btn" onclick="openCategorySettings()">Manage categories</button></div><div class="legalFooter">Household Budget • © 2026 Lindsay Shay</div></main>
+<main id="view-settings" class="hidden"><div class="card"><div class="sectionTitle">Budget settings</div><div class="muted" style="font-size:12px;margin-top:4px">App version <strong id="appVersionLabel">V106.1.0</strong></div><label>Savings goal</label><input id="settingsSavings" type="number" step="0.01"><div class="actions"><button class="btn" onclick="saveSettings()">Save settings</button></div></div><div class="card"><div class="sectionTitle">Share</div><p id="sharingStatus" class="muted">This budget is currently stored on this device only.</p><div id="sharingHouseholdInfo" class="backupBox hidden"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="openShareModal()">Share</button><button class="btn secondary" onclick="forceSyncNow()">↻ Sync now</button><button id="leaveHouseholdBtn" class="btn danger hidden" onclick="leaveSharedHousehold()">Stop sharing</button></div><p class="muted" style="font-size:11px;margin-top:10px">Share this budget between devices using a private household code. The existing backup system still works as a safety net.</p></div><div class="card"><div class="sectionTitle">Data</div><p class="muted">Export a backup before changing devices or browsers. Backups are also useful if you ever want an offline copy of your budget.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary" onclick="exportData()">Export Backup</button><button class="btn secondary" onclick="document.getElementById('importFile').click()">Import Backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"><button class="btn danger" onclick="resetAll()">Clear all data</button></div></div><div class="card"><div class="sectionTitle">Categories</div><div class="muted" style="font-size:13px;margin-bottom:10px">Choose the color, icon, and order for each spending category.</div><button class="btn" onclick="openCategorySettings()">Manage categories</button></div><div class="legalFooter">Household Budget • © 2026 Lindsay Shay</div></main>
 </div>
 
 <div id="modalWrap" class="modalWrap" onclick="if(event.target===this)closeModal()"><div class="modal"><button class="close" onclick="closeModal()">×</button><div id="modalTitle" class="modalTitle"></div><div id="modalBody"></div></div></div><div id="toast" class="toast"></div>
@@ -374,7 +374,7 @@ body.modal-open .modal{z-index:130!important}
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
 <script>
 const KEY='householdBudgetAlpha_v1';
-const APP_VERSION='V106.0.9';
+const APP_VERSION='V106.1.0';
 const colors=['#4F8EF7','#F4A300','#C65CEB','#35AFA0','#E85D75','#7A6FF0','#55A630','#F28482'];
 const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],incomeOverrides:{},manualIncomePayments:[],bonusIncomes:[],bills:[],billOverrides:{},categories:[],transactions:[],categoryCarry:{},rolloverDecisions:{},lastMonth:null,people:['Shared'],creditCards:[],creditCardPayments:[],creditCardHistory:{},creditCardOverrides:{},paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}],expenseOrder:[],categoryBudgetOverrides:{}};
 let data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
@@ -825,22 +825,28 @@ function fixedMonthlyBudget(c,m=new Date()){
 function fixedCategoryTotal(m=new Date()){return (data.categories||[]).reduce((sum,c)=>sum+fixedMonthlyBudget(c,m),0)}
 function baseMonthlyAvailable(m=new Date()){return monthlyIncome(m)-monthlyBills(m)-(+data.savingsGoal||0)}
 function householdSpendingForMonth(m=new Date()){return txForMonth(m).reduce((sum,t)=>sum+(countsTowardBudget(t)?(Number(t.amount)||0):0),0)}
+function householdMonthOverUnder(m=new Date()){return monthlyAvailable(m)-householdSpendingForMonth(m)}
 function monthKeyFromDate(d){return monthKey(d)}
 function previousMonth(m=new Date()){return addMonths(new Date(m.getFullYear(),m.getMonth(),1,12),-1)}
 function householdDebtAtStart(m=new Date()){
+  // A month starts with its own N-(B+S) spending pool, reduced only when
+  // the prior month's overspending exceeded that month's savings buffer.
+  // Categories never participate in this household-level calculation.
   const target=new Date(m.getFullYear(),m.getMonth(),1,12);
-  const prev=previousMonth(target);
   const earliestTx=(data.transactions||[]).map(t=>dateOnly(t.date)).sort((a,b)=>a-b)[0];
   if(!earliestTx)return 0;
   let cur=new Date(earliestTx.getFullYear(),earliestTx.getMonth(),1,12);
-  let debt=0;
+  let adjustment=0;
   while(cur<target){
     const base=baseMonthlyAvailable(cur);
+    const effectiveAvailable=Math.max(0,base-adjustment);
     const spent=householdSpendingForMonth(cur);
-    debt=Math.max(0,+((debt+spent-base).toFixed(2)));
+    const overage=Math.max(0,spent-effectiveAvailable);
+    const savingsBuffer=Number(data.savingsGoal)||0;
+    adjustment=Math.max(0,+((overage-savingsBuffer).toFixed(2)));
     cur=addMonths(cur,1);
   }
-  return debt;
+  return adjustment;
 }
 function householdDebtAtEnd(m=new Date()){
   const startDebt=householdDebtAtStart(m);
@@ -895,7 +901,6 @@ function billOverrideForMonth(b,m=new Date()){const ov=data.billOverrides?.[bill
 function billIsSkippedForMonth(b,m=new Date()){return !!billOverrideForMonth(b,m)?.skipped}
 function billAmountForMonth(b,m=new Date()){const ov=billOverrideForMonth(b,m);if(ov?.skipped)return 0;const amount=(ov&&ov.amount!==undefined)?Number(ov.amount):Number(b.amount)||0;return b.frequency==='annual'?amount/12:amount;}
 function monthlyBills(m=new Date()){return (data.bills||[]).reduce((sum,b)=>sum+billAmountForMonth(b,m),0)}
-function monthlyAvailable(m=new Date()){return Math.max(0,baseMonthlyAvailable(m)-householdDebtAtStart(m))}
 function budgetAllocated(m=new Date()){return (data.categories||[]).reduce((s,c)=>s+monthlyCategoryBudget(c,m),0)}
 function weekly(c,m=new Date()){const days=new Date(m.getFullYear(),m.getMonth()+1,0).getDate();return monthlyCategoryBudget(c,m)*7/days}
 function weeksInMonthByMonday(m){
@@ -920,18 +925,6 @@ function householdWeekAllocation(d=new Date()){
 }
 function householdSpentBetween(a,b){
  return (data.transactions||[]).reduce((sum,t)=>{const x=dateOnly(t.date);return x>=a&&x<=b&&countsTowardBudget(t)?sum+(Number(t.amount)||0):sum},0);
-}
-function overallWeekBalance(d=new Date()){
- const s=startWeek(d),e=addDays(s,6),ms=monthStart(d),currentWeekStart=s>ms?s:ms;
- const priorEnd=addDays(s,-1);
- const priorSpent=priorEnd>=ms?householdSpentBetween(ms,priorEnd):0;
- const priorAllocation=priorEnd>=ms?householdDailyAllowance(ms)*(Math.max(0,Math.round((priorEnd-ms)/86400000)+1)):0;
- const currentAllocation=householdWeekAllocation(d);
- const currentSpent=householdSpentBetween(s,e);
- return currentAllocation+(priorAllocation-priorSpent)-currentSpent;
-}
-function overallMonthBalance(m=new Date()){
- return monthlyAvailable(m)-categoryMonthSpendTotal(m);
 }
 function categoryMonthSpendTotal(m=new Date()){
  return txForMonth(m).reduce((sum,t)=>sum+(countsTowardBudget(t)?(Number(t.amount)||0):0),0);
@@ -1014,20 +1007,31 @@ function overallWeekBalance(d=new Date()){
  const currentSpent=householdSpentBetween(s,e);
  return currentAllocation-currentSpent;
 }
-function overallMonthBalance(m=new Date()){
- return monthlyAvailable(m)-categoryMonthSpendTotal(m);
-}
 function overallWeekBreakdown(d=new Date()){
- const s=startWeek(d),e=addDays(s,6),ms=monthStart(d);
- const priorEnd=addDays(s,-1);
- const priorSpent=priorEnd>=ms?householdSpentBetween(ms,priorEnd):0;
- const priorAllocation=priorEnd>=ms?householdDailyAllowance(ms)*(Math.max(0,Math.round((priorEnd-ms)/86400000)+1)):0;
+ const s=startWeek(d),e=addDays(s,6);
  const currentAllocation=householdWeekAllocation(d);
  const currentSpent=householdSpentBetween(s,e);
- const carried=Math.max(0,priorAllocation-priorSpent);
- const balance=currentAllocation+carried-currentSpent;
+ const balance=currentAllocation-currentSpent;
+ // Show the month's own running U for each portion of a cross-month week.
+ const monthParts=[];
+ let x=new Date(s);
+ while(x<=e){
+   const m=new Date(x.getFullYear(),x.getMonth(),1,12);
+   const mk=monthKey(m);
+   const partEnd=new Date(Math.min(e.getTime(),monthEnd(m).getTime()));
+   const days=Math.max(1,Math.round((partEnd-x)/86400000)+1);
+   const allocation=householdDailyAllowance(x)*days;
+   const spent=(data.transactions||[]).reduce((sum,t)=>{
+     const td=dateOnly(t.date);
+     return td>=x&&td<=partEnd&&td.getMonth()===m.getMonth()&&td.getFullYear()===m.getFullYear()&&countsTowardBudget(t)?sum+(Number(t.amount)||0):sum;
+   },0);
+   const monthSpent=householdSpendingForMonth(m);
+   const monthPosition=householdMonthOverUnder(m);
+   monthParts.push({month:m,monthKey:mk,start:new Date(x),end:new Date(partEnd),days,allocation,spent,monthPosition});
+   x=addDays(partEnd,1);
+ }
  const cats=data.categories||[];
- return {weekStart:s,weekEnd:e,currentAllocation,carried,currentSpent,items:cats.map(c=>({name:c.name,value:dashboardPositionValue(c,'week',d)})),balance};
+ return {weekStart:s,weekEnd:e,currentAllocation,currentSpent,items:cats.map(c=>({name:c.name,value:dashboardPositionValue(c,'week',d)})),balance,monthParts};
 }
 function overallMonthBreakdown(m=new Date()){
  const cats=data.categories||[];
@@ -1046,9 +1050,12 @@ function openOverallCalculation(range){
    body.innerHTML=`<div class="categoryDetailModalSub">${fmt(x.weekStart)}–${fmt(x.weekEnd)}</div>
    <div class="calcBreakdown"><h4>Household-wide weekly calculation</h4>
      <div class="calcLine"><span>This week's household allocation</span><strong>${money(x.currentAllocation)}</strong></div>
-     ${x.carried?`<div class="calcLine"><span>Unused household capacity from earlier this month</span><strong>+ ${money(x.carried)}</strong></div>`:''}
      <div class="calcLine"><span>Spent this week</span><strong>− ${money(x.currentSpent)}</strong></div>
      <div class="calcTotal ${x.balance>=0?'positive':'negative'}">Result: ${money(Math.abs(x.balance))} ${x.balance>=0?'under':'over'}</div>
+   </div>
+   <div class="calcBreakdown" style="margin-top:12px"><h4>Monthly positions within this week</h4>
+     ${x.monthParts.map(p=>`<div class="calcLine"><span>${p.start.toLocaleDateString('en-US',{month:'short',day:'numeric'})}–${p.end.toLocaleDateString('en-US',{month:'short',day:'numeric'})} · ${p.month.toLocaleDateString('en-US',{month:'long'})} U</span><strong class="${p.monthPosition>=0?'positive':'negative'}">${p.monthPosition>=0?'+ ':'− '}${money(Math.abs(p.monthPosition))}</strong></div>`).join('')}
+     <div class="calcMuted" style="margin-top:8px">Each day uses that day's monthly allocation. The monthly U shown above is the household's position for that calendar month, not a category total.</div>
    </div>
    <div class="calcBreakdown" style="margin-top:12px"><h4>Category balances (informational)</h4>
      ${x.items.map(i=>`<div class="calcLine"><span>${esc(i.name)}</span><strong class="${i.value>=0?'positive':'negative'}">${i.value>=0?'+ ':'− '}${money(Math.abs(i.value))}</strong></div>`).join('')}
