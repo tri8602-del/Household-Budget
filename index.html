@@ -374,7 +374,7 @@ body.modal-open .modal{z-index:130!important}
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
 <script>
 const KEY='householdBudgetAlpha_v1';
-const APP_VERSION='V106.1.2';
+const APP_VERSION='V106.1.4';
 const colors=['#4F8EF7','#F4A300','#C65CEB','#35AFA0','#E85D75','#7A6FF0','#55A630','#F28482'];
 const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],incomeOverrides:{},manualIncomePayments:[],bonusIncomes:[],bills:[],billOverrides:{},categories:[],transactions:[],categoryCarry:{},rolloverDecisions:{},lastMonth:null,people:['Shared'],creditCards:[],creditCardPayments:[],creditCardHistory:{},creditCardOverrides:{},paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}],expenseOrder:[],categoryBudgetOverrides:{}};
 let data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
@@ -479,7 +479,7 @@ function addMonths(d,n){const x=new Date(d);x.setMonth(x.getMonth()+n);return x}
 function monthStart(d=new Date()){return new Date(d.getFullYear(),d.getMonth(),1,12)}
 function monthEnd(d=new Date()){return new Date(d.getFullYear(),d.getMonth()+1,0,12)}
 function startWeek(d=new Date()){const x=new Date(d);x.setHours(12,0,0,0);x.setDate(x.getDate()-((x.getDay()+6)%7));return x}
-function persistData(){cloud.lastLocalMutationAt=Date.now();localStorage.setItem(KEY,JSON.stringify(data));if(cloud.ready&&cloud.householdId)cloud.localDirty=true;saveCloudSyncState();cloudSaveIfConnected()}
+function persistData(){cloud.lastLocalMutationAt=Date.now();localStorage.setItem(KEY,JSON.stringify(data));if(cloud.ready&&cloud.householdId)cloud.localDirty=true;saveCloudSyncState();if(!cloud.joining)cloudSaveIfConnected()}
 function save(){persistData();render()}
 
 // Optional cloud sharing. Local storage remains the source of truth until a household is connected.
@@ -500,6 +500,7 @@ function saveCloudSyncState(){try{if(!cloud.householdId)return;localStorage.setI
 function loadCloudSyncState(){try{const x=JSON.parse(localStorage.getItem(CLOUD_SYNC_STATE_KEY)||'null');if(x&&x.householdId===cloud.householdId){cloud.baseRevision=Number(x.baseRevision)||0;cloud.baseData=x.baseData?clone(x.baseData):null;cloud.localDirty=!!x.localDirty}}catch(e){console.warn('Could not load sync state',e)}}
 function clearCloudSyncState(){try{localStorage.removeItem(CLOUD_SYNC_STATE_KEY)}catch(e){}}
 function recordIdForArray(name,x){if(x===undefined||x===null)return null;if(typeof x!=='object')return String(x);if(x.id!==undefined&&x.id!==null)return String(x.id);if(name==='people')return String(x);return null}
+function budgetHasMeaningfulData(x){if(!x||typeof x!=='object')return false;return ['incomes','bills','transactions','categories','creditCards','creditCardPayments','manualIncomePayments','bonusIncomes'].some(k=>Array.isArray(x[k])&&x[k].length>0)}
 function mergeThreeWay(base,local,remote){
   if(deepEqual(local,base))return clone(remote);
   if(deepEqual(remote,base))return clone(local);
@@ -567,7 +568,7 @@ async function initCloud(autoSubscribe=true){
     const meta=getSharingMeta();cloud.householdId=meta?.householdId||null;
     if(cloud.householdId)loadCloudSyncState();
     cloud.ready=!!cloud.uid;
-    if(autoSubscribe&&cloud.ready&&cloud.householdId)subscribeToHousehold();
+    if(autoSubscribe&&cloud.ready&&cloud.householdId&&!cloud.joining)subscribeToHousehold();
     updateSharingUI();
     return cloud.ready;
   }catch(e){console.error('Sharing setup failed',e);showToast('Cloud sharing could not connect');updateSharingUI();return false}
@@ -594,6 +595,7 @@ function subscribeToHousehold(){
     if(!cloud.baseData){
       cloud.baseRevision=remoteRevision;
       if(deepEqual(data,incoming)){cloud.baseData=clone(incoming);cloud.localDirty=false;}
+      else if(budgetHasMeaningfulData(incoming)&&!budgetHasMeaningfulData(data)){data=incoming;cloud.baseData=clone(incoming);cloud.localDirty=false;localStorage.setItem(KEY,JSON.stringify(data));}
       else if(!data.setupComplete){data=incoming;cloud.baseData=clone(incoming);cloud.localDirty=false;localStorage.setItem(KEY,JSON.stringify(data));}
       else {data=mergeThreeWay(structuredClone(blank),data,incoming);ensureIds();normalizePaymentData();localStorage.setItem(KEY,JSON.stringify(data));cloud.baseData=clone(incoming);cloud.localDirty=true;}
       saveCloudSyncState();
@@ -619,6 +621,11 @@ async function cloudSaveIfConnected(){
         const ref=cloud.db.collection('households').doc(cloud.householdId),snap=await tx.get(ref);
         if(!snap.exists)throw new Error('Shared household not found');
         const remote=snap.data(),remoteRevision=Number(remote.revision||0),remoteData=prepareIncoming(remote);
+        // Never let a newly connected blank device overwrite a populated household.
+        // A real destructive clear is allowed once a non-blank sync baseline exists.
+        if(!hasBase&&budgetHasMeaningfulData(remoteData)&&!budgetHasMeaningfulData(localSnapshot)){
+          committedData=clone(remoteData);committedRevision=remoteRevision;return;
+        }
         let merged;
         if(remoteRevision===expectedRevision && hasBase) merged=localSnapshot;
         else if(remoteRevision===expectedRevision && !hasBase) merged=mergeThreeWay(structuredClone(blank),localSnapshot,remoteData);
@@ -683,45 +690,67 @@ async function createSharedHousehold(){
   }catch(e){console.error(e);if(btn){btn.disabled=false;btn.textContent='Create shared budget'}showToast('Could not create household. Check your sharing connection.');}
 }
 async function joinSharedHousehold(){
-  // Joining must not auto-subscribe to an old household first. Otherwise a
-  // stale listener can publish this device's local copy before the new join
-  // has completed.
-  if(!await initCloud(false)){openSharingSetup();return}
-  const code=(document.getElementById('joinHouseholdCode')?.value||'').trim().toUpperCase();
-  if(!/^[A-Z0-9]{8}$/.test(code)){showToast('Enter the 8-character household code');return}
-  const id=code.toLowerCase();
+  // Freeze cloud syncing BEFORE doing anything asynchronous. A device may
+  // already be listening to an older household, and that listener must never
+  // get a chance to publish this device's local data while we are joining.
+  cloud.joining=true;
   try{
-    cloud.joining=true;
     if(cloud.unsubscribe){cloud.unsubscribe();cloud.unsubscribe=null;}
+    if(!await initCloud(false)){openSharingSetup();return}
+    const code=(document.getElementById('joinHouseholdCode')?.value||'').trim().toUpperCase();
+    if(!/^[A-Z0-9]{8}$/.test(code)){showToast('Enter the 8-character household code');return}
+    const id=code.toLowerCase();
     const snap=await cloud.db.collection('households').doc(id).get();
     if(!snap.exists){showToast('Household not found');return}
     const remote=snap.data();
     if(String(remote.joinCode||'').toUpperCase()!==code||!remote.data){showToast('That household code is not valid');return}
     if(!confirm('Joining will replace this device’s current budget with the shared household budget. Continue?'))return;
 
-    // A join is an explicit replacement. The verified cloud copy becomes the
-    // local data and the sync baseline; it is never merged with stale local data.
+    // Explicit replacement: adopt the verified cloud copy. No merge and no
+    // cloud write is allowed during this operation.
     const incoming={...structuredClone(blank),...structuredClone(remote.data),setupComplete:true};
     incoming.categories=(incoming.categories||[]).map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));
-    incoming.people=Array.from(new Set((incoming.people||['Shared']).filter(Boolean)));
+    incoming.people=Array.from(new Set((Array.isArray(incoming.people)?incoming.people:['Shared']).filter(Boolean)));
     if(!incoming.people.includes('Shared'))incoming.people.unshift('Shared');
+    incoming.incomes=Array.isArray(incoming.incomes)?incoming.incomes:[];
+    incoming.bills=Array.isArray(incoming.bills)?incoming.bills:[];
+    incoming.transactions=Array.isArray(incoming.transactions)?incoming.transactions:[];
+    incoming.categories=Array.isArray(incoming.categories)?incoming.categories:[];
+    incoming.creditCards=Array.isArray(incoming.creditCards)?incoming.creditCards:[];
+    incoming.creditCardPayments=Array.isArray(incoming.creditCardPayments)?incoming.creditCardPayments:[];
+    incoming.paymentSources=Array.isArray(incoming.paymentSources)&&incoming.paymentSources.length?incoming.paymentSources:structuredClone(blank.paymentSources);
+    incoming.incomeOverrides=(incoming.incomeOverrides&&typeof incoming.incomeOverrides==='object')?incoming.incomeOverrides:{};
+    incoming.billOverrides=(incoming.billOverrides&&typeof incoming.billOverrides==='object')?incoming.billOverrides:{};
+    incoming.categoryCarry=(incoming.categoryCarry&&typeof incoming.categoryCarry==='object')?incoming.categoryCarry:{};
+    incoming.rolloverDecisions=(incoming.rolloverDecisions&&typeof incoming.rolloverDecisions==='object')?incoming.rolloverDecisions:{};
+    incoming.categoryBudgetOverrides=(incoming.categoryBudgetOverrides&&typeof incoming.categoryBudgetOverrides==='object')?incoming.categoryBudgetOverrides:{};
+    incoming.categories=incoming.categories.map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));
     ensureIdsFor(incoming);
 
     data=incoming;
     cloud.householdId=id;
     cloud.baseRevision=Number(remote.revision||0);
-    cloud.baseData=clone(data);
+    cloud.baseData=clone(incoming);
     cloud.localDirty=false;
     localStorage.setItem(KEY,JSON.stringify(data));
     saveSharingMeta({householdId:id,name:remote.name||'Household',code});
     saveCloudSyncState();
-    closeModal();
+
+    // Render only after the local copy and sync baseline are established. Any
+    // normalization performed by render stays local until the join is done.
     render();
     updateSharingUI();
-    subscribeToHousehold();
     showToast('Joined shared household');
-  }catch(e){console.error('Could not join household',e);showToast('Could not join household')}
-  finally{cloud.joining=false;}
+  }catch(e){
+    console.error('Could not join household',e);
+    showToast('Could not join household');
+  }finally{
+    cloud.joining=false;
+    // Start the listener only after the join is completely finished. The first
+    // snapshot must see the verified household as the current base, never the
+    // pre-join local budget.
+    if(cloud.ready&&cloud.householdId)subscribeToHousehold();
+  }
 }
 function openJoinHousehold(fromSetup=false){
   openCustomModal('Join a household',`<p class="muted">Enter the 8-character code from the device that created the household.</p><label>Household code</label><input id="joinHouseholdCode" maxlength="8" autocapitalize="characters" placeholder="ABCD2345"><div class="actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="joinSharedHousehold()">Join household</button></div>`);
@@ -738,7 +767,7 @@ function leaveSharedHousehold(){
 }
 function showToast(t){const e=document.getElementById('toast');e.textContent=t;e.style.display='block';clearTimeout(window._toast);window._toast=setTimeout(()=>e.style.display='none',1800)}
 
-function ensureIds(){let before=JSON.stringify(data);ensureIdsFor(data);data.categories=(data.categories||[]).map((c,i)=>({...c,id:c.id||`cat_${Date.now().toString(36)}_${i}_${Math.random().toString(36).slice(2,7)}`}));data.bills=(data.bills||[]).map(b=>({...b,tags:normalizeTags(b.tags||[])}));if(JSON.stringify(data)!==before){localStorage.setItem(KEY,JSON.stringify(data));if(cloud.ready&&cloud.householdId){cloud.localDirty=true;saveCloudSyncState();cloudSaveIfConnected()}}}
+function ensureIds(){let before=JSON.stringify(data);ensureIdsFor(data);data.categories=(data.categories||[]).map((c,i)=>({...c,id:c.id||`cat_${Date.now().toString(36)}_${i}_${Math.random().toString(36).slice(2,7)}`}));data.bills=(data.bills||[]).map(b=>({...b,tags:normalizeTags(b.tags||[])}));if(JSON.stringify(data)!==before){localStorage.setItem(KEY,JSON.stringify(data));if(cloud.ready&&cloud.householdId&&!cloud.joining){cloud.localDirty=true;saveCloudSyncState();cloudSaveIfConnected()}}}
 ensureIds();
 
 let incomeViewMonth=monthKey();
@@ -1111,6 +1140,8 @@ function renderDashboard(){
  const greeting=document.getElementById('dashboardGreeting'); if(greeting){const h=new Date().getHours(), salutation=h<12?'Good morning':h<17?'Good afternoon':'Good evening', emoji=h<12?'☀️':h<17?'☀️':'🌙'; greeting.textContent=`${salutation}! ${emoji}`;}
  const cats=data.categories||[],d=dashboardSafeRange==='week'?dashboardWeekDate():(()=>{const x=new Date();x.setMonth(x.getMonth()+(dashboardMonthOffset||0));return x})();
  const ws=startWeek(d),we=addDays(ws,6),fmt=o=>o.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+ const dateLabel=document.getElementById('safeToSpendDateLabel');
+ if(dateLabel)dateLabel.textContent=dashboardSafeRange==='week'?`This week · ${fmt(ws)}–${fmt(we)}`:`This month · ${d.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`;
  const periodStart=dashboardSafeRange==='week'?ws:monthStart(d);
  const periodEnd=dashboardSafeRange==='week'?we:monthEnd(d);
  const periodTransactions=(data.transactions||[]).filter(t=>{const x=dateOnly(t.date);return x>=periodStart&&x<=periodEnd});
@@ -1120,8 +1151,6 @@ function renderDashboard(){
  const monthPosition=overallMonthBalance(new Date());
  const selectedPosition=dashboardSafeRange==='week'?weekPosition:monthPosition;
  const nav=document.getElementById('safeWeekNav'); if(nav){nav.classList.remove('hidden');const buttons=nav.querySelectorAll('button');if(buttons[0])buttons[0].textContent='← Previous';if(buttons[1])buttons[1].textContent='Today';if(buttons[2])buttons[2].textContent='Next →';}
- const dateLabel=document.getElementById('safeToSpendDateLabel');
- if(dateLabel)dateLabel.textContent=dashboardSafeRange==='week'?`This week · ${fmt(ws)}–${fmt(we)}`:`This month · ${d.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`;
  document.querySelectorAll('.homeRange button').forEach(b=>b.classList.toggle('active',b.dataset.safe===dashboardSafeRange));
  const spendingLabel=document.getElementById('dashSpendLabel'); if(spendingLabel)spendingLabel.textContent=dashboardSafeRange==='week'?"This week's spending":"This month's spending";
  const spendingValue=document.getElementById('dashSpendValue'); if(spendingValue)spendingValue.textContent=money(totalSpent);
@@ -1769,7 +1798,92 @@ function toggleMobileMore(){const m=document.getElementById('mobileMoreMenu');if
 function closeMobileMore(){const m=document.getElementById('mobileMoreMenu');if(m)m.classList.add('hidden')}
 function render(){if(!data.setupComplete)return;ensureIncomeOverrides();normalizePaymentData();ensureExpenseOrder();ensureWeeklyRollover();document.getElementById('app').classList.remove('hidden');document.getElementById('setupScreen').classList.add('hidden');document.getElementById('settingsSavings').value=data.savingsGoal||0;const versionLabel=document.getElementById('appVersionLabel');if(versionLabel)versionLabel.textContent=APP_VERSION;renderDashboard();renderBudget();renderBills();renderIncome();renderAnalytics();renderCashflow();showView(currentView)}
 function exportData(){const backup={app:'Household Budget',version:1,exportedAt:new Date().toISOString(),data};const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'}),filename='household-budget-backup-'+dateValue()+'.json';const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup exported')}
-function importData(event){const f=event.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.data||!Array.isArray(x.data.incomes)||!Array.isArray(x.data.categories))throw Error();data={...structuredClone(blank),...x.data,setupComplete:true};data.categories=(data.categories||[]).map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));data.people=Array.from(new Set((data.people||['Shared']).filter(Boolean)));if(!data.people.includes('Shared'))data.people.unshift('Shared');normalizePaymentData();ensureIds();ensureIncomeOverrides();persistData();event.target.value='';render();showToast('Backup imported')}catch(e){showToast('That backup could not be imported')}};r.readAsText(f)}
+async function restoreImportedDataToCloud(imported){
+  if(!cloud.ready||!cloud.db||!cloud.householdId)return null;
+  cloud.writing=true;
+  try{
+    let committedRevision=Number(cloud.baseRevision||0)+1;
+    await cloud.db.runTransaction(async tx=>{
+      const ref=cloud.db.collection('households').doc(cloud.householdId),snap=await tx.get(ref);
+      if(!snap.exists)throw new Error('Shared household not found');
+      const remote=snap.data()||{};
+      committedRevision=Number(remote.revision||0)+1;
+      tx.set(ref,{data:clone(imported),revision:committedRevision,clientUpdatedAt:Date.now(),updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:cloud.uid},{merge:true});
+    });
+    cloud.baseRevision=committedRevision;
+    cloud.baseData=clone(imported);
+    cloud.localDirty=false;
+    saveCloudSyncState();
+    return committedRevision;
+  }finally{cloud.writing=false}
+}
+async function importData(event){
+  const f=event.target.files?.[0];if(!f)return;
+  cloud.joining=true;
+  if(cloud.unsubscribe){cloud.unsubscribe();cloud.unsubscribe=null;}
+  try{
+    const text=await f.text();
+    const x=JSON.parse(text);
+    const source=(x&&x.data&&typeof x.data==='object'&&!Array.isArray(x.data))?x.data:x;
+    if(!source||typeof source!=='object'||Array.isArray(source))throw new Error('Invalid backup');
+    const imported={...structuredClone(blank),...structuredClone(source),setupComplete:true};
+    imported.incomes=Array.isArray(imported.incomes)?imported.incomes:[];
+    imported.incomeOverrides=(imported.incomeOverrides&&typeof imported.incomeOverrides==='object')?imported.incomeOverrides:{};
+    imported.manualIncomePayments=Array.isArray(imported.manualIncomePayments)?imported.manualIncomePayments:[];
+    imported.bonusIncomes=Array.isArray(imported.bonusIncomes)?imported.bonusIncomes:[];
+    imported.bills=Array.isArray(imported.bills)?imported.bills:[];
+    imported.billOverrides=(imported.billOverrides&&typeof imported.billOverrides==='object')?imported.billOverrides:{};
+    imported.transactions=Array.isArray(imported.transactions)?imported.transactions:[];
+    imported.categories=Array.isArray(imported.categories)?imported.categories:[];
+    imported.people=Array.from(new Set((Array.isArray(imported.people)?imported.people:['Shared']).filter(Boolean)));
+    if(!imported.people.includes('Shared'))imported.people.unshift('Shared');
+    imported.categoryCarry=(imported.categoryCarry&&typeof imported.categoryCarry==='object')?imported.categoryCarry:{};
+    imported.rolloverDecisions=(imported.rolloverDecisions&&typeof imported.rolloverDecisions==='object')?imported.rolloverDecisions:{};
+    imported.categoryBudgetOverrides=(imported.categoryBudgetOverrides&&typeof imported.categoryBudgetOverrides==='object')?imported.categoryBudgetOverrides:{};
+    imported.creditCards=Array.isArray(imported.creditCards)?imported.creditCards:[];
+    imported.creditCardPayments=Array.isArray(imported.creditCardPayments)?imported.creditCardPayments:[];
+    imported.creditCardHistory=(imported.creditCardHistory&&typeof imported.creditCardHistory==='object')?imported.creditCardHistory:{};
+    imported.creditCardOverrides=(imported.creditCardOverrides&&typeof imported.creditCardOverrides==='object')?imported.creditCardOverrides:{};
+    imported.paymentSources=Array.isArray(imported.paymentSources)&&imported.paymentSources.length?imported.paymentSources:structuredClone(blank.paymentSources);
+    imported.categories=imported.categories.map((c,i)=>({...c,color:c.color||colors[i%colors.length],icon:c.icon||'money',allocationMode:c.allocationMode||'monthly'}));
+    data=imported;
+    normalizePaymentData();
+    ensureIds();
+    ensureIncomeOverrides();
+    localStorage.setItem(KEY,JSON.stringify(data));
+
+    if(cloud.ready&&cloud.householdId){
+      const okay=confirm('Import this backup into the current shared household too? This will replace the shared household copy with the backup.');
+      if(!okay){
+        cloud.baseData=null;cloud.baseRevision=0;cloud.localDirty=false;clearCloudSyncState();
+        render();showToast('Backup restored on this device only');return;
+      }
+      try{
+        await restoreImportedDataToCloud(data);
+      }catch(syncError){
+        console.error('Backup cloud restore failed',syncError);
+        cloud.baseData=null;cloud.baseRevision=0;cloud.localDirty=true;
+        saveCloudSyncState();
+        render();
+        showToast('Backup restored here; shared copy could not be updated');
+        return;
+      }
+    }else{
+      cloud.baseData=null;cloud.baseRevision=0;cloud.localDirty=false;
+      clearCloudSyncState();
+    }
+    render();
+    event.target.value='';
+    showToast(cloud.ready&&cloud.householdId?'Backup restored and shared':'Backup imported');
+  }catch(e){
+    console.error('Backup import failed',e);
+    showToast('That backup could not be imported');
+  }finally{
+    cloud.joining=false;
+    if(cloud.ready&&cloud.householdId)subscribeToHousehold();
+    event.target.value='';
+  }
+}
 function resetAll(){if(confirm('Clear all household budget data from this device?')){localStorage.removeItem(KEY);location.reload()}}
 
 const SETUP_DRAFT_KEY='householdBudgetSetupDraft_v1';
