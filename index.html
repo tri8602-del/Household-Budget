@@ -984,6 +984,19 @@ function householdWeekAllocation(d=new Date()){
  }
  return total;
 }
+function householdWeekAvailable(d=new Date()){
+ // Weekly budget plus rollover (or minus prior overage): the same number the
+ // Spending chart draws for the week. Each month part of a Monday week uses
+ // that month's running position, so a new month still starts fresh.
+ const s=startWeek(d),e=addDays(s,6);let total=0,x=new Date(s);
+ while(x<=e){
+   const m=new Date(x.getFullYear(),x.getMonth(),1,12);
+   const partEnd=new Date(Math.min(e.getTime(),monthEnd(m).getTime()));
+   total+=householdMonthPeriodAvailable({start:new Date(x),end:partEnd},m);
+   x=addDays(partEnd,1);
+ }
+ return total;
+}
 function householdSpentBetween(a,b){
  return (data.transactions||[]).reduce((sum,t)=>{const x=dateOnly(t.date);return x>=a&&x<=b&&countsTowardBudget(t)?sum+(Number(t.amount)||0):sum},0);
 }
@@ -1060,19 +1073,19 @@ function categoryWeekStateForDate(c,d=new Date()){
 }
 function weekBalanceForDate(c,d=new Date()){return categoryWeekStateForDate(c,d).balance}
 function overallWeekBalance(d=new Date()){
- // Household-wide weekly position. A week is exactly its seven calendar days;
- // each day uses that day's monthly household allowance. Unused capacity from
- // the prior month does not roll into the new month.
+ // Household-wide weekly position: this week's budget plus rollover from
+ // earlier weeks in the month, minus this week's counted spending. Unused
+ // capacity from the prior month does not roll into the new month.
  const s=startWeek(d),e=addDays(s,6);
- const currentAllocation=householdWeekAllocation(d);
- const currentSpent=householdSpentBetween(s,e);
- return currentAllocation-currentSpent;
+ return Math.round((householdWeekAvailable(d)-householdSpentBetween(s,e))*100)/100;
 }
 function overallWeekBreakdown(d=new Date()){
  const s=startWeek(d),e=addDays(s,6);
  const currentAllocation=householdWeekAllocation(d);
+ const available=householdWeekAvailable(d);
+ const rollover=Math.round((available-currentAllocation)*100)/100;
  const currentSpent=householdSpentBetween(s,e);
- const balance=currentAllocation-currentSpent;
+ const balance=Math.round((available-currentSpent)*100)/100;
  // Show the month's own running U for each portion of a cross-month week.
  const monthParts=[];
  let x=new Date(s);
@@ -1092,7 +1105,7 @@ function overallWeekBreakdown(d=new Date()){
    x=addDays(partEnd,1);
  }
  const cats=data.categories||[];
- return {weekStart:s,weekEnd:e,currentAllocation,currentSpent,items:cats.map(c=>({name:c.name,value:dashboardPositionValue(c,'week',d)})),balance,monthParts};
+ return {weekStart:s,weekEnd:e,currentAllocation,rollover,available,currentSpent,items:cats.map(c=>({name:c.name,value:dashboardPositionValue(c,'week',d)})),balance,monthParts};
 }
 function overallMonthBreakdown(m=new Date()){
  const cats=data.categories||[];
@@ -1111,6 +1124,7 @@ function openOverallCalculation(range){
    body.innerHTML=`<div class="categoryDetailModalSub">${fmt(x.weekStart)}–${fmt(x.weekEnd)}</div>
    <div class="calcBreakdown"><h4>Household-wide weekly calculation</h4>
      <div class="calcLine"><span>This week's household allocation</span><strong>${money(x.currentAllocation)}</strong></div>
+     ${x.rollover?`<div class="calcLine"><span>Rollover / prior overage</span><strong>${x.rollover>=0?'+ ':'− '}${money(Math.abs(x.rollover))}</strong></div><div class="calcLine"><span>Available this week</span><strong>${money(x.available)}</strong></div>`:''}
      <div class="calcLine"><span>Spent this week</span><strong>− ${money(x.currentSpent)}</strong></div>
      <div class="calcTotal ${x.balance>=0?'positive':'negative'}">Result: ${money(Math.abs(x.balance))} ${x.balance>=0?'under':'over'}</div>
    </div>
@@ -1157,15 +1171,16 @@ function renderDashboard(){
  document.querySelectorAll('.homeRange button').forEach(b=>b.classList.toggle('active',b.dataset.safe===dashboardSafeRange));
  const spendingLabel=document.getElementById('dashSpendLabel'); if(spendingLabel)spendingLabel.textContent=dashboardSafeRange==='week'?"This week's spending":"This month's spending";
  const spendingValue=document.getElementById('dashSpendValue'); if(spendingValue)spendingValue.textContent=money(totalSpent);
- // The dashboard's weekly budget is the household's actual spending capacity
- // for the seven calendar days in the selected week. It is intentionally
- // independent of category allocations and does not carry unused capacity
- // across a month boundary.
- const weeklyAvailable=householdWeekAllocation(ws);
+ // The dashboard's weekly budget is the household's spending capacity for the
+ // selected week: its seven days' allowance plus rollover (or minus overage)
+ // from earlier weeks in the same month. It is the same number the Spending
+ // chart draws. It does not carry unused capacity across a month boundary.
+ const weeklyAvailable=householdWeekAvailable(ws);
+ const countedSpent=periodTransactions.filter(countsTowardBudget).reduce((sum,t)=>sum+(Number(t.amount)||0),0);
  const renderDashAmount=(id,balance)=>{const el=document.getElementById(id);if(!el)return;el.className=`dashSummaryValue ${balance>=0?'positive':'negative'}`;el.textContent=`${money(Math.abs(balance))} ${balance>=0?'under':'over'}`;};
  const budgetValue=document.getElementById('dashBudgetValue');if(budgetValue)budgetValue.textContent=money(weeklyAvailable);
- const budgetUsed=document.getElementById('dashBudgetUsed');if(budgetUsed){const used=weeklyAvailable>0?Math.round(totalSpent/weeklyAvailable*100):0;budgetUsed.textContent=`${Math.max(0,used)}% used`;}
- const budgetProgress=document.getElementById('dashBudgetProgress');if(budgetProgress)budgetProgress.style.width=`${Math.min(100,weeklyAvailable>0?totalSpent/weeklyAvailable*100:0)}%`;
+ const budgetUsed=document.getElementById('dashBudgetUsed');if(budgetUsed){const used=weeklyAvailable>0?Math.round(countedSpent/weeklyAvailable*100):0;budgetUsed.textContent=`${Math.max(0,used)}% used`;}
+ const budgetProgress=document.getElementById('dashBudgetProgress');if(budgetProgress)budgetProgress.style.width=`${Math.min(100,weeklyAvailable>0?countedSpent/weeklyAvailable*100:0)}%`;
  const positionBudget=document.getElementById('dashPositionBudget');if(positionBudget)positionBudget.textContent=money(weeklyAvailable);
  const remainingLabel=document.getElementById('dashRemainingLabel');if(remainingLabel)remainingLabel.textContent=dashboardSafeRange==='week'?'Weekly remaining':'Monthly remaining';
  const remaining=selectedPosition;
@@ -1445,8 +1460,7 @@ function householdMonthPeriodAvailable(period,base){
 }
 function householdPeriodAllocation(period,base){
  // A chart period's own allocation: one daily household allowance for each of
- // its days inside the month. This is the same weekly budget the Home screen
- // shows. Earlier weeks' leftover (or overage) is reported separately.
+ // its days inside the month (before rollover from earlier weeks).
  const ms=monthStart(base),me=monthEnd(base);
  const from=period.start<ms?ms:period.start,to=period.end>me?me:period.end;
  let total=0;
@@ -1464,8 +1478,8 @@ function renderAnalytics(){
  const totals=barVals.map(a=>a.reduce((x,y)=>x+y,0));
  const allocated=ps.map(p=>{
    if(analyticsRange==='year')return (data.categories||[]).reduce((sum,c)=>sum+monthlyCategoryBudget(c,p.start),0);
-   if(analyticsRange==='month')return householdPeriodAllocation(p,base);
-   return householdDailyAllowance(p.start);
+   if(analyticsRange==='month')return householdMonthPeriodAvailable(p,base);
+   return householdWeekAvailable(p.start)/7;
  });
  const total=visibleTx.filter(t=>ps.some(p=>inP(t,p))).reduce((sum,t)=>sum+t.amount,0);
  document.getElementById('analyticsLabel').textContent=analyticsRange==='week'?`${ps[0].start.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} – ${ps[6].start.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`:analyticsRange==='month'?base.toLocaleDateString('en-US',{month:'long',year:'numeric'}):String(base.getFullYear());
@@ -1478,7 +1492,7 @@ function renderAnalytics(){
  chart+='<div class="chartPlot">';[.25,.5,.75,1].forEach(v=>chart+=`<div class="gridLine" style="bottom:${v*100}%"></div>`);chart+='</div>';
  ps.forEach((period,i)=>{
    const tot=totals[i]||0,budget=allocated[i]||0,barHeight=scaleMax?Math.min(100,tot/scaleMax*100):0;
-   const budgetHeight=scaleMax?Math.min(100,budget/scaleMax*100):0;
+   const budgetHeight=scaleMax?Math.max(0,Math.min(100,budget/scaleMax*100)):0;
    const barClass=analyticsRange==='month'?'monthBarClickable':'';
    const click=analyticsRange==='month'?`onclick="openAnalyticsBarModal(${i})" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openAnalyticsBarModal(${i})}"` : '';
    chart+=`<div class="barGroup ${barClass}" ${click}><div class="stack" style="height:${barHeight}%">${(data.categories||[]).map((c,j)=>barVals[i][j]>0?`<div class="seg" style="height:${tot?barVals[i][j]/tot*100:0}%;background:${c.color}"></div>`:'').join('')}</div>`;
@@ -1488,8 +1502,8 @@ function renderAnalytics(){
    chart+=`<div class="xlabel">${esc(period.label)}</div></div>`;
  });
  if(analyticsRange==='week'){
-   // Same weekly budget as the Home screen, spread over the seven days.
-   const dailyAvailable=householdWeekAllocation(ps[0].start)/7,dailyHeight=scaleMax?Math.min(100,dailyAvailable/scaleMax*100):0;
+   // Same weekly number as the Home screen (budget plus rollover), per day.
+   const dailyAvailable=householdWeekAvailable(ps[0].start)/7,dailyHeight=scaleMax?Math.max(0,Math.min(100,dailyAvailable/scaleMax*100)):0;
    chart+=`<div class="chartPlot"><div class="weekAllocation" data-label="${esc(money(dailyAvailable))}/day" style="bottom:${dailyHeight}%"></div></div>`;
  }
  chart+='</div></div><div class="chartScaleNote"><span>Bars = spending</span><span>━ Allocation</span></div>';
@@ -1524,7 +1538,7 @@ function openAnalyticsBarModal(index){
  const allocation=householdPeriodAllocation(p,base);
  const rollover=Math.round((householdMonthPeriodAvailable(p,base)-allocation)*100)/100;
  const available=allocation+rollover;
- const balance=available-spent;
+ const balance=Math.round((available-spent)*100)/100;
  const fmt=d=>d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
  const byCat=(data.categories||[]).map(c=>({name:c.name,amount:monthTx.filter(t=>t.category===c.name).reduce((sum,t)=>sum+t.amount,0)})).filter(x=>x.amount>0).sort((a,b)=>b.amount-a.amount);
  const body=document.getElementById('analyticsBarModalBody');
