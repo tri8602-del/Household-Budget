@@ -1473,7 +1473,7 @@ function renderAnalytics(){
  const ps=periods(analyticsRange,base),tx=data.transactions||[],visibleTx=tx.filter(matchesExpense);
  const vals=ps.map(p=>(data.categories||[]).map(c=>visibleTx.filter(t=>t.category===c.name&&inP(t,p)).reduce((sum,t)=>sum+t.amount,0)));
  // Bars are compared with the allocation line, so they only include spending
- // that counts toward the budget (the legend and totals still show everything).
+ // that counts toward the budget. The header total matches the bars; the legend still shows everything.
  const barVals=ps.map(p=>(data.categories||[]).map(c=>visibleTx.filter(t=>t.category===c.name&&countsTowardBudget(t)&&inP(t,p)).reduce((sum,t)=>sum+t.amount,0)));
  const totals=barVals.map(a=>a.reduce((x,y)=>x+y,0));
  const allocated=ps.map(p=>{
@@ -1481,7 +1481,7 @@ function renderAnalytics(){
    if(analyticsRange==='month')return householdMonthPeriodAvailable(p,base);
    return householdWeekAvailable(p.start)/7;
  });
- const total=visibleTx.filter(t=>ps.some(p=>inP(t,p))).reduce((sum,t)=>sum+t.amount,0);
+ const total=visibleTx.filter(t=>countsTowardBudget(t)&&ps.some(p=>inP(t,p))).reduce((sum,t)=>sum+t.amount,0);
  document.getElementById('analyticsLabel').textContent=analyticsRange==='week'?`${ps[0].start.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} – ${ps[6].start.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`:analyticsRange==='month'?base.toLocaleDateString('en-US',{month:'long',year:'numeric'}):String(base.getFullYear());
  const nav=document.getElementById('analyticsMonthNav');
  if(nav){nav.classList.remove('hidden');nav.querySelector('.today').textContent=analyticsRange==='year'?'This year':'Today';}
