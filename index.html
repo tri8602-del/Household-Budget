@@ -1536,8 +1536,8 @@ function openAnalyticsBarModal(index){
  const spent=monthTx.filter(countsTowardBudget).reduce((sum,t)=>sum+t.amount,0);
  const notCounted=monthTx.filter(t=>!countsTowardBudget(t)).reduce((sum,t)=>sum+t.amount,0);
  const allocation=householdPeriodAllocation(p,base);
- const rollover=Math.round((householdMonthPeriodAvailable(p,base)-allocation)*100)/100;
- const available=allocation+rollover;
+ const available=householdMonthPeriodAvailable(p,base);
+ const rollover=Math.round((available-allocation)*100)/100;
  const balance=Math.round((available-spent)*100)/100;
  const fmt=d=>d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
  const byCat=(data.categories||[]).map(c=>({name:c.name,amount:monthTx.filter(t=>t.category===c.name).reduce((sum,t)=>sum+t.amount,0)})).filter(x=>x.amount>0).sort((a,b)=>b.amount-a.amount);
