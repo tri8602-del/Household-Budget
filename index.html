@@ -203,6 +203,7 @@ body.modal-open .modal{z-index:130!important}
   .app{padding-bottom:142px}
   .nav{display:none !important}
   .mobileNav{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:auto;position:fixed;left:0;right:0;bottom:0;z-index:80;background:rgba(255,255,255,.98);border-top:1px solid rgba(60,80,78,.12);box-shadow:0 -8px 24px rgba(40,50,48,.10);padding:7px 8px calc(7px + env(safe-area-inset-bottom));gap:2px 4px;}
+  .toast{bottom:calc(124px + env(safe-area-inset-bottom));z-index:90;max-width:calc(100vw - 32px);text-align:center}
   .mobileNav button{border:0;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:5px 2px;min-height:48px;font-weight:800}
   .mobileNav button span{font-size:18px;line-height:18px;display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px}
   .mobileNav button span svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -221,7 +222,7 @@ body.modal-open .modal{z-index:130!important}
 <body>
 
 <div id="setupScreen" class="setup hidden"><div class="card">
-<div class="eyebrow">HOUSEHOLD BUDGET · <span id="setupVersionLabel">V106.2.0</span></div><h1>Welcome to Household Budget.</h1>
+<div class="eyebrow">HOUSEHOLD BUDGET · <span id="setupVersionLabel">V106.2.1</span></div><h1>Welcome to Household Budget.</h1>
 <p>Choose how you want to get started.</p>
 <div id="setupWelcome" class="setupStep active">
   <div style="display:grid;gap:10px;margin-top:18px">
@@ -365,7 +366,7 @@ body.modal-open .modal{z-index:130!important}
 
 <main id="view-bills" class="hidden"><div class="card"><div class="row"><div><div class="sectionTitle">Bills & fixed expenses</div><div class="muted" style="font-size:13px;margin-top:3px">Everything here is part of the monthly budget.</div></div><button class="btn small" onclick="openModal('bill')">＋ Add bill</button></div><div id="billTotal" class="billTotal"><div class="label">MONTHLY BILL TOTAL</div><div id="billTotalValue" class="value">$0</div><div class="note">Annual bills are shown as their monthly equivalent.</div></div><div id="billList"></div></div></main>
 
-<main id="view-settings" class="hidden"><div class="card"><div class="sectionTitle">Budget settings</div><div class="muted" style="font-size:12px;margin-top:4px">App version <strong id="appVersionLabel">V106.2.0</strong></div><label>Savings goal</label><input id="settingsSavings" type="number" step="0.01"><div class="actions"><button class="btn" onclick="saveSettings()">Save settings</button></div></div><div class="card"><div class="sectionTitle">Share</div><p id="sharingStatus" class="muted">This budget is currently stored on this device only.</p><div id="sharingHouseholdInfo" class="backupBox hidden"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="openShareModal()">Share</button><button class="btn secondary" onclick="forceSyncNow()">↻ Sync now</button><button id="leaveHouseholdBtn" class="btn danger hidden" onclick="leaveSharedHousehold()">Stop sharing</button></div><p class="muted" style="font-size:11px;margin-top:10px">Share this budget between devices using a private household code. The existing backup system still works as a safety net.</p></div><div class="card"><div class="sectionTitle">Data</div><p class="muted">Export a backup before changing devices or browsers. Backups are also useful if you ever want an offline copy of your budget.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary" onclick="exportData()">Export Backup</button><button class="btn secondary" onclick="document.getElementById('importFile').click()">Import Backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"><button class="btn danger" onclick="resetAll()">Clear all data</button></div></div><div class="card"><div class="sectionTitle">Categories</div><div class="muted" style="font-size:13px;margin-bottom:10px">Choose the color, icon, and order for each spending category.</div><button class="btn" onclick="openCategorySettings()">Manage categories</button></div><div class="legalFooter">Household Budget • © 2026 Lindsay Shay</div></main>
+<main id="view-settings" class="hidden"><div class="card"><div class="sectionTitle">Budget settings</div><div class="muted" style="font-size:12px;margin-top:4px">App version <strong id="appVersionLabel">V106.2.1</strong></div><label>Savings goal</label><input id="settingsSavings" type="number" step="0.01"><div class="actions"><button class="btn" onclick="saveSettings()">Save settings</button></div></div><div class="card"><div class="sectionTitle">Share</div><p id="sharingStatus" class="muted">This budget is currently stored on this device only.</p><div id="sharingHouseholdInfo" class="backupBox hidden"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="openShareModal()">Share</button><button class="btn secondary" onclick="forceSyncNow()">↻ Sync now</button><button id="leaveHouseholdBtn" class="btn danger hidden" onclick="leaveSharedHousehold()">Stop sharing</button></div><p class="muted" style="font-size:11px;margin-top:10px">Share this budget between devices using a private household code. The existing backup system still works as a safety net.</p></div><div class="card"><div class="sectionTitle">Data</div><p class="muted">Export a backup before changing devices or browsers. Backups are also useful if you ever want an offline copy of your budget.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary" onclick="exportData()">Export Backup</button><button class="btn secondary" onclick="document.getElementById('importFile').click()">Import Backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"><button class="btn danger" onclick="resetAll()">Clear all data</button></div></div><div class="card"><div class="sectionTitle">Categories</div><div class="muted" style="font-size:13px;margin-bottom:10px">Choose the color, icon, and order for each spending category.</div><button class="btn" onclick="openCategorySettings()">Manage categories</button></div><div class="legalFooter">Household Budget • © 2026 Lindsay Shay</div></main>
 </div>
 
 <div id="modalWrap" class="modalWrap" onclick="if(event.target===this)closeModal()"><div class="modal"><button class="close" onclick="closeModal()">×</button><div id="modalTitle" class="modalTitle"></div><div id="modalBody"></div></div></div><div id="toast" class="toast"></div>
@@ -375,7 +376,7 @@ body.modal-open .modal{z-index:130!important}
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
 <script>
 const KEY='householdBudgetAlpha_v1';
-const APP_VERSION='V106.2.0';
+const APP_VERSION='V106.2.1';
 let cloud={app:null,db:null,auth:null,uid:null,householdId:null,unsubscribe:null,ready:false,writing:false,savePending:false,lastLocalMutationAt:0,baseRevision:0,baseData:null,localDirty:false,joining:false};
 const colors=['#4F8EF7','#F4A300','#C65CEB','#35AFA0','#E85D75','#7A6FF0','#55A630','#F28482'];
 const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],incomeOverrides:{},manualIncomePayments:[],bonusIncomes:[],bills:[],billOverrides:{},categories:[],transactions:[],people:['Shared'],creditCards:[],creditCardPayments:[],creditCardHistory:{},creditCardOverrides:{},paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}],expenseOrder:[],categoryBudgetOverrides:{}};
@@ -495,7 +496,10 @@ function getSharingConfig(){try{const saved=JSON.parse(localStorage.getItem(SHAR
 function getSharingMeta(){try{return JSON.parse(localStorage.getItem(SHARING_META_KEY)||'null')}catch(e){return null}}
 function saveSharingMeta(x){localStorage.setItem(SHARING_META_KEY,JSON.stringify(x))}
 function validFirebaseConfig(c){return !!(c&&c.apiKey&&c.authDomain&&c.projectId&&c.appId)}
-function deepEqual(a,b){try{return JSON.stringify(a)===JSON.stringify(b)}catch(e){return false}}
+// Compare by content. Firestore does not keep the order of an object's keys,
+// so the same record can come back with its fields in a different order.
+function stableJSON(x){if(Array.isArray(x))return '['+x.map(stableJSON).join(',')+']';if(x&&typeof x==='object')return '{'+Object.keys(x).sort().filter(k=>x[k]!==undefined).map(k=>JSON.stringify(k)+':'+stableJSON(x[k])).join(',')+'}';return JSON.stringify(x===undefined?null:x)}
+function deepEqual(a,b){try{return stableJSON(a)===stableJSON(b)}catch(e){return false}}
 function clone(x){return structuredClone(x)}
 function saveCloudSyncState(){try{if(!cloud.householdId)return;localStorage.setItem(CLOUD_SYNC_STATE_KEY,JSON.stringify({householdId:cloud.householdId,baseRevision:cloud.baseRevision||0,baseData:cloud.baseData||null,localDirty:!!cloud.localDirty}))}catch(e){console.warn('Could not save sync state',e)}}
 function loadCloudSyncState(){try{const x=JSON.parse(localStorage.getItem(CLOUD_SYNC_STATE_KEY)||'null');if(x&&x.householdId===cloud.householdId){cloud.baseRevision=Number(x.baseRevision)||0;cloud.baseData=x.baseData?clone(x.baseData):null;cloud.localDirty=!!x.localDirty}}catch(e){console.warn('Could not load sync state',e)}}
@@ -579,14 +583,20 @@ function subscribeToHousehold(){
   if(!cloud.db||!cloud.householdId)return;
   if(cloud.unsubscribe)cloud.unsubscribe();
   const ref=cloud.db.collection('households').doc(cloud.householdId);
-  cloud.unsubscribe=ref.onSnapshot(async snap=>{
+  cloud.deferredSnapshot=null;
+  cloud.unsubscribe=ref.onSnapshot(snap=>applyHouseholdSnapshot(snap),err=>{console.error('Sharing listener error',err);showToast('Sharing connection lost')});
+}
+function modalIsOpen(){return !!document.getElementById('modalWrap')?.classList.contains('open')}
+function applyDeferredSnapshot(){const snap=cloud.deferredSnapshot;if(!snap)return;cloud.deferredSnapshot=null;applyHouseholdSnapshot(snap)}
+function applyHouseholdSnapshot(snap){
     if(cloud.joining)return;
-    if(!snap.exists)return;
+    if(!snap.exists||snap.id!==cloud.householdId)return;
     const remote=snap.data();if(!remote.joinCode||!remote.data)return;
-    // Do not let an in-flight listener snapshot repaint local edits while the
-    // safe transaction is publishing them. The post-write snapshot will arrive
-    // after the transaction completes and establish the new base.
-    if(cloud.writing)return;
+    // Hold an update that arrives while this device is publishing its own
+    // changes, or while a form is open (the form's Save still refers to the
+    // records as they were when it opened). The latest held update is applied
+    // as soon as the save finishes or the form closes.
+    if(cloud.writing||modalIsOpen()){cloud.deferredSnapshot=snap;return}
     const remoteRevision=Number(remote.revision||0);
     const incoming=prepareIncoming(remote);
     // First connection to a legacy household: establish a base without erasing
@@ -607,7 +617,6 @@ function subscribeToHousehold(){
       }
     }
     if(cloud.localDirty)cloudSaveIfConnected();
-  },err=>{console.error('Sharing listener error',err);showToast('Sharing connection lost')});
 }
 async function cloudSaveIfConnected(){
   if(!cloud.ready||!cloud.db||!cloud.householdId)return;
@@ -632,7 +641,9 @@ async function cloudSaveIfConnected(){
         else merged=mergeThreeWay(base,localSnapshot,remoteData);
         ensureIdsFor(merged);normalizePaymentDataFor(merged);
         const nextRevision=Math.max(remoteRevision,expectedRevision)+1;
-        tx.set(ref,{data:merged,revision:nextRevision,clientUpdatedAt:Date.now(),updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:cloud.uid},{merge:true});
+        // update() replaces the whole budget. set(...,{merge:true}) would merge maps
+        // key by key, so a deleted bill skip or paycheck edit could never be removed.
+        tx.update(ref,{data:merged,revision:nextRevision,clientUpdatedAt:Date.now(),updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:cloud.uid});
         committedData=clone(merged);committedRevision=nextRevision;
       });
       if(committedData){
@@ -641,8 +652,12 @@ async function cloudSaveIfConnected(){
       localStorage.setItem(KEY,JSON.stringify(data));saveCloudSyncState();render();updateSharingUI();
     }
   }catch(e){console.error('Cloud save failed',e);cloud.localDirty=true;saveCloudSyncState();showToast('Saved here. Sync will retry when connected');}
-  finally{cloud.writing=false;if(cloud.savePending)cloudSaveIfConnected();}
+  finally{cloud.writing=false;if(cloud.savePending)cloudSaveIfConnected();else applyDeferredSnapshot();}
 }
+// Changes saved while offline are sent as soon as the connection or the app comes back.
+function retryPendingSync(){if(cloud.ready&&cloud.householdId&&cloud.localDirty&&!cloud.joining)setTimeout(cloudSaveIfConnected,1000)}
+window.addEventListener('online',retryPendingSync);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)retryPendingSync()});
 function normalizePaymentDataFor(target){
   target.manualIncomePayments=Array.isArray(target.manualIncomePayments)?target.manualIncomePayments:[];
   target.creditCards=Array.isArray(target.creditCards)?target.creditCards:[];
@@ -761,7 +776,7 @@ function updateSharingUI(){
 }
 function leaveSharedHousehold(){
   if(!confirm('Stop syncing this device with the shared household? Your current data will stay on this device.'))return;
-  if(cloud.unsubscribe)cloud.unsubscribe();cloud.unsubscribe=null;cloud.householdId=null;cloud.ready=!!cloud.uid;localStorage.removeItem(SHARING_META_KEY);clearCloudSyncState();updateSharingUI();showToast('Sharing stopped on this device');
+  if(cloud.unsubscribe)cloud.unsubscribe();cloud.unsubscribe=null;cloud.deferredSnapshot=null;cloud.householdId=null;cloud.ready=!!cloud.uid;localStorage.removeItem(SHARING_META_KEY);clearCloudSyncState();updateSharingUI();showToast('Sharing stopped on this device');
 }
 function showToast(t){const e=document.getElementById('toast');e.textContent=t;e.style.display='block';clearTimeout(window._toast);window._toast=setTimeout(()=>e.style.display='none',1800)}
 
@@ -1636,10 +1651,10 @@ function updateIncomeFormFields(){
  if(help)help.style.display=manual?'':'none';
  if(range)range.style.display=manual?'none':'';
 }
-function billForm(b,saveFn='addBill'){const x=b||{},cards=availableCreditCards(),isCredit=x.method==='credit';return `<label>Bill / expense</label><input id="fName" value="${esc(x.name||'')}" placeholder="Mortgage, electric, phone..." required><div class="formgrid"><div><label>Amount</label><input id="fAmount" type="number" step=".01" min="0" value="${x.amount||''}" required></div><div><label>Frequency</label><select id="fFreq"><option value="monthly" ${x.frequency!=='annual'?'selected':''}>Monthly</option><option value="annual" ${x.frequency==='annual'?'selected':''}>Annual</option></select></div></div><label>When does it come out?</label><input id="fDue" type="number" min="1" max="31" value="${x.due||''}" placeholder="Day of month"><label>How is this bill paid?</label><select id="fMethod" onchange="toggleBillCreditCard()"><option value="manual" ${!isCredit&&(!x.method||x.method==='manual')?'selected':''}>Cash / other</option><option value="checking" ${!isCredit&&x.method==='checking'?'selected':''}>Cash / checking account</option><option value="credit" ${isCredit?'selected':''}>Credit card</option><option value="automatic" ${!isCredit&&x.method==='automatic'?'selected':''}>Automatic</option><option value="other" ${!isCredit&&x.method==='other'?'selected':''}>Other</option></select><div id="billCreditCardWrap" class="${isCredit?'':'hidden'}"><label>Credit card</label><select id="fCreditCard"><option value="">Choose a card</option>${cards.map(c=>`<option value="${esc(c)}" ${c===(x.creditCard||'')?'selected':''}>${esc(c)}</option>`).join('')}</select>${cards.length?'':'<div class="muted" style="font-size:11px;margin-top:4px">No credit cards have been added yet. Add one from Cash Flow → Manage cards.</div>'}</div><label>Tags <span class="muted">(optional)</span></label><input id="fBillTags" value="${esc(normalizeTags(x.tags||[]).join(', '))}" placeholder="Subscriptions, Utilities, etc." oninput="syncBillTagChoices()">${renderBillTagChoices(x.tags||[])}<label>Type</label><select id="fType"><option value="fixed" ${x.type!=='variable'?'selected':''}>Fixed amount</option><option value="variable" ${x.type==='variable'?'selected':''}>Varies month to month</option></select><div class="actions"><button type="button" class="btn ghost" onclick="closeModal()">Cancel</button><button type="button" class="btn" onclick="${saveFn}()">${b?'Save changes':'Save bill'}</button></div>`}
+function billForm(b,saveFn='addBill'){const x=b||{},cards=availableCreditCards(),isCredit=x.method==='credit';return `<label>Bill / expense</label><input id="fName" value="${esc(x.name||'')}" placeholder="Mortgage, electric, phone..." required><div class="formgrid"><div><label>Amount</label><input id="fAmount" type="number" step=".01" min="0" value="${x.amount||''}" required></div><div><label>Frequency</label><select id="fFreq"><option value="monthly" ${x.frequency!=='annual'?'selected':''}>Monthly</option><option value="annual" ${x.frequency==='annual'?'selected':''}>Annual</option></select></div></div><label>When does it come out?</label><input id="fDue" type="number" min="1" max="31" value="${x.due||''}" placeholder="Day of month"><label>How is this bill paid?</label><select id="fMethod" onchange="toggleBillCreditCard()"><option value="manual" ${!isCredit&&(!x.method||x.method==='manual')?'selected':''}>Cash / other</option><option value="checking" ${!isCredit&&x.method==='checking'?'selected':''}>Cash / checking account</option><option value="credit" ${isCredit?'selected':''}>Credit card</option><option value="automatic" ${!isCredit&&x.method==='automatic'?'selected':''}>Automatic</option><option value="other" ${!isCredit&&x.method==='other'?'selected':''}>Other</option></select><div id="billCreditCardWrap" class="${isCredit?'':'hidden'}"><label>Credit card</label><select id="fCreditCard"><option value="">Choose a card</option>${cards.map(c=>`<option value="${esc(c)}" ${c===(x.creditCard||'')?'selected':''}>${esc(c)}</option>`).join('')}</select>${cards.length?'':'<div class="muted" style="font-size:11px;margin-top:4px">No credit cards have been added yet. Add one from Cash Flow → Manage cards.</div>'}</div><label>Tags <span class="muted">(optional)</span></label><input id="fBillTags" value="${esc(normalizeTags(x.tags||[]).join(', '))}" placeholder="Subscriptions, Utilities, etc." oninput="syncBillTagChoices()">${renderBillTagChoices(x.tags||[])}<label>Type</label><select id="fType"><option value="fixed" ${x.type!=='variable'?'selected':''}>Fixed amount</option><option value="variable" ${x.type==='variable'?'selected':''}>Varies month to month</option></select><div class="actions"><button type="button" class="btn ghost" onclick="closeModal()">Cancel</button><button type="button" class="btn" onclick="${saveFn.includes('(')?saveFn:saveFn+'()'}">${b?'Save changes':'Save bill'}</button></div>`}
 
 function toggleBillCreditCard(){const wrap=document.getElementById('billCreditCardWrap');if(wrap)wrap.classList.toggle('hidden',document.getElementById('fMethod')?.value!=='credit')}
-function closeModal(){document.getElementById('modalWrap').classList.remove('open');document.body.classList.remove('modal-open')}
+function closeModal(){document.getElementById('modalWrap').classList.remove('open');document.body.classList.remove('modal-open');if(cloud.deferredSnapshot)setTimeout(applyDeferredSnapshot,0)}
 
 function addCategory(name){const n=(name||'').trim();if(!n)return false;if(data.categories.some(c=>c.name.toLowerCase()===n.toLowerCase())){showToast('That category already exists');return false}data.categories.push({id:'cat_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7),name:n,budget:0,type:'fixed',percent:0,color:colors[data.categories.length%colors.length],icon:'money',allocationMode:'monthly'});save();return true}
 function addCategoryFromExpense(){const n=prompt('New category name');if(!n)return;if(addCategory(n)){const current=document.getElementById('fCat')?.value||'';openModal('expense',current);showToast('Category added')}}
@@ -1793,7 +1808,7 @@ function saveSettings(){
 }
 function showView(v){currentView=v;document.querySelectorAll('main[id^="view-"]').forEach(x=>x.classList.toggle('hidden',x.id!=="view-"+v));document.querySelectorAll('.nav button,.mobileNav button[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===v));closeMobileMore();if(v==='budget')renderBudget();if(v==='bills')renderBills();if(v==='income')renderIncome();if(v==='spending')renderAnalytics();if(v==='cashflow')renderCashflow();if(v==='dashboard')renderDashboard()}
 function closeMobileMore(){const m=document.getElementById('mobileMoreMenu');if(m)m.classList.add('hidden')}
-function render(){if(!data.setupComplete)return;ensureIncomeOverrides();normalizePaymentData();ensureExpenseOrder();ensureWeeklyRollover();document.getElementById('app').classList.remove('hidden');document.getElementById('setupScreen').classList.add('hidden');document.getElementById('settingsSavings').value=data.savingsGoal||0;const versionLabel=document.getElementById('appVersionLabel');if(versionLabel)versionLabel.textContent=APP_VERSION;renderDashboard();renderBudget();renderBills();renderIncome();renderAnalytics();renderCashflow();showView(currentView)}
+function render(){if(!data.setupComplete)return;ensureIncomeOverrides();normalizePaymentData();ensureExpenseOrder();ensureWeeklyRollover();document.getElementById('app').classList.remove('hidden');document.getElementById('setupScreen').classList.add('hidden');const savingsInput=document.getElementById('settingsSavings');if(document.activeElement!==savingsInput)savingsInput.value=data.savingsGoal||0;const versionLabel=document.getElementById('appVersionLabel');if(versionLabel)versionLabel.textContent=APP_VERSION;renderDashboard();renderBudget();renderBills();renderIncome();renderAnalytics();renderCashflow();showView(currentView)}
 function exportData(){const backup={app:'Household Budget',version:1,exportedAt:new Date().toISOString(),data};const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'}),filename='household-budget-backup-'+dateValue()+'.json';const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup exported')}
 async function restoreImportedDataToCloud(imported){
   if(!cloud.ready||!cloud.db||!cloud.householdId)return null;
@@ -1805,7 +1820,7 @@ async function restoreImportedDataToCloud(imported){
       if(!snap.exists)throw new Error('Shared household not found');
       const remote=snap.data()||{};
       committedRevision=Number(remote.revision||0)+1;
-      tx.set(ref,{data:clone(imported),revision:committedRevision,clientUpdatedAt:Date.now(),updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:cloud.uid},{merge:true});
+      tx.update(ref,{data:clone(imported),revision:committedRevision,clientUpdatedAt:Date.now(),updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:cloud.uid});
     });
     cloud.baseRevision=committedRevision;
     cloud.baseData=clone(imported);
@@ -1948,7 +1963,8 @@ function mergeBackupInto(current,imported){
   return {merged,summary};
 }
 async function replaceWithBackup(source){
-  const previousData=clone(data),previousHouseholdId=cloud.householdId,previousMeta=getSharingMeta();
+  const previousData=clone(data),previousHouseholdId=cloud.householdId,previousMeta=getSharingMeta(),previousSync={baseData:cloud.baseData,baseRevision:cloud.baseRevision,localDirty:cloud.localDirty};
+  let cloudStep=false;
   cloud.joining=true;
   if(cloud.unsubscribe){cloud.unsubscribe();cloud.unsubscribe=null;}
   try{
@@ -1965,6 +1981,7 @@ async function replaceWithBackup(source){
       const okay=confirm('Backup restored on this device. Replace the shared household with this backup too?');
       if(okay){
         cloud.householdId=previousHouseholdId;
+        cloudStep=true;
         await restoreImportedDataToCloud(data);
       }else{
         // A device-only restore cannot remain subscribed to the old remote copy,
@@ -1987,15 +2004,20 @@ async function replaceWithBackup(source){
     data=previousData;
     cloud.householdId=previousHouseholdId;
     if(previousMeta)saveSharingMeta(previousMeta);
+    if(previousHouseholdId){Object.assign(cloud,previousSync);saveCloudSyncState();}
     localStorage.setItem(KEY,JSON.stringify(data));
-    showToast('That backup could not be imported');
+    render();
+    showToast(cloudStep?'Offline, so nothing was replaced. Try again when online.':'That backup could not be imported');
   }finally{
     cloud.joining=false;
     if(cloud.ready&&cloud.householdId)subscribeToHousehold();
     updateSharingUI();
   }
 }
-function resetAll(){if(confirm('Clear all household budget data from this device?')){localStorage.removeItem(KEY);location.reload()}}
+function resetAll(){const shared=!!(cloud.householdId&&getSharingMeta());if(confirm(shared?'Clear all household budget data from this device?\n\nThis device will also stop sharing, so the shared budget on your other devices is not changed. You can join it again later.':'Clear all household budget data from this device?')){
+  // A cleared device must not stay connected with its old sync baseline, or
+  // setting it up again would publish the empty budget to the shared household.
+  if(cloud.unsubscribe)cloud.unsubscribe();localStorage.removeItem(SHARING_META_KEY);clearCloudSyncState();localStorage.removeItem(KEY);location.reload()}}
 
 const SETUP_DRAFT_KEY='householdBudgetSetupDraft_v1';
 let currentView='dashboard',analyticsRange='month',setupIncomes=[],setupBills=[],setupPeople=['Shared'],setupCats=[],setupIncomeSkipped=false,setupBillsSkipped=false,setupCategoryLimitsSkipped=false,categoryDetailName='',categoryDetailMonth=monthKey();
