@@ -723,7 +723,7 @@ function openImportBill(i){
 <div class="billProgressText" id="impBillProg${i}"></div>
 <label><input type="checkbox" id="impBillPosted${i}"> Mark this bill posted for ${esc(mon)}</label>
 <div class="importItemBtns"><button type="button" class="btn" onclick="markImportedBill(${i})">Save as bill</button></div>
-<div style="font-size:12px;opacity:.7">It won’t be added as an expense, because the bill is already in your budget. A smaller amount counts as a partial payment toward the bill.</div>`;
+<div style="font-size:12px;opacity:.7">It won’t be added as an expense, because the bill is already in your budget. For a bill paid in installments, the amount counts toward the bill; otherwise it becomes that bill’s amount for this month.</div>`;
   box.hidden=false;const sel=document.getElementById('impBillSel'+i);if(sel)sel.onchange=()=>importBillPreview(i);importBillPreview(i);
 }
 function markImportedBill(i){
@@ -733,26 +733,40 @@ function markImportedBill(i){
   data.importDecisions=data.importDecisions&&typeof data.importDecisions==='object'?data.importDecisions:{};
   const posted=!!document.getElementById('impBillPosted'+i)?.checked;
   if(posted){if(!data.billPosted||typeof data.billPosted!=='object'||Array.isArray(data.billPosted))data.billPosted={};data.billPosted[billOverrideKey(b,m)]=true}
-  const amt=Math.round(Number(x.amount)*100)/100,paidBefore=billPaidForMonth(b,m),paidAfter=paidBefore+amt,due=billAmountForMonth(b,m)||Number(b.amount)||0;
-  data.importDecisions[x.externalId]={status:'bill',billId:String(b.id||b.name),billName:b.name,month:monthKey(m),amount:amt,posted,at:new Date().toISOString()};
-  save();renderImportInboxList();showToast(due&&!billIsFull(paidAfter,due,paidBefore)?`${money(amt)} applied to ${b.name}: ${money(paidAfter)} of ${money(due)}`:`Marked as bill: ${b.name}`);
+  const amt=Math.round(Number(x.amount)*100)/100,inst=billIsInstallment(b);
+  let msg=`Marked as bill: ${b.name}`;
+  if(inst){const paidAfter=billPaidForMonth(b,m)+amt,due=billAmountForMonth(b,m)||Number(b.amount)||0;if(due&&!billIsFull(paidAfter,due))msg=`${money(amt)} applied to ${b.name}: ${money(paidAfter)} of ${money(due)}`}
+  else if(b.frequency!=='annual'&&Math.abs(billAmountForMonth(b,m)-amt)>=0.005){
+    // V106.6.0: the charged amount becomes this bill's amount for THIS month only (same as "This month" on the Bills page).
+    if(!data.billOverrides||typeof data.billOverrides!=='object'||Array.isArray(data.billOverrides))data.billOverrides={};
+    const key=billOverrideKey(b,m),prev=data.billOverrides[key]||{};const ov={...prev,amount:amt};delete ov.skipped;data.billOverrides[key]=ov;
+    msg=`${b.name}: ${m.toLocaleDateString('en-US',{month:'long'})} set to ${money(amt)}`;
+  }
+  data.importDecisions[x.externalId]={status:'bill',billId:String(b.id||b.name),billName:b.name,month:monthKey(m),amount:amt,mode:inst?'installment':'month',posted,at:new Date().toISOString()};
+  save();renderImportInboxList();showToast(msg);
 }
 // V106.6.0: installment bills. Imported items applied to a bill add up toward that
 // bill's amount for the month; they are never spending, so nothing is counted twice.
 function importAmountByExt(ext){for(const [k,x] of Object.entries(importInbox||{}))if(importExtId(k,x)===ext)return Number(x.amount)||0;return 0}
 function billPaidForMonth(b,m=new Date()){
+  if(!billIsInstallment(b))return 0;
   const id=String(b.id||b.name),mk=monthKey(m);let sum=0;
   Object.entries(data.importDecisions||{}).forEach(([ext,d])=>{if(d&&d.status==='bill'&&String(d.billId)===id&&d.month===mk)sum+=Number(d.amount!==undefined?d.amount:importAmountByExt(ext))||0});
   return Math.round(sum*100)/100;
 }
-// Full when the payments reach the bill. A single payment within 10% also counts (variable bills, small price changes).
-function billIsFull(paid,due,before=0){return due>0&&(paid>=due-0.005||(before<0.005&&paid>=due*0.9-0.005))}
+function billIsFull(paid,due){return due>0&&paid>=due-0.005}
+function billIsInstallment(b){return !!(b&&b.installments===true)}
+function toggleBillInstallments(i,on){const b=data.bills?.[i];if(!b)return;if(on)b.installments=true;else delete b.installments;save();renderBills();showToast(on?`${b.name}: paid in installments`:`${b.name}: installments off`)}
 function importBillPreview(i){
   const x=importInboxView[i],k=document.getElementById('impBillSel'+i)?.value,el=document.getElementById('impBillProg'+i),cb=document.getElementById('impBillPosted'+i);if(!x||!el||!cb)return;
   const b=k===''||k==null?null:data.bills[+k];if(!b){el.textContent='';cb.checked=false;return}
-  const m=dateOnly(x.date),due=billAmountForMonth(b,m)||Number(b.amount)||0,before=billPaidForMonth(b,m),after=Math.round((before+(Number(x.amount)||0))*100)/100;
-  el.textContent=`${money(after)} of ${money(due)} paid this month after this${before?` (${money(before)} already applied)`:''}`;
-  cb.checked=billIsFull(after,due,before)||billIsPosted(b,m);
+  const m=dateOnly(x.date),amt=Math.round((Number(x.amount)||0)*100)/100,mon=m.toLocaleDateString('en-US',{month:'long'});
+  if(!billIsInstallment(b)){const cur=billAmountForMonth(b,m),def=Number(b.amount)||0;
+    el.textContent=b.frequency==='annual'?`Yearly bill: amount stays ${money(def)}.`:Math.abs(amt-cur)<0.005?`Matches the ${mon} amount (${money(cur)}).`:`${mon} amount will be set to ${money(amt)} (usually ${money(def)}). Other months keep ${money(def)}.`;
+    cb.checked=true;return}
+  const due=billAmountForMonth(b,m)||Number(b.amount)||0,before=billPaidForMonth(b,m),after=Math.round((before+amt)*100)/100;
+  el.textContent=`Installment: ${money(after)} of ${money(due)} paid this month after this${before?` (${money(before)} already applied)`:''}`;
+  cb.checked=billIsFull(after,due)||billIsPosted(b,m);
 }
 function billProgressHTML(b,m){
   const due=billAmountForMonth(b,m)||Number(b.amount)||0,paid=billPaidForMonth(b,m);if(!due)return '';
@@ -1811,7 +1825,7 @@ function saveCategoryAllocation(i){
 
 function renderBills(){
  const now=new Date(),bills=data.bills||[];document.getElementById('billTotalValue').textContent=money(monthlyBills(now));
- document.getElementById('billList').innerHTML=bills.length?bills.map((b,i)=>{const skipped=billIsSkippedForMonth(b,now),method=b.method==='credit'?`Credit card${b.creditCard?` · ${esc(b.creditCard)}`:''}`:(b.method==='checking'?'Cash / checking account':b.method==='automatic'?'Automatic':b.method==='other'?'Other':'Manually');const tags=normalizeTags(b.tags||[]);const amountText=skipped?`Skipped for ${now.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`:`${money(billAmountForMonth(b,now))}${b.type==='variable'?' this month':''} · ${esc(b.frequency||'monthly')} · ${b.due?`day ${b.due}`:'date not set'} · ${method}`;const posted=!skipped&&billIsPosted(b,now);return `<div class="item${posted?' billPosted':''}"><div class="row"><div><strong>${esc(b.name)}</strong><div class="muted">${amountText}</div>${skipped?'':billProgressHTML(b,now)}${tags.length?`<div class="tagPills">${tags.map(t=>`<span class="tagPill">${esc(t)}</span>`).join('')}</div>`:''}</div><div style="display:flex;gap:6px;flex-wrap:wrap">${skipped?'':`<label class="postedToggle" title="Tick when this bill has actually come out of the account this month. It does not change any totals."><input type="checkbox" ${posted?'checked':''} onchange="toggleBillPosted(${i},this.checked)" aria-label="Posted: ${esc(b.name)}">Posted</label>`}<button class="btn small secondary" onclick="openModal('editBill',${i})">Edit</button><button class="btn small secondary" onclick="toggleBillMonth(${i})">${skipped?'Include this month':'Skip this month'}</button>${b.type==='variable'&&!skipped?`<button class="btn small secondary" onclick="setBillActual(${i})">This month</button>`:''}<button class="btn small danger" onclick="deleteBill(${i})">×</button></div></div></div>`}).join(''):'<div class="empty">No bills added yet.</div>';
+ document.getElementById('billList').innerHTML=bills.length?bills.map((b,i)=>{const skipped=billIsSkippedForMonth(b,now),method=b.method==='credit'?`Credit card${b.creditCard?` · ${esc(b.creditCard)}`:''}`:(b.method==='checking'?'Cash / checking account':b.method==='automatic'?'Automatic':b.method==='other'?'Other':'Manually');const tags=normalizeTags(b.tags||[]);const amountText=skipped?`Skipped for ${now.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`:`${money(billAmountForMonth(b,now))}${b.type==='variable'||data.billOverrides?.[billOverrideKey(b,now)]?.amount!=null?' this month':''} · ${esc(b.frequency||'monthly')} · ${b.due?`day ${b.due}`:'date not set'} · ${method}`;const posted=!skipped&&billIsPosted(b,now);return `<div class="item${posted?' billPosted':''}"><div class="row"><div><strong>${esc(b.name)}</strong><div class="muted">${amountText}</div>${skipped||!billIsInstallment(b)?'':billProgressHTML(b,now)}${tags.length?`<div class="tagPills">${tags.map(t=>`<span class="tagPill">${esc(t)}</span>`).join('')}</div>`:''}</div><div style="display:flex;gap:6px;flex-wrap:wrap">${skipped?'':`<label class="postedToggle" title="Turn on if this bill comes out in several pieces each month. Imported pieces then add up toward it."><input type="checkbox" ${billIsInstallment(b)?'checked':''} onchange="toggleBillInstallments(${i},this.checked)" aria-label="Paid in installments: ${esc(b.name)}">Paid in installments</label><label class="postedToggle" title="Tick when this bill has actually come out of the account this month. It does not change any totals."><input type="checkbox" ${posted?'checked':''} onchange="toggleBillPosted(${i},this.checked)" aria-label="Posted: ${esc(b.name)}">Posted</label>`}<button class="btn small secondary" onclick="openModal('editBill',${i})">Edit</button><button class="btn small secondary" onclick="toggleBillMonth(${i})">${skipped?'Include this month':'Skip this month'}</button>${b.type==='variable'&&!skipped?`<button class="btn small secondary" onclick="setBillActual(${i})">This month</button>`:''}<button class="btn small danger" onclick="deleteBill(${i})">×</button></div></div></div>`}).join(''):'<div class="empty">No bills added yet.</div>';
 }
 function deleteBill(i){if(!data.bills?.[i])return;const n=data.bills[i].name;if(confirm(`Delete ${n}?`)){data.bills.splice(i,1);save();showToast('Deleted '+n)}}
 
