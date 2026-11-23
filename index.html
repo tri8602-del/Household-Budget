@@ -228,6 +228,47 @@ body.modal-open .modal{z-index:130!important}
   .mobileMoreMenu{display:none !important}
   .safeWeekNav{display:flex !important;justify-content:center !important;align-items:center;gap:8px;width:100%;margin:12px auto 16px}
 }
+
+
+/* V106.8.0 Reconcile */
+.recAccountGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+@media(min-width:700px){.recAccountGrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.recAccountCard{text-align:left;border:1px solid var(--line);background:#fafbfa;border-radius:14px;padding:12px;color:var(--ink)}
+.recAccountCard.active{border-color:var(--accent);background:var(--accent2);box-shadow:0 0 0 2px rgba(66,107,90,.15)}
+.recAccountCard.isDone .recAccountStatus{color:var(--accent)}
+.recAccountName{font-weight:850;font-size:13px}
+.recAccountStatus{font-size:12px;font-weight:800;color:var(--muted);margin-top:2px}
+.recToolbar{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin-bottom:12px}
+.recPeriod{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px;font-size:13px;font-weight:750}
+.recPeriod input[type=date]{width:auto;min-width:150px;padding:8px 10px}
+.recDrop{border:2px dashed #c9d2cb;border-radius:18px;padding:22px 16px;text-align:center;background:#f7f9f7}
+.recDrop.drag{border-color:var(--accent);background:var(--accent2)}
+.recSummaryGrid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:12px}
+@media(min-width:700px){.recSummaryGrid{grid-template-columns:1fr 1fr}}
+.recSumCol{background:#f7f9f7;border:1px solid var(--line);border-radius:14px;padding:12px}
+.recSumRow{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:6px 0;font-size:13px;border-bottom:1px solid #eef1ee}
+.recSumRow:last-child{border-bottom:0}
+.recBalInput{width:120px;padding:6px 8px;text-align:right;font-weight:800}
+.recDiff{margin-top:14px;padding:12px 14px;border-radius:14px;font-weight:850;font-size:16px}
+.recDiff.ok{background:var(--accent2);color:var(--accent)}
+.recDiff.off{background:#f7e7e6;color:var(--danger)}
+.recLine{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0 0;background:#fff}
+.recLine.isReview{border-color:#e2d2a8;background:#fffdf6}
+.recLine.isMissing{border-color:#e4c7c6;background:#fffafa}
+.recLine.isExtra{border-color:#d5d8d5;background:#fafbfa}
+.recLine.isPay{background:#f7f9f7}
+.recLineTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.recLineMeta{font-size:12px;color:var(--muted);margin-top:4px}
+.recItemBtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.recBadge{display:inline-flex;padding:2px 7px;border-radius:8px;background:var(--accent2);color:var(--accent);font-size:10px;font-weight:800;margin-left:6px;vertical-align:middle}
+.recBadgePay{background:#eef1ee;color:var(--ink)}
+.recBadgeIn{background:#e8f4ea;color:#2d6a3e}
+.recBadgeBill{background:#eef1ee;color:var(--accent)}
+.recBadgeMute{background:#eef1ee;color:var(--muted)}
+.recAddPanel{margin-top:10px;padding-top:8px;border-top:1px solid var(--line)}
+.recActionsCard .recItemBtns{margin-top:0}
+.recHero{margin-bottom:4px}
+@media(max-width:650px){.recBalInput{width:100px}.recPeriod input[type=date]{min-width:0;flex:1}}
 </style>
 
 
@@ -238,7 +279,7 @@ body.modal-open .modal{z-index:130!important}
 <body>
 
 <div id="setupScreen" class="setup hidden"><div class="card">
-<div class="eyebrow">HOUSEHOLD BUDGET · <span id="setupVersionLabel">V106.7.0</span></div><h1>Welcome to Household Budget.</h1>
+<div class="eyebrow">HOUSEHOLD BUDGET · <span id="setupVersionLabel">V106.8.0</span></div><h1>Welcome to Household Budget.</h1>
 <p>Choose how you want to get started.</p>
 <div id="setupWelcome" class="setupStep active">
   <div style="display:grid;gap:10px;margin-top:18px">
@@ -260,7 +301,7 @@ body.modal-open .modal{z-index:130!important}
 <div id="app" class="app hidden">
 <div class="top"><div class="brand">Household Budget</div><button class="btn small secondary" onclick="showView('settings')">⚙︎</button></div>
 <div class="nav">
-<button data-view="dashboard" class="active" onclick="showView('dashboard')"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21v-6h6v6"/></svg></span><span>Dashboard</span></button><button data-view="spending"  onclick="showView('spending')"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9h-9z"/><path d="M14 3v7h7"/></svg></span><span>Spending</span></button><button data-view="budget"  onclick="showView('budget')"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg></span><span>Budget</span></button><button data-view="cashflow"  onclick="showView('cashflow')"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M7 4v16M17 7a4 4 0 0 0-4-3H10a3 3 0 0 0 0 6h4a3 3 0 1 1 0 6H7"/></svg></span><span>Cash Flow</span></button><button data-view="income"  onclick="showView('income')"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M3 7h18v10H3z"/><path d="M12 5v14M8 9h8"/></svg></span><span>Income</span></button><button data-view="bills"  onclick="showView('bills')"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg></span><span>Bills</span></button><button data-view="settings"  onclick="showView('settings')"><span class="navIcon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.12 2.12-.06-.06A1.7 1.7 0 0 0 15.74 18a1.7 1.7 0 0 0-1 1.55V20h-3v-.45A1.7 1.7 0 0 0 10.74 18a1.7 1.7 0 0 0-1.88 1l-.06.06-2.12-2.12.06-.06A1.7 1.7 0 0 0 7.74 15a1.7 1.7 0 0 0-1.55-1H5.74v-3h.45A1.7 1.7 0 0 0 7.74 10a1.7 1.7 0 0 0-1-1.88L6.68 8 8.8 5.88l.06.06A1.7 1.7 0 0 0 10.74 7a1.7 1.7 0 0 0 1-1.55V5h3v.45A1.7 1.7 0 0 0 15.74 7a1.7 1.7 0 0 0 1.88-1l.06-.06L19.8 8l-.06.06A1.7 1.7 0 0 0 18.74 10a1.7 1.7 0 0 0 1.55 1h.45v3h-.45A1.7 1.7 0 0 0 19.4 15z"/></svg></span><span>Settings</span></button>
+<button data-view="dashboard" class="active" onclick="showView('dashboard')"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21v-6h6v6"/></svg></span><span>Dashboard</span></button><button data-view="spending"  onclick="showView('spending')"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9h-9z"/><path d="M14 3v7h7"/></svg></span><span>Spending</span></button><button data-view="budget"  onclick="showView('budget')"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg></span><span>Budget</span></button><button data-view="cashflow"  onclick="showView('cashflow')"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M7 4v16M17 7a4 4 0 0 0-4-3H10a3 3 0 0 0 0 6h4a3 3 0 1 1 0 6H7"/></svg></span><span>Cash Flow</span></button><button data-view="income"  onclick="showView('income')"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M3 7h18v10H3z"/><path d="M12 5v14M8 9h8"/></svg></span><span>Income</span></button><button data-view="bills"  onclick="showView('bills')"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg></span><span>Bills</span></button><button data-view="reconcile"  onclick="showView('reconcile')"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span>Reconcile</span></button><button data-view="settings"  onclick="showView('settings')"><span class="navIcon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.12 2.12-.06-.06A1.7 1.7 0 0 0 15.74 18a1.7 1.7 0 0 0-1 1.55V20h-3v-.45A1.7 1.7 0 0 0 10.74 18a1.7 1.7 0 0 0-1.88 1l-.06.06-2.12-2.12.06-.06A1.7 1.7 0 0 0 7.74 15a1.7 1.7 0 0 0-1.55-1H5.74v-3h.45A1.7 1.7 0 0 0 7.74 10a1.7 1.7 0 0 0-1-1.88L6.68 8 8.8 5.88l.06.06A1.7 1.7 0 0 0 10.74 7a1.7 1.7 0 0 0 1-1.55V5h3v.45A1.7 1.7 0 0 0 15.74 7a1.7 1.7 0 0 0 1.88-1l.06-.06L19.8 8l-.06.06A1.7 1.7 0 0 0 18.74 10a1.7 1.7 0 0 0 1.55 1h.45v3h-.45A1.7 1.7 0 0 0 19.4 15z"/></svg></span><span>Settings</span></button>
 </div>
 
 <div class="mobileNav" id="mobileNav">
@@ -270,6 +311,7 @@ body.modal-open .modal{z-index:130!important}
   <button data-view="cashflow" onclick="showView('cashflow')"><span>↔</span><small>Cash Flow</small></button>
   <button data-view="income" onclick="showView('income')"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18v10H3z"/><path d="M12 5v14M8 9h8"/></svg></span><small>Income</small></button>
   <button data-view="bills" onclick="showView('bills')"><span>▤</span><small>Bills</small></button>
+  <button data-view="reconcile" onclick="showView('reconcile')"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><small>Reconcile</small></button>
   <button data-view="settings" onclick="showView('settings')"><span>⚙︎</span><small>Settings</small></button>
 </div>
 <div class="mobileMoreMenu hidden" id="mobileMoreMenu"></div>
@@ -383,7 +425,8 @@ body.modal-open .modal{z-index:130!important}
 
 <main id="view-bills" class="hidden"><div class="card"><div class="row"><div><div class="sectionTitle">Bills & fixed expenses</div><div class="muted" style="font-size:13px;margin-top:3px">Everything here is part of the monthly budget.</div></div><button class="btn small" onclick="openModal('bill')">＋ Add bill</button></div><div id="billTotal" class="billTotal"><div class="label">MONTHLY BILL TOTAL</div><div id="billTotalValue" class="value">$0</div><div class="note">Annual bills are shown as their monthly equivalent.</div></div><div class="muted" style="font-size:13px;margin:12px 0 6px">Tick <strong>Posted</strong> when a bill actually comes out. It's just a reminder for you: it doesn't change any totals, and it starts fresh each month.</div><div id="billList"></div></div></main>
 
-<main id="view-settings" class="hidden"><div class="card"><div class="sectionTitle">Budget settings</div><div class="muted" style="font-size:12px;margin-top:4px">App version <strong id="appVersionLabel">V106.7.0</strong></div><label>Savings goal</label><input id="settingsSavings" type="number" step="0.01"><div class="actions"><button class="btn" onclick="saveSettings()">Save settings</button></div></div><div class="card"><div class="sectionTitle">Share</div><p id="sharingStatus" class="muted">This budget is currently stored on this device only.</p><div id="sharingHouseholdInfo" class="backupBox hidden"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="openShareModal()">Share</button><button class="btn secondary" onclick="forceSyncNow()">↻ Sync now</button><button id="leaveHouseholdBtn" class="btn danger hidden" onclick="leaveSharedHousehold()">Stop sharing</button></div><p class="muted" style="font-size:11px;margin-top:10px">Share this budget between devices using a private household code. The existing backup system still works as a safety net.</p></div><div class="card"><div class="sectionTitle">Data</div><p class="muted">Export a backup before changing devices or browsers. Backups are also useful if you ever want an offline copy of your budget.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary" onclick="exportData()">Export Backup</button><button class="btn secondary" onclick="document.getElementById('importFile').click()">Import Backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"><button class="btn danger" onclick="resetAll()">Clear all data</button></div></div><div class="card"><div class="sectionTitle">Categories</div><div class="muted" style="font-size:13px;margin-bottom:10px">Choose the color, icon, and order for each spending category.</div><button class="btn" onclick="openCategorySettings()">Manage categories</button></div><div class="legalFooter">Household Budget • © 2026 Lindsay Shay</div></main>
+<main id="view-settings" class="hidden"><div class="card"><div class="sectionTitle">Budget settings</div><div class="muted" style="font-size:12px;margin-top:4px">App version <strong id="appVersionLabel">V106.8.0</strong></div><label>Savings goal</label><input id="settingsSavings" type="number" step="0.01"><div class="actions"><button class="btn" onclick="saveSettings()">Save settings</button></div></div><div class="card"><div class="sectionTitle">Share</div><p id="sharingStatus" class="muted">This budget is currently stored on this device only.</p><div id="sharingHouseholdInfo" class="backupBox hidden"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="openShareModal()">Share</button><button class="btn secondary" onclick="forceSyncNow()">↻ Sync now</button><button id="leaveHouseholdBtn" class="btn danger hidden" onclick="leaveSharedHousehold()">Stop sharing</button></div><p class="muted" style="font-size:11px;margin-top:10px">Share this budget between devices using a private household code. The existing backup system still works as a safety net.</p></div><div class="card"><div class="sectionTitle">Data</div><p class="muted">Export a backup before changing devices or browsers. Backups are also useful if you ever want an offline copy of your budget.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn secondary" onclick="exportData()">Export Backup</button><button class="btn secondary" onclick="document.getElementById('importFile').click()">Import Backup</button><input id="importFile" class="hidden" type="file" accept=".json,application/json" onchange="importData(event)"><button class="btn danger" onclick="resetAll()">Clear all data</button></div></div><div class="card"><div class="sectionTitle">Categories</div><div class="muted" style="font-size:13px;margin-bottom:10px">Choose the color, icon, and order for each spending category.</div><button class="btn" onclick="openCategorySettings()">Manage categories</button></div><div class="legalFooter">Household Budget • © 2026 Lindsay Shay</div></main><main id="view-reconcile" class="hidden"><div id="reconcileRoot"></div></main>
+
 </div>
 
 <div id="modalWrap" class="modalWrap" onclick="if(event.target===this)closeModal()"><div class="modal"><button class="close" onclick="closeModal()">×</button><div id="modalTitle" class="modalTitle"></div><div id="modalBody"></div></div></div><div id="toast" class="toast"></div>
@@ -393,10 +436,10 @@ body.modal-open .modal{z-index:130!important}
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
 <script>
 const KEY='householdBudgetAlpha_v1';
-const APP_VERSION='V106.7.0';
+const APP_VERSION='V106.8.0';
 let cloud={app:null,db:null,auth:null,uid:null,householdId:null,unsubscribe:null,ready:false,writing:false,savePending:false,lastLocalMutationAt:0,baseRevision:0,baseData:null,localDirty:false,joining:false};
 const colors=['#4F8EF7','#F4A300','#C65CEB','#35AFA0','#E85D75','#7A6FF0','#55A630','#F28482'];
-const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],incomeOverrides:{},manualIncomePayments:[],bonusIncomes:[],bills:[],billOverrides:{},categories:[],transactions:[],people:['Shared'],creditCards:[],creditCardPayments:[],creditCardHistory:{},creditCardOverrides:{},paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}],expenseOrder:[],categoryBudgetOverrides:{}};
+const blank={version:1,setupComplete:false,savingsGoal:500,incomes:[],incomeOverrides:{},manualIncomePayments:[],bonusIncomes:[],bills:[],billOverrides:{},categories:[],transactions:[],people:['Shared'],creditCards:[],creditCardPayments:[],creditCardHistory:{},creditCardOverrides:{},paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}],expenseOrder:[],categoryBudgetOverrides:{},reconciliations:{}};
 var data=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank);
 data.incomes=data.incomes||[];data.incomeOverrides=(data.incomeOverrides&&typeof data.incomeOverrides==='object')?data.incomeOverrides:{};data.manualIncomePayments=Array.isArray(data.manualIncomePayments)?data.manualIncomePayments:[];data.billOverrides=(data.billOverrides&&typeof data.billOverrides==='object')?data.billOverrides:{};data.bonusIncomes=data.bonusIncomes||[];data.bills=data.bills||[];data.transactions=data.transactions||[];data.categories=data.categories||[];data.creditCards=Array.isArray(data.creditCards)?data.creditCards:[];data.creditCardPayments=Array.isArray(data.creditCardPayments)?data.creditCardPayments:[];data.creditCardHistory=(data.creditCardHistory&&typeof data.creditCardHistory==='object')?data.creditCardHistory:{};data.creditCardOverrides=(data.creditCardOverrides&&typeof data.creditCardOverrides==='object')?data.creditCardOverrides:{};data.paymentSources=Array.isArray(data.paymentSources)&&data.paymentSources.length?data.paymentSources:[{id:'checking',name:'Checking',type:'account',primary:true},{id:'cash',name:'Cash',type:'account'},{id:'apple-cash',name:'Apple Cash',type:'account'}];data.savedTags=Array.isArray(data.savedTags)?data.savedTags.map(x=>String(x).trim()).filter(Boolean):[];data.bills=data.bills.map(b=>({...b,tags:normalizeTags(b.tags||[])}));
 data.categoryBudgetOverrides=(data.categoryBudgetOverrides&&typeof data.categoryBudgetOverrides==='object')?data.categoryBudgetOverrides:{};
@@ -1923,6 +1966,7 @@ function addPersonFromExpense(){const n=prompt('New person name');if(!n)return;c
 function addCategoryFromSettings(){const n=prompt('New category name');if(!n)return;if(addCategory(n)){openCategorySettings();showToast('Category added')}}
 
 function normalizePaymentData(){
+ data.reconciliations=(data.reconciliations&&typeof data.reconciliations==='object'&&!Array.isArray(data.reconciliations))?data.reconciliations:{};
  data.manualIncomePayments=Array.isArray(data.manualIncomePayments)?data.manualIncomePayments:[];
  data.creditCards=Array.isArray(data.creditCards)?data.creditCards:[];
  data.creditCardPayments=Array.isArray(data.creditCardPayments)?data.creditCardPayments:[];
@@ -2069,9 +2113,9 @@ function saveSettings(){
   cloudSaveIfConnected();
   showToast('Settings saved');
 }
-function showView(v){currentView=v;document.querySelectorAll('main[id^="view-"]').forEach(x=>x.classList.toggle('hidden',x.id!=="view-"+v));document.querySelectorAll('.nav button,.mobileNav button[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===v));closeMobileMore();if(v==='budget')renderBudget();if(v==='bills')renderBills();if(v==='income')renderIncome();if(v==='spending')renderAnalytics();if(v==='cashflow')renderCashflow();if(v==='dashboard')renderDashboard()}
+function showView(v){currentView=v;document.querySelectorAll('main[id^="view-"]').forEach(x=>x.classList.toggle('hidden',x.id!=="view-"+v));document.querySelectorAll('.nav button,.mobileNav button[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===v));closeMobileMore();if(v==='budget')renderBudget();if(v==='bills')renderBills();if(v==='income')renderIncome();if(v==='spending')renderAnalytics();if(v==='cashflow')renderCashflow();if(v==='dashboard')renderDashboard();if(v==='reconcile')renderReconcile()}
 function closeMobileMore(){const m=document.getElementById('mobileMoreMenu');if(m)m.classList.add('hidden')}
-function render(){if(!data.setupComplete)return;try{updateImportBanner()}catch(e){}ensureIncomeOverrides();normalizePaymentData();ensureExpenseOrder();ensureWeeklyRollover();document.getElementById('app').classList.remove('hidden');document.getElementById('setupScreen').classList.add('hidden');const savingsInput=document.getElementById('settingsSavings');if(document.activeElement!==savingsInput)savingsInput.value=data.savingsGoal||0;const versionLabel=document.getElementById('appVersionLabel');if(versionLabel)versionLabel.textContent=APP_VERSION;renderDashboard();renderBudget();renderBills();renderIncome();renderAnalytics();renderCashflow();showView(currentView)}
+function render(){if(!data.setupComplete)return;try{updateImportBanner()}catch(e){}ensureIncomeOverrides();normalizePaymentData();ensureExpenseOrder();ensureWeeklyRollover();document.getElementById('app').classList.remove('hidden');document.getElementById('setupScreen').classList.add('hidden');const savingsInput=document.getElementById('settingsSavings');if(document.activeElement!==savingsInput)savingsInput.value=data.savingsGoal||0;const versionLabel=document.getElementById('appVersionLabel');if(versionLabel)versionLabel.textContent=APP_VERSION;renderDashboard();renderBudget();renderBills();renderIncome();renderAnalytics();renderCashflow();try{renderReconcile()}catch(e){};showView(currentView)}
 function exportData(){const backup={app:'Household Budget',version:1,exportedAt:new Date().toISOString(),data};const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'}),filename='household-budget-backup-'+dateValue()+'.json';const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup exported')}
 async function restoreImportedDataToCloud(imported){
   if(!cloud.ready||!cloud.db||!cloud.householdId)return null;
@@ -2321,6 +2365,1107 @@ function startNewBudget(){document.querySelectorAll('.setupStep').forEach(s=>s.c
 function setupNext(step){saveSetupDraft();if(step===2){collectSetupIncomes();if(setupIncomes.length)setupIncomeSkipped=false;if(!setupIncomeSkipped&&!setupIncomes.length){showToast('Add income or choose “I’ll set this up later”');return}renderSetupBillChoices(collectSetupBillDraft());renderSetupBills();}if(step===3){collectSetupBills();if(setupBills.length)setupBillsSkipped=false;renderSetupPeople();}if(step===4){renderSetupPeople();}if(step===5){renderSetupCategoryChoices();renderSetupCats();}if(step===6&&!setupCats.length){showToast('Choose at least one category, or go back and choose “No, I’ll do this later”');return}document.querySelectorAll('.setupStep').forEach(s=>s.classList.remove('active'));document.getElementById('setup'+step).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
 function setupChooseCategoryLimits(yes){setupCategoryLimitsSkipped=!yes;saveSetupDraft();if(yes){renderSetupCategoryChoices();renderSetupCats();document.querySelectorAll('.setupStep').forEach(s=>s.classList.remove('active'));document.getElementById('setup5').classList.add('active');window.scrollTo({top:0,behavior:'smooth'});return;}setupCats=[];setupSuggestedCategories.forEach(n=>addSetupCategory(n));openCustomModal('That’s okay!',`<div class="backupBox"><strong>You don't need to set spending limits right now.</strong><br><br>We've added some basic categories with no limits so you can start tracking your spending. You can add, remove, or set limits for them later.</div><div class="actions"><button class="btn" onclick="closeModal();finishSetup()">Start using my budget</button></div>`);}
 function finishSetup(){collectSetupIncomes();collectSetupBills();setupPeople=Array.from(new Set((setupPeople||['Shared']).filter(Boolean)));if(!setupPeople.includes('Shared'))setupPeople.unshift('Shared');if(!setupIncomeSkipped&&!setupIncomes.length){showToast('Add income or choose “I’ll set this up later”');setupNext(1);return}if(!setupBillsSkipped&&!setupBills.length){showToast('Add a bill or choose “I’ll set this up later”');setupNext(2);return}if(!setupCats.length){setupSuggestedCategories.forEach(n=>addSetupCategory(n));}if(setupIncomeSkipped)setupIncomes=[];if(setupBillsSkipped)setupBills=[];data.incomes=setupIncomes.map((x,i)=>({...x,id:x.id||`income-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}`}));data.bills=setupBills.map(x=>({...x}));data.people=[...setupPeople];data.categories=setupCats;data.setupComplete=true;ensureIncomeOverrides();clearSetupDraft();save();}
+/* V106.8.0: Monthly statement reconciliation (PNC, Chase Sapphire, Chase Amazon, Apple Card). */
+const RECONCILE_ACCOUNTS=[
+  {id:'pnc-checking',name:'PNC Checking',short:'PNC',kind:'checking',cardName:''},
+  {id:'chase-sapphire',name:'Chase Sapphire',short:'Sapphire',kind:'card',cardName:'Chase Sapphire'},
+  {id:'chase-amazon',name:'Chase Amazon',short:'Amazon',kind:'card',cardName:'Chase Amazon'},
+  {id:'apple-card',name:'Apple Card',short:'Apple Card',kind:'card',cardName:'Apple Card'}
+];
+const RECONCILE_DATE_CLOSE=5,RECONCILE_DATE_REVIEW=14,RECONCILE_AMT_EPS=0.011,RECONCILE_AMT_REVIEW=15;
+let reconcileMonth=null,reconcileAccountId='pnc-checking',reconcileSession=null,reconcileBusy=false,reconcilePdfLibPromise=null,reconcileAddPanel=null;
+
+function reconcileAccount(id){return RECONCILE_ACCOUNTS.find(a=>a.id===id)||RECONCILE_ACCOUNTS[0]}
+function reconcileEnsureState(){
+  if(!data.reconciliations||typeof data.reconciliations!=='object'||Array.isArray(data.reconciliations))data.reconciliations={};
+  if(!reconcileMonth)reconcileMonth=monthKey(new Date());
+}
+function reconcileMonthDate(){const [y,m]=String(reconcileMonth||monthKey()).split('-').map(Number);return new Date(y,m-1,15)}
+function reconcileShiftMonth(d){const dt=reconcileMonthDate();reconcileSaveProgress(false);reconcileMonth=monthKey(new Date(dt.getFullYear(),dt.getMonth()+d,1));reconcileAddPanel=null;reconcileRestoreSession();renderReconcile()}
+function reconcileGoToday(){reconcileSaveProgress(false);reconcileMonth=monthKey(new Date());reconcileAddPanel=null;reconcileRestoreSession();renderReconcile()}
+function reconcileSetAccount(id){reconcileSaveProgress(false);reconcileAccountId=id;reconcileAddPanel=null;reconcileRestoreSession();renderReconcile()}
+function reconcileRound(n){return Math.round((Number(n)||0)*100)/100}
+function reconcileMonthLabel(mk){const [y,m]=String(mk).split('-').map(Number);return new Date(y,m-1,1).toLocaleDateString('en-US',{month:'long',year:'numeric'})}
+
+function parseReconcileCsvRaw(text){
+  const raw=String(text||'').replace(/^\uFEFF/,'').replace(/\r\n/g,'\n').replace(/\r/g,'\n');
+  const rows=[];let row=[],cell='',inQ=false;
+  const pushCell=()=>{row.push(cell);cell=''};
+  const pushRow=()=>{if(row.some(c=>String(c).trim()!==''))rows.push(row);row=[]};
+  for(let i=0;i<raw.length;i++){
+    const ch=raw[i],next=raw[i+1];
+    if(inQ){
+      if(ch==='"'&&next==='"'){cell+='"';i++}
+      else if(ch==='"')inQ=false;
+      else cell+=ch;
+    }else if(ch==='"')inQ=true;
+    else if(ch===',')pushCell();
+    else if(ch==='\n'){pushCell();pushRow()}
+    else cell+=ch;
+  }
+  if(cell.length||row.length){pushCell();pushRow()}
+  return rows;
+}
+function reconcileNormHeader(h){return String(h||'').replace(/^\uFEFF/,'').trim().toLowerCase().replace(/[\s_]+/g,' ').replace(/[()]/g,' ').replace(/usd/g,'usd').trim()}
+function reconcileHeaderMap(row){
+  const map={};
+  (row||[]).forEach((h,i)=>{const k=reconcileNormHeader(h);if(k)map[k]=i});
+  return map;
+}
+function reconcileCell(row,map,names){
+  for(const n of names){const i=map[reconcileNormHeader(n)];if(i!=null&&row[i]!=null&&String(row[i]).trim()!=='')return String(row[i]).trim()}
+  return '';
+}
+function reconcileParseAmount(s){
+  if(s==null||s==='')return null;
+  let t=String(s).trim();
+  if(!t||t==='-'||t==='—'||t==='–')return null;
+  const cr=/\bcr\b/i.test(t),paren=t.startsWith('(')&&t.endsWith(')');
+  const neg=t.startsWith('-')||t.endsWith('-')||paren||cr;
+  t=t.replace(/[$,()\s]/g,'').replace(/cr$/i,'').replace(/-$/,'').replace(/^-/,'');
+  if(!t)return null;
+  const n=Number(t);
+  if(!isFinite(n))return null;
+  return reconcileRound(neg?-Math.abs(n):n);
+}
+function reconcileParseDate(s,yearHint){
+  if(s==null)return '';
+  const t=String(s).trim();
+  if(!t)return '';
+  let m=t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if(m)return `${m[1]}-${String(+m[2]).padStart(2,'0')}-${String(+m[3]).padStart(2,'0')}`;
+  m=t.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+  if(m){
+    const y=+m[3]<100?2000+ +m[3]:+m[3];
+    return `${y}-${String(+m[1]).padStart(2,'0')}-${String(+m[2]).padStart(2,'0')}`;
+  }
+  m=t.match(/^([A-Za-z]{3,9})\s+(\d{1,2}),?\s+(\d{4})$/);
+  if(m){
+    const d=new Date(`${m[1]} ${m[2]}, ${m[3]}`);
+    if(!isNaN(d))return dateValue(d);
+  }
+  m=t.match(/^([A-Za-z]{3,9})\s+(\d{1,2})$/);
+  if(m){
+    const y=yearHint||new Date().getFullYear();
+    const d=new Date(`${m[1]} ${m[2]}, ${y}`);
+    if(!isNaN(d))return dateValue(d);
+  }
+  m=t.match(/^(\d{1,2})[\/\-](\d{1,2})$/);
+  if(m){
+    const y=yearHint||new Date().getFullYear();
+    return `${y}-${String(+m[1]).padStart(2,'0')}-${String(+m[2]).padStart(2,'0')}`;
+  }
+  return '';
+}
+function reconcileYearHint(text,fallbackMonth){
+  const years=[...String(text||'').matchAll(/\b(20\d{2})\b/g)].map(x=>+x[1]);
+  if(years.length)return years.sort((a,b)=>b-a)[0];
+  if(fallbackMonth)return +String(fallbackMonth).slice(0,4);
+  return new Date().getFullYear();
+}
+
+function detectReconcileAccount(text,headers){
+  const blob=(Array.isArray(headers)?headers.join(' ')+' ':'')+String(text||'');
+  const h=(headers||[]).map(reconcileNormHeader);
+  const has=n=>h.includes(reconcileNormHeader(n));
+  if(has('purchased by')||has('amount (usd)')||has('amount usd')||has('clearing date')||/apple card|daily cash|goldman sachs/i.test(blob))return 'apple-card';
+  if(/amazon prime visa|prime visa|chase amazon|amazon\.com visa|amazon reward/i.test(blob))return 'chase-amazon';
+  if(has('post date')&&has('transaction date')&&(has('type')||has('memo'))||/chase sapphire|sapphire preferred|sapphire reserve|ultimate rewards/i.test(blob))return 'chase-sapphire';
+  if(/pnc bank|pnc virtual|virtual wallet|account ending|beginning ledger|ending ledger/i.test(blob))return 'pnc-checking';
+  if(has('withdrawals')&&has('deposits'))return 'pnc-checking';
+  if(has('post date'))return 'chase-sapphire';
+  return '';
+}
+
+function reconcileLineId(line,i){
+  const base=`${line.date||''}|${reconcileRound(line.amount)}|${reconcileNormMerchant(line.merchant||line.description||'')}`;
+  return `stmt-${i}-${base.replace(/[^a-z0-9.|-]+/g,'_').slice(0,80)}`;
+}
+
+function classifyReconcileKind(accountId,desc,type,signedAmount,opts){
+  const d=String(desc||'')+' '+String(type||'');
+  const typ=String(type||'').toLowerCase();
+  if(/declin/i.test(d)||typ==='declined')return 'declined';
+  const acct=reconcileAccount(accountId);
+  if(acct.kind==='card'){
+    if(typ==='payment'||/payment thank you|autopay|online payment|mobile payment/i.test(d))return 'payment';
+    if(typ==='return'||typ==='refund'||typ==='credit'||(typ==='adjustment'&&signedAmount<0)||/refund|return|credit/i.test(typ)){
+      if(/payment/.test(typ))return 'payment';
+      return 'credit';
+    }
+    if(acct.id!=='apple-card'&&signedAmount>0&&(typ===''||/payment|credit|refund|return|interest|adjustment/i.test(typ))){
+      if(/payment thank you|payment/i.test(d))return 'payment';
+      if(/refund|return|credit/i.test(d))return 'credit';
+    }
+    if(acct.id==='apple-card'&&signedAmount<0&&(typ===''||/payment|credit|refund/i.test(typ))){
+      if(/payment/i.test(d)||typ==='payment')return 'payment';
+      return 'credit';
+    }
+    return 'purchase';
+  }
+  if(/apple ?card|gsbank|goldman|chase credit|chase crd|jpmorgan|card ?payment|credit ?crd|epay|autopay|cardmember/i.test(d))return 'payment';
+  if(/transfer to savings|online transfer|xfer|wire transfer|zelle|internal transfer/i.test(d))return 'transfer';
+  if(/payroll|direct deposit|dir dep|salary|deposit|venmo|cash ?out|ach credit|interest paid|tax refund/i.test(d)&&!/purchase|pos |debit card/i.test(d))return 'income';
+  if(/mortgage|utilities|utility|electric|duquesne|windstream|verizon|comcast|xfinity|water|sewer|insurance|robinhood|loan payment/i.test(d))return 'bill';
+  if((opts&&opts.column)==='deposit'||(signedAmount>0&&!/purchase|pos |debit|withdrawal|fee/i.test(d)))return 'income';
+  return 'expense';
+}
+
+function reconcileFinalizeLines(lines,meta,accountHint,rawText){
+  const detected=accountHint||detectReconcileAccount(rawText,(meta&&meta.headers)||[])||'';
+  const accountId=detected||accountHint||'';
+  const yearHint=reconcileYearHint(rawText,reconcileMonth);
+  const out=[];
+  (lines||[]).forEach((ln,i)=>{
+    const date=reconcileParseDate(ln.date,yearHint)||reconcileParseDate(ln.postDate,yearHint);
+    const postDate=reconcileParseDate(ln.postDate,yearHint);
+    if(!date&&ln.amount==null)return;
+    const amount=reconcileRound(Math.abs(Number(ln.amount)||0));
+    if(!amount&&ln.kind!=='declined')return;
+    const signed=ln.signedAmount!=null?reconcileRound(ln.signedAmount):(ln.amount||0);
+    const description=String(ln.description||ln.merchant||'').trim();
+    const merchant=String(ln.merchant||ln.description||'').trim();
+    const kind=ln.kind||classifyReconcileKind(accountId||'pnc-checking',description+' '+merchant,ln.type,signed,{column:ln.column});
+    const line={id:ln.id||reconcileLineId({date,amount,merchant},i),date:date||'',postDate:postDate||'',description,merchant,amount,signedAmount:signed,type:ln.type||'',category:ln.category||'',kind,accountId,raw:ln.raw||''};
+    if(kind==='declined')line.ignored=true;
+    out.push(line);
+  });
+  const dates=out.map(l=>l.date).filter(Boolean).sort();
+  const periodStart=meta.periodStart||dates[0]||'';
+  const periodEnd=meta.periodEnd||dates[dates.length-1]||'';
+  return {
+    accountId,accountName:(reconcileAccount(accountId).name||''),
+    detectedAccountId:detected,
+    fileName:meta.fileName||'',fileType:meta.fileType||'csv',
+    periodStart,periodEnd,
+    beginningBalance:meta.beginningBalance==null?null:reconcileRound(meta.beginningBalance),
+    endingBalance:meta.endingBalance==null?null:reconcileRound(meta.endingBalance),
+    statementPurchases:meta.statementPurchases==null?null:reconcileRound(meta.statementPurchases),
+    statementCredits:meta.statementCredits==null?null:reconcileRound(meta.statementCredits),
+    statementPayments:meta.statementPayments==null?null:reconcileRound(meta.statementPayments),
+    lines:out,
+    headers:meta.headers||[],
+    rawPreview:String(rawText||'').slice(0,400)
+  };
+}
+
+
+function parsePncCsv(rows){
+  const meta={headers:[],beginningBalance:null,endingBalance:null,periodStart:'',periodEnd:''};
+  let headerIdx=-1,map={};
+  const isHeader=r=>{
+    const h=r.map(reconcileNormHeader);
+    return h.some(x=>x==='date'||x==='transaction date')&&h.some(x=>['description','transaction','amount','withdrawals','deposits','memo'].includes(x));
+  };
+  rows.forEach((r,i)=>{
+    const line=r.join(' ');
+    const beg=line.match(/beginning(?: ledger)? balance[^0-9\-]*([\$(]?\s*[0-9,]+\.\d{2}\)?)/i);
+    const end=line.match(/ending(?: ledger)? balance[^0-9\-]*([\$(]?\s*[0-9,]+\.\d{2}\)?)/i);
+    const per=line.match(/statement period[^0-9]*(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})\s*(?:through|to|–|-|—)\s*(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})/i);
+    if(beg&&meta.beginningBalance==null)meta.beginningBalance=reconcileParseAmount(beg[1]);
+    if(end&&meta.endingBalance==null)meta.endingBalance=reconcileParseAmount(end[1]);
+    if(per){meta.periodStart=reconcileParseDate(per[1]);meta.periodEnd=reconcileParseDate(per[2])}
+    if(headerIdx<0&&isHeader(r)){headerIdx=i;map=reconcileHeaderMap(r);meta.headers=r}
+    r.forEach((cell,ci)=>{
+      const k=reconcileNormHeader(cell);
+      if(k==='beginning ledger balance'||k==='beginning balance'){const v=reconcileParseAmount(r[ci+1]);if(v!=null)meta.beginningBalance=v}
+      if(k==='ending ledger balance'||k==='ending balance'){const v=reconcileParseAmount(r[ci+1]);if(v!=null)meta.endingBalance=v}
+    });
+  });
+  if(headerIdx<0){
+    if(rows[0]){headerIdx=0;map=reconcileHeaderMap(rows[0]);meta.headers=rows[0]}
+  }
+  const lines=[];
+  rows.forEach((r,i)=>{
+    if(i<=headerIdx||!r.length)return;
+    if(isHeader(r))return;
+    const date=reconcileCell(r,map,['date','transaction date','posting date','trans date']);
+    if(!reconcileParseDate(date)&&!/^\d{1,2}[\/\-]/.test(date))return;
+    const desc=reconcileCell(r,map,['description','transaction','memo','payee','name'])||r.slice(1,3).join(' ');
+    const withdrawals=reconcileParseAmount(reconcileCell(r,map,['withdrawals','withdrawal','debit','debits']));
+    const deposits=reconcileParseAmount(reconcileCell(r,map,['deposits','deposit','credit','credits']));
+    let amount=reconcileParseAmount(reconcileCell(r,map,['amount','value']));
+    let signed,column;
+    if(withdrawals!=null&&withdrawals!==0){signed=-Math.abs(withdrawals);amount=Math.abs(withdrawals);column='withdrawal'}
+    else if(deposits!=null&&deposits!==0){signed=Math.abs(deposits);amount=Math.abs(deposits);column='deposit'}
+    else if(amount!=null){signed=amount;amount=Math.abs(amount);column=signed>=0?'deposit':'withdrawal'}
+    else return;
+    lines.push({date,description:desc,merchant:desc,amount,signedAmount:signed,column,type:column,raw:r.join(' | ')});
+  });
+  return {lines,meta};
+}
+
+function parseChaseCsv(rows,accountHint){
+  const headerIdx=rows.findIndex(r=>r.some(c=>/transaction date/i.test(c))&&r.some(c=>/amount/i.test(c)));
+  const hi=headerIdx>=0?headerIdx:0;
+  const map=reconcileHeaderMap(rows[hi]||[]);
+  const meta={headers:rows[hi]||[],beginningBalance:null,endingBalance:null,periodStart:'',periodEnd:''};
+  const lines=[];
+  rows.forEach((r,i)=>{
+    if(i<=hi)return;
+    const date=reconcileCell(r,map,['transaction date','trans date','date']);
+    const post=reconcileCell(r,map,['post date','posting date']);
+    if(!reconcileParseDate(date)&&!reconcileParseDate(post))return;
+    const desc=reconcileCell(r,map,['description','memo','merchant']);
+    const typ=reconcileCell(r,map,['type']);
+    const cat=reconcileCell(r,map,['category']);
+    const signed=reconcileParseAmount(reconcileCell(r,map,['amount']));
+    if(signed==null)return;
+    lines.push({date,postDate:post,description:desc,merchant:desc,amount:Math.abs(signed),signedAmount:signed,type:typ,category:cat,raw:r.join(' | ')});
+  });
+  return {lines,meta,accountHint};
+}
+
+function parseAppleCardCsv(rows){
+  const headerIdx=rows.findIndex(r=>r.some(c=>/transaction date/i.test(c))&&(r.some(c=>/amount/i.test(c))));
+  const hi=headerIdx>=0?headerIdx:0;
+  const map=reconcileHeaderMap(rows[hi]||[]);
+  const meta={headers:rows[hi]||[],beginningBalance:null,endingBalance:null};
+  const lines=[];
+  rows.forEach((r,i)=>{
+    if(i<=hi)return;
+    const typ=reconcileCell(r,map,['type','status']);
+    const date=reconcileCell(r,map,['transaction date','date']);
+    const clear=reconcileCell(r,map,['clearing date']);
+    const mer=reconcileCell(r,map,['merchant','description']);
+    const desc=reconcileCell(r,map,['description','merchant']);
+    const cat=reconcileCell(r,map,['category']);
+    const who=reconcileCell(r,map,['purchased by']);
+    const signed=reconcileParseAmount(reconcileCell(r,map,['amount (usd)','amount usd','amount']));
+    if(signed==null&&!/declin/i.test(typ))return;
+    const kind=/declin/i.test(typ)?'declined':'';
+    lines.push({date,postDate:clear,description:desc,merchant:mer||desc,amount:Math.abs(signed||0),signedAmount:signed||0,type:typ,category:cat,who,kind,raw:r.join(' | ')});
+  });
+  return {lines,meta};
+}
+
+function parseReconcileCsv(text,accountHint,fileName){
+  const rows=parseReconcileCsvRaw(text);
+  if(!rows.length)throw new Error('That file does not look like a statement CSV.');
+  const detected=accountHint||detectReconcileAccount(text,rows[0])||detectReconcileAccount(text,rows.flat().slice(0,30));
+  let parsed;
+  if(detected==='apple-card'||(rows[0]||[]).some(c=>/purchased by|amount \(usd\)|clearing date/i.test(c)))parsed=parseAppleCardCsv(rows);
+  else if(detected==='pnc-checking'||(rows[0]||[]).some(c=>/withdrawals|deposits|beginning ledger/i.test(c)))parsed=parsePncCsv(rows);
+  else parsed=parseChaseCsv(rows,detected);
+  const meta=Object.assign({},parsed.meta,{fileName:fileName||'',fileType:'csv'});
+  return reconcileFinalizeLines(parsed.lines,meta,detected||accountHint,text);
+}
+
+function reconcileExtractBalances(text){
+  const t=String(text||'').replace(/\s+/g,' ');
+  const grab=(...pats)=>{for(const p of pats){const m=t.match(p);if(m){const v=reconcileParseAmount(m[1]);if(v!=null)return v}}return null};
+  const period=t.match(/statement period[:\s]*(\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?)\s*(?:through|to|–|-|—)\s*(\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?)/i)
+    ||t.match(/(\w+ \d{1,2})\s*(?:–|-|—|to|through)\s*(\w+ \d{1,2},?\s*\d{4})/i);
+  return {
+    beginningBalance:grab(/previous balance[:\s]*\$?([\$(]?\s*[0-9,]+\.\d{2}\)?)/i,/beginning balance[:\s]*\$?([\$(]?\s*[0-9,]+\.\d{2}\)?)/i,/opening balance[:\s]*\$?([\$(]?\s*[0-9,]+\.\d{2}\)?)/i),
+    endingBalance:grab(/new balance[:\s]*\$?([\$(]?\s*[0-9,]+\.\d{2}\)?)/i,/ending balance[:\s]*\$?([\$(]?\s*[0-9,]+\.\d{2}\)?)/i,/closing balance[:\s]*\$?([\$(]?\s*[0-9,]+\.\d{2}\)?)/i,/total balance[:\s]*\$?([\$(]?\s*[0-9,]+\.\d{2}\)?)/i),
+    statementPurchases:grab(/total purchases[:\s]*\$?([\$(]?\s*[0-9,]+\.\d{2}\)?)/i,/(?:purchases|withdrawals and other debits)[:\s]*\$?([\$(]?\s*[0-9,]+\.\d{2}\)?)/i),
+    statementCredits:grab(/total (?:credits|deposits)[:\s]*\$?([\$(]?\s*[0-9,]+\.\d{2}\)?)/i,/deposits and other credits[:\s]*\$?([\$(]?\s*[0-9,]+\.\d{2}\)?)/i),
+    statementPayments:grab(/payments?(?: and other credits)?[:\s]*\$?([\$(]?\s*[0-9,]+\.\d{2}\)?)/i,/total payments[:\s]*\$?([\$(]?\s*[0-9,]+\.\d{2}\)?)/i),
+    periodStart:period?reconcileParseDate(period[1],reconcileYearHint(t)): '',
+    periodEnd:period?reconcileParseDate(period[2],reconcileYearHint(t)): ''
+  };
+}
+
+function parsePncPdfText(text){
+  const lines=String(text||'').split(/\n+/);
+  const txs=[],yearHint=reconcileYearHint(text,reconcileMonth);
+  const skip=/^(date|description|withdrawals|deposits|balance|beginning|ending|statement|page |account |total |summary|pnc bank)/i;
+  for(const line of lines){
+    const t=line.trim();if(!t||skip.test(t))continue;
+    const m2=t.match(/^(\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?)\s+(.+)$/);
+    if(!m2)continue;
+    const date=m2[1],rest=m2[2];
+    const amounts=[...rest.matchAll(/[\$(]?\s*[0-9,]+\.\d{2}\)?(?:\s*CR)?/gi)].map(x=>x[0]);
+    if(!amounts.length)continue;
+    let desc=rest;
+    amounts.forEach(a=>{desc=desc.replace(a,'')});
+    desc=desc.replace(/\s+/g,' ').trim();
+    if(/^(beginning|ending|total|balance)\b/i.test(desc))continue;
+    let withdrawals=null,deposits=null;
+    if(/CR\b/i.test(amounts[0])||/deposit|credit|payroll|venmo/i.test(desc)){deposits=reconcileParseAmount(amounts[0])}
+    else if(amounts.length>=3){withdrawals=reconcileParseAmount(amounts[0])}
+    else if(amounts.length===2){
+      if(/deposit|credit|payroll|venmo|interest|refund/i.test(desc))deposits=reconcileParseAmount(amounts[0]);
+      else withdrawals=reconcileParseAmount(amounts[0]);
+    }else{
+      if(/deposit|credit|payroll|venmo|interest|refund/i.test(desc))deposits=reconcileParseAmount(amounts[0]);
+      else withdrawals=reconcileParseAmount(amounts[0]);
+    }
+    let signed,amount,column;
+    if(withdrawals){signed=-Math.abs(withdrawals);amount=Math.abs(withdrawals);column='withdrawal'}
+    else if(deposits){signed=Math.abs(deposits);amount=Math.abs(deposits);column='deposit'}
+    else continue;
+    txs.push({date:reconcileParseDate(date,yearHint)||date,description:desc,merchant:desc,amount,signedAmount:signed,column,type:column,raw:t});
+  }
+  const meta=Object.assign({headers:[],fileType:'pdf'},reconcileExtractBalances(text));
+  return {lines:txs,meta};
+}
+
+function parseChasePdfText(text){
+  const lines=String(text||'').split(/\n+/);
+  const txs=[],yearHint=reconcileYearHint(text,reconcileMonth);
+  const skip=/^(date of|transaction|payment description|amount|previous balance|new balance|account|page |opening|closing|total |summary|chase )/i;
+  for(const line of lines){
+    const t=line.trim();if(!t||skip.test(t))continue;
+    const m=t.match(/^(\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?)\s+(?:(\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?)\s+)?(.+?)\s+(-?\$?\s*[0-9,]+\.\d{2})\s*$/);
+    if(!m)continue;
+    const date=m[1],post=m[2]||'',desc=m[3].trim(),signed=reconcileParseAmount(m[4]);
+    if(signed==null)continue;
+    if(/^(previous|new|opening|closing|total|balance|purchases|payments)\b/i.test(desc))continue;
+    txs.push({date:reconcileParseDate(date,yearHint)||date,postDate:reconcileParseDate(post,yearHint),description:desc,merchant:desc,amount:Math.abs(signed),signedAmount:signed,type:/payment/i.test(desc)?'Payment':(/return|refund|credit/i.test(desc)?'Return':'Sale'),raw:t});
+  }
+  const meta=Object.assign({headers:[],fileType:'pdf'},reconcileExtractBalances(text));
+  return {lines:txs,meta};
+}
+
+function parseAppleCardPdfText(text){
+  const lines=String(text||'').split(/\n+/);
+  const txs=[],yearHint=reconcileYearHint(text,reconcileMonth);
+  const skip=/^(statement|transactions|total |daily cash|apple card|page |balance|summary)/i;
+  for(const line of lines){
+    const t=line.trim();if(!t||skip.test(t))continue;
+    const m=t.match(/^(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}|\w{3,9}\s+\d{1,2},?\s*\d{0,4})\s+(?:(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}|\w{3,9}\s+\d{1,2},?\s*\d{0,4})\s+)?(.+?)\s+(Purchase|Payment|Refund|Credit|Declined)?\s*(-?\$?\s*[0-9,]+\.\d{2})\s*$/i);
+    if(!m){
+      const m2=t.match(/^(\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?)\s+(.+?)\s+(-?\$?\s*[0-9,]+\.\d{2})\s*$/);
+      if(!m2)continue;
+      const desc=m2[2].trim(),signed=reconcileParseAmount(m2[3]);
+      if(signed==null||/^(total|balance|daily cash)\b/i.test(desc))continue;
+      const typ=/payment/i.test(desc)?'Payment':(/refund|credit/i.test(desc)?'Refund':'Purchase');
+      txs.push({date:reconcileParseDate(m2[1],yearHint)||m2[1],description:desc,merchant:desc,amount:Math.abs(signed),signedAmount:signed,type:typ,raw:t});
+      continue;
+    }
+    const date=m[1],clear=m[2]||'',mid=m[3].trim(),typ=(m[4]||'').trim(),signed=reconcileParseAmount(m[5]);
+    if(signed==null)continue;
+    if(/^(total|balance|daily cash)\b/i.test(mid))continue;
+    txs.push({date:reconcileParseDate(date,yearHint)||date,postDate:reconcileParseDate(clear,yearHint),description:mid,merchant:mid,amount:Math.abs(signed),signedAmount:signed||0,type:typ||(/payment/i.test(mid)?'Payment':'Purchase'),raw:t});
+  }
+  const meta=Object.assign({headers:[],fileType:'pdf'},reconcileExtractBalances(text));
+  return {lines:txs,meta};
+}
+
+function parseReconcilePdfText(text,accountHint,fileName){
+  const detected=accountHint||detectReconcileAccount(text,[]);
+  let parsed;
+  if(detected==='apple-card')parsed=parseAppleCardPdfText(text);
+  else if(detected==='pnc-checking')parsed=parsePncPdfText(text);
+  else parsed=parseChasePdfText(text);
+  const meta=Object.assign({},parsed.meta,{fileName:fileName||'',fileType:'pdf'});
+  const result=reconcileFinalizeLines(parsed.lines,meta,detected||accountHint,text);
+  if(!result.periodStart||!result.periodEnd){
+    const dates=result.lines.map(l=>l.date).filter(Boolean).sort();
+    result.periodStart=result.periodStart||dates[0]||'';
+    result.periodEnd=result.periodEnd||dates[dates.length-1]||'';
+  }
+  return result;
+}
+
+function loadPdfJs(){
+  if(window.pdfjsLib)return Promise.resolve(window.pdfjsLib);
+  if(reconcilePdfLibPromise)return reconcilePdfLibPromise;
+  reconcilePdfLibPromise=new Promise((resolve,reject)=>{
+    const sources=[window.PDFJS_SRC,'/vendor/pdfjs/pdf.min.js','https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js','https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js'].filter(Boolean);
+    const tryNext=i=>{
+      if(i>=sources.length){const err=new Error('PDF statements need a short download the first time (PDF.js). You can still upload a CSV, or try again when you have a connection.');reconcilePdfLibPromise=null;reject(err);return}
+      const src=sources[i],s=document.createElement('script');
+      s.src=src;
+      s.onload=()=>{
+        const lib=window.pdfjsLib;
+        if(!lib){tryNext(i+1);return}
+        try{lib.GlobalWorkerOptions.workerSrc=window.PDFJS_WORKER_SRC||(src.indexOf('/vendor/')===0||src.indexOf('vendor/pdfjs')>=0?'/vendor/pdfjs/pdf.worker.min.js':src.replace(/pdf\.min\.js.*$/,'pdf.worker.min.js'))}catch(e){}
+        resolve(lib);
+      };
+      s.onerror=()=>tryNext(i+1);
+      document.head.appendChild(s);
+    };
+    tryNext(0);
+  });
+  return reconcilePdfLibPromise;
+}
+
+function pdfTextContentToLines(content){
+  const rows={};
+  (content.items||[]).forEach(it=>{
+    const y=Math.round((it.transform&&it.transform[5]||0)*2)/2;
+    const x=it.transform&&it.transform[4]||0;
+    (rows[y]=rows[y]||[]).push({x,str:it.str||''});
+  });
+  return Object.keys(rows).map(Number).sort((a,b)=>b-a).map(y=>rows[y].sort((a,b)=>a.x-b.x).map(i=>i.str).join(' ').replace(/\s+/g,' ').trim()).filter(Boolean);
+}
+
+async function pdfFileToText(file){
+  const lib=await loadPdfJs();
+  const buf=await file.arrayBuffer();
+  const loading=lib.getDocument({data:buf,disableWorker:true});
+  const doc=await loading.promise;
+  const pages=[];
+  for(let i=1;i<=doc.numPages;i++){
+    const page=await doc.getPage(i);
+    const content=await page.getTextContent();
+    pages.push(pdfTextContentToLines(content).join('\n'));
+  }
+  try{if(doc.destroy)await doc.destroy()}catch(e){}
+  return pages.join('\n');
+}
+
+
+function reconcileNormMerchant(s){
+  return String(s||'').toLowerCase().replace(/&amp;/g,'and').replace(/[^a-z0-9 ]+/g,' ')
+    .replace(/\b(the|and|inc|llc|ltd|co|corp|store|sq|tst|pos|debit|purchase|payment|online|com|www|ach|card|preauthorized|authorized|transaction)\b/g,' ')
+    .replace(/\s+/g,' ').trim();
+}
+function reconcileMerchantScore(a,b){
+  const A=reconcileNormMerchant(a),B=reconcileNormMerchant(b);
+  if(!A||!B)return 0;
+  if(A===B)return 1;
+  if(A.includes(B)||B.includes(A))return .85;
+  const ta=new Set(A.split(' ').filter(w=>w.length>=3)),tb=new Set(B.split(' ').filter(w=>w.length>=3));
+  if(!ta.size||!tb.size)return 0;
+  let n=0;ta.forEach(w=>{if(tb.has(w))n++});
+  return n/Math.max(ta.size,tb.size);
+}
+function reconcileDaysApart(a,b){
+  if(!a||!b)return 999;
+  return Math.abs((dateOnly(a)-dateOnly(b))/86400000);
+}
+function reconcileAsDate(v){
+  if(!v)return null;
+  if(v instanceof Date){if(isNaN(v))return null;return new Date(v.getFullYear(),v.getMonth(),v.getDate(),12)}
+  return dateOnly(v);
+}
+function reconcileInRange(date,start,end,pad){
+  if(!date)return false;
+  const d=reconcileAsDate(date),p=pad||0;
+  if(!d||isNaN(d))return false;
+  const s=start?addDays(reconcileAsDate(start),-p):null;
+  const e=end?addDays(reconcileAsDate(end),p):null;
+  if(s&&d<s)return false;
+  if(e&&d>e)return false;
+  return true;
+}
+
+function reconcileCardNameFor(accountId){
+  const a=reconcileAccount(accountId);
+  if(a.kind!=='card')return '';
+  const cards=availableCreditCards();
+  const re=accountId==='chase-amazon'?/amazon/i:accountId==='chase-sapphire'?/sapphire/i:/apple/i;
+  return cards.find(c=>re.test(c))||a.cardName;
+}
+function reconcileExpenseAccountId(t){
+  if(t.paymentMethod==='creditCard'||t.creditCard){
+    const c=String(t.creditCard||'');
+    if(/amazon/i.test(c))return 'chase-amazon';
+    if(/sapphire/i.test(c))return 'chase-sapphire';
+    if(/apple/i.test(c))return 'apple-card';
+    return 'card-other';
+  }
+  const src=String(t.paymentSourceName||t.paymentSource||'');
+  if(/pnc|checking/i.test(src)||!src||t.paymentSource==='checking')return 'pnc-checking';
+  return 'other';
+}
+function reconcileBillAccountId(b){
+  if(b.method==='credit'||b.creditCard){
+    const c=String(b.creditCard||'');
+    if(/amazon/i.test(c))return 'chase-amazon';
+    if(/sapphire/i.test(c))return 'chase-sapphire';
+    if(/apple/i.test(c))return 'apple-card';
+    return 'card-other';
+  }
+  return 'pnc-checking';
+}
+
+function reconcileBudgetItems(accountId,periodStart,periodEnd){
+  const items=[];
+  const pad=RECONCILE_DATE_CLOSE;
+  (data.transactions||[]).forEach(t=>{
+    if(reconcileExpenseAccountId(t)!==accountId)return;
+    if(periodStart&&periodEnd&&!reconcileInRange(t.date,periodStart,periodEnd,pad))return;
+    items.push({kind:'expense',id:t.id,date:t.date,amount:reconcileRound(t.amount),name:t.note||t.category||'Expense',detail:t.category||'',posted:!!t.posted||!!t.reconciled,item:t});
+  });
+  if(accountId==='pnc-checking'){
+    const start=periodStart?dateOnly(periodStart):monthStart(reconcileMonthDate());
+    const end=periodEnd?dateOnly(periodEnd):monthEnd(reconcileMonthDate());
+    const months=new Set([monthKey(start),monthKey(end),reconcileMonth]);
+    months.forEach(mk=>{
+      const m=new Date(+mk.slice(0,4),+mk.slice(5,7)-1,15);
+      (data.bills||[]).forEach(b=>{
+        if(reconcileBillAccountId(b)!==accountId)return;
+        if(billIsSkippedForMonth(b,m))return;
+        const amt=billAmountForMonth(b,m);if(amt<=0)return;
+        const last=new Date(+mk.slice(0,4),+mk.slice(5,7),0).getDate();
+        const due=Math.min(Math.max(+(b.due||1),1),last);
+        const date=`${mk}-${String(due).padStart(2,'0')}`;
+        if(periodStart&&periodEnd&&!reconcileInRange(date,periodStart,periodEnd,1))return;
+        items.push({kind:'bill',id:`${b.id}|${mk}`,billId:b.id,date,amount:reconcileRound(amt),name:b.name,detail:'Bill',posted:billIsPosted(b,m),item:b,month:mk});
+      });
+      incomePaychecksForMonth(m).forEach(p=>{
+        if(periodStart&&periodEnd&&!reconcileInRange(p.date,periodStart,periodEnd,1))return;
+        items.push({kind:'income',id:p.id,date:p.date,amount:reconcileRound(p.amount),name:p.sourceName,detail:'Income',posted:!!p.edited,item:p});
+      });
+      (data.bonusIncomes||[]).forEach(b=>{
+        if(b.month!==mk)return;
+        const date=b.date||`${mk}-15`;
+        if(periodStart&&periodEnd&&!reconcileInRange(date,periodStart,periodEnd,1))return;
+        items.push({kind:'income',id:b.id,date,amount:reconcileRound(b.amount),name:b.name||'Bonus',detail:'Bonus income',item:b});
+      });
+      (data.manualIncomePayments||[]).forEach(b=>{
+        const d=b.date||'';if(!d||monthKey(dateOnly(d))!==mk)return;
+        if(periodStart&&periodEnd&&!reconcileInRange(d,periodStart,periodEnd,1))return;
+        items.push({kind:'income',id:b.id,date:d,amount:reconcileRound(b.amount),name:b.name||b.note||'Income',detail:'Income',item:b});
+      });
+    });
+  }
+  (data.creditCardPayments||[]).forEach(p=>{
+    const card=String(p.card||'');
+    const date=p.date||(p.month?`${p.month}-15`:'');
+    if(accountId==='pnc-checking'){
+      if(periodStart&&periodEnd&&date&&!reconcileInRange(date,periodStart,periodEnd,pad+2))return;
+      items.push({kind:'payment',id:p.id,date,amount:reconcileRound(p.amount),name:`Payment to ${card}`,detail:'Card payment',item:p});
+    }else{
+      const re=accountId==='chase-amazon'?/amazon/i:accountId==='chase-sapphire'?/sapphire/i:/apple/i;
+      if(!re.test(card))return;
+      if(periodStart&&periodEnd&&date&&!reconcileInRange(date,periodStart,periodEnd,pad+2))return;
+      items.push({kind:'payment',id:p.id,date,amount:reconcileRound(p.amount),name:`Payment · ${card}`,detail:'Card payment',item:p});
+    }
+  });
+  try{
+    pendingImports().forEach(x=>{
+      const src=x.source==='apple'?'apple-card':x.source==='pnc'?'pnc-checking':(/amazon/i.test(x.account||'')?'chase-amazon':/sapphire|chase/i.test(x.account||x.source||'')?'chase-sapphire':'');
+      if(src!==accountId)return;
+      if(periodStart&&periodEnd&&!reconcileInRange(x.date,periodStart,periodEnd,pad))return;
+      items.push({kind:'inbox',id:x.externalId,date:x.date,amount:reconcileRound(x.amount),name:x.merchant||'Imported',detail:'Imported inbox',item:x});
+    });
+  }catch(e){}
+  return items;
+}
+
+function matchReconcile(parsed,accountId){
+  const lines=(parsed.lines||[]).filter(l=>l.kind!=='declined');
+  const start=parsed.periodStart,end=parsed.periodEnd;
+  const budget=reconcileBudgetItems(accountId||parsed.accountId,start,end);
+  const used=new Set();
+  const decisions=(reconcileSession&&reconcileSession.decisions)||{};
+  const results=[];
+  function score(line,item){
+    if(decisions[line.id]&&decisions[line.id].action==='missing'&&String(decisions[line.id].rejectedBudgetId)===String(item.id))return null;
+    const amtDiff=Math.abs(reconcileRound(line.amount)-reconcileRound(item.amount));
+    const days=reconcileDaysApart(line.date,item.date);
+    const mer=reconcileMerchantScore(line.merchant||line.description,item.name);
+    const kindBoost=(line.kind==='payment'&&item.kind==='payment')||(line.kind==='income'&&item.kind==='income')||(line.kind==='bill'&&item.kind==='bill')||((line.kind==='expense'||line.kind==='purchase'||line.kind==='bill')&&(item.kind==='expense'||item.kind==='bill'||item.kind==='inbox'))?0.15:0;
+    if(line.kind==='payment'&&item.kind!=='payment'&&item.kind!=='bill')return null;
+    if(line.kind==='income'&&item.kind!=='income')return null;
+    if((line.kind==='expense'||line.kind==='purchase')&&item.kind==='income')return null;
+    if((line.kind==='expense'||line.kind==='purchase')&&item.kind==='payment')return null;
+    let status=null;
+    if(line.kind==='payment'&&item.kind==='payment'&&amtDiff<=RECONCILE_AMT_EPS&&days<=RECONCILE_DATE_REVIEW)status='matched';
+    else if(amtDiff<=RECONCILE_AMT_EPS&&days<=RECONCILE_DATE_CLOSE&&(mer>=0.34||days<=2||item.kind==='payment'||item.kind==='income'||item.kind==='bill'))status='matched';
+    else if(amtDiff<=RECONCILE_AMT_EPS&&days<=RECONCILE_DATE_REVIEW)status='review';
+    else if(mer>=0.5&&amtDiff<=RECONCILE_AMT_REVIEW&&days<=RECONCILE_DATE_CLOSE)status='review';
+    else return null;
+    const sc=(amtDiff<=RECONCILE_AMT_EPS?80:Math.max(0,40-amtDiff*2))+(days<=1?25:days<=RECONCILE_DATE_CLOSE?15:Math.max(0,10-days))+(mer*30)+kindBoost*20;
+    return {status,score:sc,amtDiff,days,mer};
+  }
+  lines.forEach(line=>{
+    const dec=decisions[line.id]||{};
+    if(dec.action==='ignore'||dec.action==='payment'||dec.action==='transfer'){
+      results.push({line,status:dec.action==='ignore'?'ignored':dec.action,budgetItem:null,decision:dec});
+      return;
+    }
+    if(dec.action==='match'&&dec.budgetId){
+      const item=budget.find(b=>String(b.id)===String(dec.budgetId));
+      if(item){used.add(item.id);results.push({line,status:'matched',budgetItem:item,decision:dec,confirmed:true});return}
+    }
+    const cands=[];
+    budget.forEach(item=>{
+      if(used.has(item.id))return;
+      const s=score(line,item);if(!s)return;
+      cands.push(Object.assign({item},s));
+    });
+    cands.sort((a,b)=>b.score-a.score||a.days-b.days);
+    const best=cands[0];
+    if(best&&best.status==='matched'&&dec.action!=='missing'){
+      used.add(best.item.id);
+      results.push({line,status:'matched',budgetItem:best.item,alt:cands[1]||null,amtDiff:best.amtDiff,days:best.days,mer:best.mer});
+    }else if(best&&best.status==='review'&&dec.action!=='missing'){
+      results.push({line,status:'review',budgetItem:best.item,alt:cands[1]||null,amtDiff:best.amtDiff,days:best.days,mer:best.mer,candidates:cands.slice(0,3)});
+    }else{
+      results.push({line,status:'missing',budgetItem:null});
+    }
+  });
+  const unmatchedBudget=budget.filter(b=>!used.has(b.id)&&!((reconcileSession&&reconcileSession.hiddenBudget)||{})[b.id]);
+  return {results,unmatchedBudget,budget};
+}
+
+function reconcileTotals(parsed,match){
+  const lines=parsed.lines||[];
+  const purchases=reconcileRound(lines.filter(l=>l.kind==='purchase'||l.kind==='expense'||l.kind==='bill').reduce((s,l)=>s+l.amount,0));
+  const credits=reconcileRound(lines.filter(l=>l.kind==='income'||l.kind==='credit').reduce((s,l)=>s+l.amount,0));
+  const payments=reconcileRound(lines.filter(l=>l.kind==='payment'||l.kind==='transfer').reduce((s,l)=>s+l.amount,0));
+  const declined=lines.filter(l=>l.kind==='declined').length;
+  const res=match?match.results:[];
+  const matchedAmt=reconcileRound(res.filter(r=>r.status==='matched').reduce((s,r)=>s+r.line.amount,0));
+  const reviewAmt=reconcileRound(res.filter(r=>r.status==='review').reduce((s,r)=>s+r.line.amount,0));
+  const missingAmt=reconcileRound(res.filter(r=>r.status==='missing'&&r.line.kind!=='payment'&&r.line.kind!=='transfer').reduce((s,r)=>s+r.line.amount,0));
+  const extraAmt=reconcileRound((match?match.unmatchedBudget:[]).filter(b=>b.kind!=='inbox').reduce((s,b)=>s+b.amount,0));
+  const beginning=parsed.beginningBalance,ending=parsed.endingBalance;
+  let computedEnding=null,balanceDiff=null;
+  if(beginning!=null){
+    const acct=reconcileAccount(parsed.accountId);
+    if(acct.kind==='checking')computedEnding=reconcileRound(beginning+credits-purchases-payments);
+    else computedEnding=reconcileRound(beginning+purchases-credits-payments);
+    if(ending!=null)balanceDiff=reconcileRound(ending-computedEnding);
+  }
+  const booksDiff=reconcileRound(missingAmt-extraAmt);
+  const unresolved=res.filter(r=>((r.status==='missing'&&r.line.kind!=='payment'&&r.line.kind!=='transfer')||r.status==='review')).length+(match?match.unmatchedBudget.filter(b=>b.kind!=='inbox').length:0);
+  const reconciled=unresolved===0&&(balanceDiff==null||Math.abs(balanceDiff)<=RECONCILE_AMT_EPS);
+  return {purchases,credits,payments,declined,matchedAmt,reviewAmt,missingAmt,extraAmt,beginning,ending,computedEnding,balanceDiff,booksDiff,unresolved,reconciled};
+}
+
+function reconcileStored(month,accountId){
+  reconcileEnsureState();
+  const m=data.reconciliations[month];
+  return m&&m[accountId]||null;
+}
+function reconcileSaveProgress(complete){
+  if(!reconcileSession||!reconcileSession.parsed)return;
+  reconcileEnsureState();
+  const month=reconcileMonth,accountId=reconcileAccountId;
+  if(!data.reconciliations[month]||typeof data.reconciliations[month]!=='object')data.reconciliations[month]={};
+  const match=matchReconcile(reconcileSession.parsed,accountId);
+  const totals=reconcileTotals(reconcileSession.parsed,match);
+  const rec={
+    status:complete||totals.reconciled?'complete':((data.reconciliations[month]&&data.reconciliations[month][accountId]&&data.reconciliations[month][accountId].status==='complete')?'complete':'in-progress'),
+    accountId,accountName:reconcileAccount(accountId).name,
+    fileName:reconcileSession.parsed.fileName||'',
+    fileType:reconcileSession.parsed.fileType||'',
+    statementStart:reconcileSession.parsed.periodStart||'',
+    statementEnd:reconcileSession.parsed.periodEnd||'',
+    beginningBalance:reconcileSession.parsed.beginningBalance,
+    endingBalance:reconcileSession.parsed.endingBalance,
+    totals:{purchases:totals.purchases,credits:totals.credits,payments:totals.payments,matchedAmt:totals.matchedAmt,missingAmt:totals.missingAmt,extraAmt:totals.extraAmt,booksDiff:totals.booksDiff,balanceDiff:totals.balanceDiff,reconciled:!!totals.reconciled},
+    decisions:reconcileSession.decisions||{},
+    hiddenBudget:reconcileSession.hiddenBudget||{},
+    lines:(reconcileSession.parsed.lines||[]).map(l=>({id:l.id,date:l.date,postDate:l.postDate,description:l.description,merchant:l.merchant,amount:l.amount,signedAmount:l.signedAmount,type:l.type,kind:l.kind,category:l.category})),
+    savedAt:new Date().toISOString()
+  };
+  if(complete)rec.completedAt=rec.savedAt;
+  data.reconciliations[month][accountId]=rec;
+  persistData();
+  return rec;
+}
+function reconcileRestoreSession(){
+  const rec=reconcileStored(reconcileMonth,reconcileAccountId);
+  if(!rec||!rec.lines||!rec.lines.length){reconcileSession=rec?{parsed:null,decisions:rec.decisions||{},hiddenBudget:rec.hiddenBudget||{},status:rec.status}:null;return}
+  reconcileSession={
+    parsed:{
+      accountId:rec.accountId||reconcileAccountId,
+      accountName:rec.accountName,
+      fileName:rec.fileName,fileType:rec.fileType,
+      periodStart:rec.statementStart,periodEnd:rec.statementEnd,
+      beginningBalance:rec.beginningBalance,endingBalance:rec.endingBalance,
+      lines:rec.lines
+    },
+    decisions:rec.decisions||{},
+    hiddenBudget:rec.hiddenBudget||{},
+    status:rec.status
+  };
+}
+
+async function reconcileHandleFiles(fileList,accountOverride){
+  const file=fileList&&fileList[0];
+  if(!file)return;
+  const name=file.name||'statement';
+  const lower=name.toLowerCase();
+  try{
+    reconcileBusy=true;renderReconcile();
+    let parsed;
+    if(lower.endsWith('.pdf')||(file.type||'').includes('pdf')){
+      const text=await pdfFileToText(file);
+      parsed=parseReconcilePdfText(text,accountOverride||reconcileAccountId,name);
+    }else{
+      const text=await file.text();
+      parsed=parseReconcileCsv(text,accountOverride||'',name);
+    }
+    if(accountOverride)parsed.accountId=accountOverride;
+    if(parsed.accountId&&parsed.accountId!==reconcileAccountId)reconcileAccountId=parsed.accountId;
+    if(!parsed.accountId)parsed.accountId=reconcileAccountId;
+    parsed.accountName=reconcileAccount(parsed.accountId).name;
+    reconcileSession={parsed,decisions:{},hiddenBudget:{},status:'in-progress'};
+    reconcileSaveProgress(false);
+    showToast(`Loaded ${parsed.lines.length} line${parsed.lines.length===1?'':'s'} from ${name}`);
+  }catch(e){
+    console.error(e);
+    showToast(e&&e.message?e.message:'Could not read that statement.');
+  }finally{
+    reconcileBusy=false;renderReconcile();
+  }
+}
+
+
+function reconcileConfirmMatch(lineId,opts){
+  if(!reconcileSession)return;
+  const match=matchReconcile(reconcileSession.parsed,reconcileAccountId);
+  const row=match.results.find(r=>r.line.id===lineId);
+  if(!row||!row.budgetItem)return;
+  reconcileSession.decisions=reconcileSession.decisions||{};
+  reconcileSession.decisions[lineId]={action:'match',budgetId:row.budgetItem.id,budgetKind:row.budgetItem.kind,at:new Date().toISOString()};
+  if(opts&&opts.updateAmount&&row.budgetItem.kind==='expense'){
+    const t=(data.transactions||[]).find(x=>String(x.id)===String(row.budgetItem.id));
+    if(t)t.amount=reconcileRound(row.line.amount);
+  }
+  if(opts&&opts.updateAmount&&row.budgetItem.kind==='bill'){
+    const b=(data.bills||[]).find(x=>String(x.id)===String(row.budgetItem.billId||row.budgetItem.id));
+    if(b){const m=row.budgetItem.month?new Date(+row.budgetItem.month.slice(0,4),+row.budgetItem.month.slice(5,7)-1,15):reconcileMonthDate();const key=billOverrideKey(b,m);data.billOverrides=data.billOverrides&&typeof data.billOverrides==='object'?data.billOverrides:{};data.billOverrides[key]=Object.assign({},data.billOverrides[key]||{},{amount:reconcileRound(row.line.amount)})}
+  }
+  reconcileMarkItemPosted(row.budgetItem,true);
+  reconcileSaveProgress(false);render();showToast('Match confirmed');
+}
+function reconcileTreatSeparate(lineId){
+  if(!reconcileSession)return;
+  const match=matchReconcile(reconcileSession.parsed,reconcileAccountId);
+  const row=match.results.find(r=>r.line.id===lineId);
+  reconcileSession.decisions=reconcileSession.decisions||{};
+  reconcileSession.decisions[lineId]={action:'missing',rejectedBudgetId:row&&row.budgetItem?row.budgetItem.id:undefined,at:new Date().toISOString()};
+  reconcileSaveProgress(false);renderReconcile();
+}
+function reconcileIgnoreLine(lineId,asKind){
+  if(!reconcileSession)return;
+  reconcileSession.decisions=reconcileSession.decisions||{};
+  reconcileSession.decisions[lineId]={action:asKind||'ignore',at:new Date().toISOString()};
+  const line=reconcileSession.parsed.lines.find(l=>l.id===lineId);
+  if(line&&(asKind==='payment'||asKind==='transfer')){
+    line.kind=asKind;
+    if(asKind==='payment')reconcileRecordCardPayment(line);
+  }
+  reconcileSaveProgress(false);render();showToast(asKind==='payment'?'Saved as a card payment':asKind==='transfer'?'Marked as a transfer':'Ignored');
+}
+function reconcileRecordCardPayment(line){
+  const guess=(typeof importCardPayGuess==='function')?importCardPayGuess({merchant:line.merchant||line.description,source:'pnc',amount:line.amount,date:line.date}):'';
+  const cards=availableCreditCards();
+  let card=guess&&cards.includes(guess)?guess:'';
+  if(!card){
+    const d=line.merchant||line.description||'';
+    if(/amazon/i.test(d))card=cards.find(c=>/amazon/i.test(c))||'';
+    else if(/sapphire|chase/i.test(d))card=cards.find(c=>/sapphire/i.test(c))||cards.find(c=>/chase/i.test(c))||'';
+    else if(/apple|gsbank/i.test(d))card=cards.find(c=>/apple/i.test(c))||'';
+  }
+  if(!card&&cards.length===1)card=cards[0];
+  if(!card){showToast('Choose a card in Cash Flow if you want this payment saved there too.');return}
+  if((data.creditCardPayments||[]).some(p=>p.externalId===line.id||(p.card===card&&Math.abs(p.amount-line.amount)<0.011&&p.date===line.date)))return;
+  data.creditCardPayments=Array.isArray(data.creditCardPayments)?data.creditCardPayments:[];
+  data.creditCardPayments.push({id:`ccp-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,month:(line.date||reconcileMonth).slice(0,7),date:line.date,card,amount:reconcileRound(line.amount),externalId:line.id,source:'reconcile'});
+}
+function reconcileMarkItemPosted(item,on){
+  if(!item)return;
+  if(item.kind==='expense'){
+    const t=(data.transactions||[]).find(x=>String(x.id)===String(item.id));
+    if(t){if(on)t.posted=true;else delete t.posted;t.reconciled=!!on}
+  }else if(item.kind==='bill'){
+    const b=(data.bills||[]).find(x=>String(x.id)===String(item.billId||String(item.id).split('|')[0]));
+    if(b){
+      const mk=item.month||monthKey(dateOnly(item.date));
+      const m=new Date(+mk.slice(0,4),+mk.slice(5,7)-1,15);
+      const key=billOverrideKey(b,m);
+      if(!data.billPosted||typeof data.billPosted!=='object'||Array.isArray(data.billPosted))data.billPosted={};
+      if(on)data.billPosted[key]=true;else delete data.billPosted[key];
+    }
+  }
+}
+function reconcileMarkAllMatchedPosted(){
+  if(!reconcileSession||!reconcileSession.parsed)return;
+  const match=matchReconcile(reconcileSession.parsed,reconcileAccountId);
+  match.results.filter(r=>r.status==='matched'&&r.budgetItem).forEach(r=>reconcileMarkItemPosted(r.budgetItem,true));
+  reconcileSaveProgress(false);render();showToast('Matched items marked as posted');
+}
+function reconcileComplete(){
+  if(!reconcileSession||!reconcileSession.parsed){showToast('Upload a statement first');return}
+  const match=matchReconcile(reconcileSession.parsed,reconcileAccountId);
+  match.results.filter(r=>r.status==='matched'&&r.budgetItem).forEach(r=>reconcileMarkItemPosted(r.budgetItem,true));
+  reconcileSaveProgress(true);render();showToast('Reconciliation saved');
+}
+function reconcileSetBalance(field,value){
+  if(!reconcileSession||!reconcileSession.parsed)return;
+  const n=value===''||value==null?null:reconcileParseAmount(value);
+  reconcileSession.parsed[field]=n;
+  reconcileSaveProgress(false);renderReconcile();
+}
+function reconcileSetPeriod(field,value){
+  if(!reconcileSession||!reconcileSession.parsed)return;
+  reconcileSession.parsed[field]=value||'';
+  reconcileSaveProgress(false);renderReconcile();
+}
+
+function reconcileOpenAdd(lineId,kind){
+  reconcileAddPanel={lineId,kind,category:'',who:(data.people||['Shared'])[0]||'Shared'};
+  const line=reconcileSession&&reconcileSession.parsed.lines.find(l=>l.id===lineId);
+  if(line&&kind==='expense'){
+    const sug=suggestImportCategory({merchant:line.merchant||line.description,plaidCategory:line.category||''});
+    reconcileAddPanel.category=sug.name||'';
+  }
+  if(line&&kind==='bill'){
+    const bills=data.bills||[];
+    const guess=bills.findIndex(b=>reconcileMerchantScore(b.name,line.merchant||line.description)>=0.34||Math.abs(billAmountForMonth(b,reconcileMonthDate())-line.amount)<0.011);
+    reconcileAddPanel.billIndex=guess>=0?guess:-1;
+  }
+  renderReconcile();
+  const el=document.getElementById('reconcileAddPanel');if(el)el.scrollIntoView({block:'nearest'});
+}
+function reconcileSubmitAdd(){
+  const p=reconcileAddPanel;if(!p||!reconcileSession)return;
+  const line=reconcileSession.parsed.lines.find(l=>l.id===p.lineId);if(!line)return;
+  if(p.kind==='expense'){
+    const category=document.getElementById('recAddCat')?.value||p.category||'';
+    const who=document.getElementById('recAddWho')?.value||p.who||'Shared';
+    if(!category){showToast('Choose a category');return}
+    const acct=reconcileAccount(reconcileAccountId);
+    const isCard=acct.kind==='card';
+    if(isCard)reconcileEnsureCard(acct.cardName);
+    const newId=`tx-${Date.now()}-${Math.random().toString(36).slice(2,9)}`;
+    const paymentSource=isCard?'':'checking';
+    const paymentSourceName=isCard?'':(paymentAccounts().find(a=>a.id==='checking')?.name||'Checking');
+    data.transactions.push({id:newId,amount:reconcileRound(line.amount),category,note:String(line.merchant||line.description||'').trim(),person:who,who,date:line.date,tags:[],paymentMethod:isCard?'creditCard':'debit',paymentSource,paymentSourceName,creditCard:isCard?(reconcileCardNameFor(acct.id)||acct.cardName):'',countsTowardBudget:true,posted:true,reconciled:true,externalId:line.id,importSource:'reconcile'});
+    ensureExpenseOrder();data.expenseOrder=data.expenseOrder.filter(id=>id!==newId);data.expenseOrder.unshift(newId);
+    reconcileSession.decisions[line.id]={action:'match',budgetId:newId,budgetKind:'expense',added:true,at:new Date().toISOString()};
+  }else if(p.kind==='bill'){
+    const idx=+(document.getElementById('recAddBill')?.value??p.billIndex);
+    if(!(idx>=0)||!data.bills[idx]){showToast('Choose a bill');return}
+    const b=data.bills[idx];
+    const m=dateOnly(line.date);
+    const key=billOverrideKey(b,m);
+    data.billOverrides=data.billOverrides&&typeof data.billOverrides==='object'?data.billOverrides:{};
+    if(Math.abs(billAmountForMonth(b,reconcileMonthDate())-line.amount)>0.011)data.billOverrides[key]=Object.assign({},data.billOverrides[key]||{},{amount:reconcileRound(line.amount)});
+    if(!data.billPosted||typeof data.billPosted!=='object'||Array.isArray(data.billPosted))data.billPosted={};
+    data.billPosted[key]=true;
+    reconcileSession.decisions[line.id]={action:'match',budgetId:`${b.id}|${monthKey(m)}`,budgetKind:'bill',added:true,at:new Date().toISOString()};
+  }else if(p.kind==='income'){
+    const name=document.getElementById('recAddName')?.value.trim()||line.merchant||'Income';
+    const id=`bonus-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
+    data.bonusIncomes=Array.isArray(data.bonusIncomes)?data.bonusIncomes:[];
+    data.bonusIncomes.push({id,name,amount:reconcileRound(line.amount),month:(line.date||reconcileMonth).slice(0,7),date:line.date,source:'reconcile'});
+    reconcileSession.decisions[line.id]={action:'match',budgetId:id,budgetKind:'income',added:true,at:new Date().toISOString()};
+  }
+  reconcileAddPanel=null;
+  reconcileSaveProgress(false);render();showToast('Added to your budget');
+}
+function reconcileEnsureCard(name){
+  if(!name)return;
+  data.creditCards=Array.isArray(data.creditCards)?data.creditCards:[];
+  if(!data.creditCards.some(c=>c.toLowerCase()===name.toLowerCase()))data.creditCards.push(name);
+}
+function reconcileKeepBudget(id){
+  if(!reconcileSession)return;
+  reconcileSession.hiddenBudget=reconcileSession.hiddenBudget||{};
+  reconcileSession.hiddenBudget[id]=true;
+  reconcileSaveProgress(false);renderReconcile();showToast('Kept as pending');
+}
+function reconcileDeleteBudget(item){
+  if(!item)return;
+  if(item.kind==='expense'){
+    if(!confirm('Delete this expense from the budget?'))return;
+    const i=data.transactions.findIndex(x=>String(x.id)===String(item.id));
+    if(i>=0){const removed=String(data.transactions[i].id);data.transactions.splice(i,1);data.expenseOrder=(data.expenseOrder||[]).filter(x=>String(x)!==removed)}
+  }else{showToast('This item is not an expense you can delete from here.');return}
+  reconcileSaveProgress(false);render();showToast('Expense deleted');
+}
+
+function reconcileShortDate(v){const [y,m,d]=String(v||'').split('-');return y&&m&&d?`${+m}/${+d}/${y}`:esc(v||'')}
+function reconcileKindLabel(k){
+  return {purchase:'Purchase',expense:'Expense',income:'Deposit',credit:'Credit',payment:'Card payment',transfer:'Transfer',bill:'Bill',declined:'Declined',ignored:'Ignored'}[k]||k||'';
+}
+function reconcileKindClass(k){
+  if(k==='payment'||k==='transfer')return 'recBadge recBadgePay';
+  if(k==='income'||k==='credit')return 'recBadge recBadgeIn';
+  if(k==='declined'||k==='ignored')return 'recBadge recBadgeMute';
+  if(k==='bill')return 'recBadge recBadgeBill';
+  return 'recBadge';
+}
+
+function reconcileAddFormHtml(){
+  const p=reconcileAddPanel;if(!p)return '';
+  if(p.kind==='expense'){
+    const cats=importCategoryNames(),people=data.people||['Shared'];
+    return `<div id="reconcileAddPanel" class="recAddPanel"><div class="importItemGrid">
+      <select id="recAddCat" aria-label="Category"><option value="">Category…</option>${cats.map(c=>`<option ${c===p.category?'selected':''}>${esc(c)}</option>`).join('')}</select>
+      <select id="recAddWho" aria-label="Person">${people.map(x=>`<option ${x===p.who?'selected':''}>${esc(x)}</option>`).join('')}</select>
+    </div><div class="recItemBtns"><button type="button" class="btn small" onclick="reconcileSubmitAdd()">Add expense</button><button type="button" class="btn small secondary" onclick="reconcileAddPanel=null;renderReconcile()">Cancel</button></div></div>`;
+  }
+  if(p.kind==='bill'){
+    const bills=data.bills||[];
+    return `<div id="reconcileAddPanel" class="recAddPanel"><label class="filterFieldLabel">Bill
+      <select id="recAddBill"><option value="-1">Choose a bill…</option>${bills.map((b,i)=>`<option value="${i}" ${i===p.billIndex?'selected':''}>${esc(b.name)} · ${money(billAmountForMonth(b,reconcileMonthDate()))}</option>`).join('')}</select>
+    </label><div class="recItemBtns"><button type="button" class="btn small" onclick="reconcileSubmitAdd()">Add as this bill and mark posted</button><button type="button" class="btn small secondary" onclick="reconcileAddPanel=null;renderReconcile()">Cancel</button></div></div>`;
+  }
+  return `<div id="reconcileAddPanel" class="recAddPanel"><label class="filterFieldLabel">Income name
+    <input id="recAddName" type="text" placeholder="Paycheck, Venmo, etc.">
+  </label><div class="recItemBtns"><button type="button" class="btn small" onclick="reconcileSubmitAdd()">Add income</button><button type="button" class="btn small secondary" onclick="reconcileAddPanel=null;renderReconcile()">Cancel</button></div></div>`;
+}
+
+function reconcileOverrideAccount(id){
+  if(reconcileSession&&reconcileSession.parsed){
+    reconcileAccountId=id;
+    reconcileSession.parsed.accountId=id;
+    reconcileSession.parsed.accountName=reconcileAccount(id).name;
+    reconcileSaveProgress(false);renderReconcile();
+  }else reconcileSetAccount(id);
+}
+
+function renderReconcile(){
+  const root=document.getElementById('reconcileRoot');if(!root)return;
+  reconcileEnsureState();
+  if(!reconcileSession&&reconcileStored(reconcileMonth,reconcileAccountId))reconcileRestoreSession();
+  const parsed=reconcileSession&&reconcileSession.parsed;
+  const match=parsed?matchReconcile(parsed,reconcileAccountId):null;
+  const totals=parsed?reconcileTotals(parsed,match):null;
+  const monthLab=reconcileMonthLabel(reconcileMonth);
+  const acct=reconcileAccount(reconcileAccountId);
+  const checklist=RECONCILE_ACCOUNTS.map(a=>{
+    const rec=reconcileStored(reconcileMonth,a.id);
+    const st=rec?rec.status:'not-started';
+    const ok=st==='complete'||(rec&&rec.totals&&rec.totals.reconciled);
+    const range=rec&&rec.statementStart&&rec.statementEnd?`${reconcileShortDate(rec.statementStart)}–${reconcileShortDate(rec.statementEnd)}`:'';
+    const label=ok?'Reconciled ✓':st==='in-progress'?'In progress':'Not started';
+    return `<button type="button" class="recAccountCard ${a.id===reconcileAccountId?'active':''} ${ok?'isDone':''}" onclick="reconcileSetAccount('${a.id}')">
+      <div class="recAccountName">${esc(a.name)}</div>
+      <div class="recAccountStatus">${esc(label)}</div>
+      <div class="muted" style="font-size:11px;margin-top:2px">${range||'&nbsp;'}</div>
+    </button>`;
+  }).join('');
+  const period=parsed?`<div class="recPeriod">Statement period
+    <input type="date" id="recPeriodStart" value="${esc(parsed.periodStart||'')}" onchange="reconcileSetPeriod('periodStart',this.value)">
+    <span class="muted">to</span>
+    <input type="date" id="recPeriodEnd" value="${esc(parsed.periodEnd||'')}" onchange="reconcileSetPeriod('periodEnd',this.value)">
+  </div>`:'';
+  const drop=`<div class="recDrop" id="recDrop" tabindex="0" role="button" aria-label="Upload a statement PDF or CSV">
+    <input id="recFile" class="hidden" type="file" accept=".csv,.pdf,text/csv,application/pdf" onchange="reconcileHandleFiles(this.files)">
+    <div class="sectionTitle" style="font-size:16px">Drop a statement here</div>
+    <p class="muted" style="margin:6px 0 12px">PDF or CSV for ${esc(acct.name)}. The account is detected from the file when possible.</p>
+    <div class="actions" style="justify-content:center;margin-top:0"><button type="button" class="btn" onclick="document.getElementById('recFile').click()">Choose file</button></div>
+    ${reconcileBusy?'<p class="muted" style="margin-top:10px">Reading statement…</p>':''}
+  </div>`;
+  const override=`<div class="recToolbar"><label class="filterFieldLabel">Account
+    <select id="recAccountSel" onchange="reconcileOverrideAccount(this.value)">${RECONCILE_ACCOUNTS.map(a=>`<option value="${a.id}" ${a.id===reconcileAccountId?'selected':''}>${esc(a.name)}</option>`).join('')}</select>
+  </label>${parsed?`<div class="muted" style="font-size:12px;align-self:end;padding-bottom:6px">${esc(parsed.fileName||'Statement')} · ${esc((parsed.fileType||'').toUpperCase())} · ${parsed.lines.length} line${parsed.lines.length===1?'':'s'}${parsed.detectedAccountId&&parsed.detectedAccountId!==reconcileAccountId?' · detected as '+esc(reconcileAccount(parsed.detectedAccountId).name):''}</div>`:''}</div>`;
+
+  let summary='';
+  if(totals){
+    const recLabel=totals.reconciled?`<div class="recDiff ok">Difference: ${money(0)} — Reconciled ✓</div>`:`<div class="recDiff off">Difference: ${money(totals.booksDiff)} · ${totals.unresolved} item${totals.unresolved===1?'':'s'} still open</div>`;
+    const bal=totals.beginning!=null&&totals.ending!=null
+      ?`<div class="muted" style="font-size:12px;margin-top:8px">Statement math: ${money(totals.beginning)} + ${money(totals.credits)} − ${money(totals.purchases)} − ${money(totals.payments)} = ${money(totals.computedEnding)}${totals.balanceDiff==null?'':(Math.abs(totals.balanceDiff)<=RECONCILE_AMT_EPS?' · balances agree ✓':` · off by ${money(totals.balanceDiff)} vs ending ${money(totals.ending)}`)}</div>`
+      :`<div class="muted" style="font-size:12px;margin-top:8px">Add a beginning and ending balance (CSVs often leave these out) to check the statement math.</div>`;
+    summary=`<div class="card recSummaryCard"><div class="sectionTitle">Actual finances</div>
+      <div class="recSummaryGrid">
+        <div class="recSumCol"><div class="muted" style="font-weight:800;font-size:12px;margin-bottom:8px">STATEMENT</div>
+          <div class="recSumRow"><span>Beginning balance</span><span><input id="recBegBal" class="recBalInput" type="number" step="0.01" value="${totals.beginning==null?'':totals.beginning}" onchange="reconcileSetBalance('beginningBalance',this.value)" placeholder="—"></span></div>
+          <div class="recSumRow"><span>${acct.kind==='checking'?'Withdrawals / debits':'Purchases'}</span><strong>${money(totals.purchases)}</strong></div>
+          <div class="recSumRow"><span>${acct.kind==='checking'?'Deposits / credits':'Credits / refunds'}</span><strong>${money(totals.credits)}</strong></div>
+          <div class="recSumRow"><span>Card payments / transfers</span><strong>${money(totals.payments)}</strong></div>
+          <div class="recSumRow"><span>Ending balance</span><span><input id="recEndBal" class="recBalInput" type="number" step="0.01" value="${totals.ending==null?'':totals.ending}" onchange="reconcileSetBalance('endingBalance',this.value)" placeholder="—"></span></div>
+        </div>
+        <div class="recSumCol"><div class="muted" style="font-weight:800;font-size:12px;margin-bottom:8px">BUDGET</div>
+          <div class="recSumRow"><span>Matched</span><strong>${money(totals.matchedAmt)}</strong></div>
+          <div class="recSumRow"><span>Unmatched on statement</span><strong>${money(totals.missingAmt+totals.reviewAmt)}</strong></div>
+          <div class="recSumRow"><span>Unmatched in budget</span><strong>${money(totals.extraAmt)}</strong></div>
+          <div class="recSumRow"><span>Open items</span><strong>${totals.unresolved}</strong></div>
+        </div>
+      </div>
+      ${recLabel}${bal}
+    </div>`;
+  }
+
+  function rowActions(r){
+    const id=r.line.id;
+    if(r.status==='matched')return `<button type="button" class="btn small secondary" onclick="reconcileTreatSeparate('${id}')">Unmatch</button>`;
+    if(r.status==='review')return `<div class="recItemBtns"><button type="button" class="btn small" onclick="reconcileConfirmMatch('${id}')">Confirm match</button>
+      ${r.amtDiff>RECONCILE_AMT_EPS?`<button type="button" class="btn small secondary" onclick="reconcileConfirmMatch('${id}',{updateAmount:true})">Confirm and update amount</button>`:''}
+      <button type="button" class="btn small secondary" onclick="reconcileTreatSeparate('${id}')">Treat as separate</button></div>`;
+    if(r.line.kind==='payment'||r.line.kind==='transfer'||r.status==='payment'||r.status==='transfer'){
+      if(r.status==='matched'||r.status==='payment'||r.status==='transfer'||r.status==='ignored')return r.status==='matched'?`<button type="button" class="btn small secondary" onclick="reconcileTreatSeparate('${id}')">Unmatch</button>`:'';
+      return `<div class="recItemBtns">
+        <button type="button" class="btn small secondary" onclick="reconcileIgnoreLine('${id}','payment')">Save as card payment</button>
+        <button type="button" class="btn small ghost" onclick="reconcileIgnoreLine('${id}','transfer')">Ignore / Transfer</button>
+      </div>`;
+    }
+    if(r.status==='missing'){
+      const addOpen=reconcileAddPanel&&reconcileAddPanel.lineId===id;
+      return `<div class="recItemBtns">
+        <button type="button" class="btn small" onclick="reconcileOpenAdd('${id}','expense')">Add as Expense</button>
+        <button type="button" class="btn small secondary" onclick="reconcileOpenAdd('${id}','bill')">Add as Bill</button>
+        <button type="button" class="btn small secondary" onclick="reconcileOpenAdd('${id}','income')">Add as Income</button>
+        <button type="button" class="btn small secondary" onclick="reconcileIgnoreLine('${id}','payment')">Mark as Card Payment / Ignore</button>
+        <button type="button" class="btn small ghost" onclick="reconcileIgnoreLine('${id}','transfer')">Ignore / Transfer</button>
+      </div>${addOpen?reconcileAddFormHtml():''}`;
+    }
+    return '';
+  }
+  function lineRow(r,extraClass){
+    const l=r.line,item=r.budgetItem;
+    const posted=item&&(item.posted||(item.kind==='expense'&&item.item&&item.item.posted));
+    return `<div class="recLine ${extraClass||''}">
+      <div class="recLineTop"><span><strong>${esc(l.merchant||l.description||'Transaction')}</strong> <span class="${reconcileKindClass(l.kind)}">${esc(reconcileKindLabel(l.kind))}</span></span><strong>${money(l.amount)}</strong></div>
+      <div class="recLineMeta">${reconcileShortDate(l.date)}${l.postDate&&l.postDate!==l.date?' · posted '+reconcileShortDate(l.postDate):''}${item?` ↔ ${esc(item.name)} ${money(item.amount)} on ${reconcileShortDate(item.date)}${posted?' · Posted ✓':''}${r.status==='review'&&r.amtDiff>RECONCILE_AMT_EPS?` · amount off by ${money(r.amtDiff)}`:''}${r.status==='review'&&r.days>RECONCILE_DATE_CLOSE?` · ${Math.round(r.days)} days apart`:''}`:''}</div>
+      ${rowActions(r)}
+    </div>`;
+  }
+  function section(title,rows,note,cls){
+    if(!rows.length)return '';
+    return `<div class="card"><div class="sectionTitle">${esc(title)} <span class="muted" style="font-weight:700;font-size:13px">(${rows.length})</span></div>${note?`<p class="muted" style="margin:6px 0 10px;font-size:13px">${note}</p>`:''}${rows.map(r=>lineRow(r,cls)).join('')}</div>`;
+  }
+
+  let body='';
+  if(match){
+    const matched=match.results.filter(r=>r.status==='matched'&&r.line.kind!=='payment'&&r.line.kind!=='transfer');
+    const review=match.results.filter(r=>r.status==='review'&&r.line.kind!=='payment'&&r.line.kind!=='transfer');
+    const missingSpend=match.results.filter(r=>r.status==='missing'&&r.line.kind!=='payment'&&r.line.kind!=='transfer');
+    const payAuto=match.results.filter(r=>r.line.kind==='payment'||r.line.kind==='transfer'||r.status==='payment'||r.status==='transfer');
+    const ignored=match.results.filter(r=>r.status==='ignored'||r.line.kind==='declined');
+    const extras=match.unmatchedBudget.filter(b=>b.kind!=='inbox');
+    body+=section('Matched',matched,'These line up with your budget. You can mark them posted.','');
+    body+=section('Needs review',review,'Same amount with a wider date gap, or the same merchant with a slightly different amount (a tip or tax adjustment).','isReview');
+    body+=section('On the statement, missing from the budget',missingSpend,'Add the ones that should be in the budget, or mark a card payment / transfer so it is not counted as missing spending.','isMissing');
+    if(extras.length){
+      body+=`<div class="card"><div class="sectionTitle">In the budget, not on the statement <span class="muted" style="font-weight:700;font-size:13px">(${extras.length})</span></div>
+        <p class="muted" style="margin:6px 0 10px;font-size:13px">These are in this account’s date range but did not appear on the upload. They may be pending, in the wrong month, or a duplicate.</p>
+        ${extras.map(b=>`<div class="recLine isExtra">
+          <div class="recLineTop"><span><strong>${esc(b.name)}</strong> <span class="recBadge">${esc(b.kind)}</span></span><strong>${money(b.amount)}</strong></div>
+          <div class="recLineMeta">${reconcileShortDate(b.date)} · ${esc(b.detail||'')}${b.posted?' · Posted ✓':''}</div>
+          <div class="recItemBtns">
+            <button type="button" class="btn small secondary" onclick="reconcileKeepBudget('${esc(String(b.id))}')">Keep pending</button>
+            ${b.kind==='expense'?`<button type="button" class="btn small secondary" onclick="openModal('editExpenseById','${esc(String(b.id))}')">Edit</button>
+            <button type="button" class="btn small danger" onclick='reconcileDeleteBudget(${JSON.stringify({kind:b.kind,id:b.id})})'>Delete</button>`:''}
+          </div>
+        </div>`).join('')}
+      </div>`;
+    }
+    body+=section('Card payments & transfers',payAuto,'These count toward the statement’s cash-flow and balance check, but they are not treated as missing spending.','isPay');
+    if(ignored.length)body+=section('Ignored / declined',ignored,'Declined Apple Card charges and lines you chose to ignore.','');
+    body+=`<div class="card recActionsCard"><div class="recItemBtns">
+      <button type="button" class="btn" onclick="reconcileMarkAllMatchedPosted()">Mark all matched as posted</button>
+      <button type="button" class="btn secondary" onclick="reconcileComplete()">Complete / Save reconciliation</button>
+    </div></div>`;
+  }
+
+  root.innerHTML=`<div class="dashboardHero recHero"><div class="dashboardEyebrow">Monthly close</div>
+    <div class="row" style="align-items:flex-end"><h1 class="dashboardTitle" style="margin:0">Reconcile</h1></div>
+    <div class="muted" style="margin-top:4px">Upload a statement and match it to this month’s budget.</div>
+    <div class="safeWeekNav" style="margin-top:12px"><button type="button" onclick="reconcileShiftMonth(-1)">← Previous</button><button type="button" class="today" onclick="reconcileGoToday()">Today</button><button type="button" onclick="reconcileShiftMonth(1)">Next →</button></div>
+    <div class="incomeMonthLabel" style="text-align:center;margin-top:8px">${esc(monthLab)}</div>
+  </div>
+  <div class="card"><div class="sectionTitle">Accounts this month</div>
+    <div class="recAccountGrid">${checklist}</div>
+  </div>
+  <div class="card">${override}${period}${drop}</div>
+  ${summary}${body}`;
+
+  const dropEl=document.getElementById('recDrop');
+  if(dropEl&&!dropEl.dataset.bound){
+    dropEl.dataset.bound='1';
+    const over=e=>{e.preventDefault();e.stopPropagation();dropEl.classList.add('drag')};
+    const off=e=>{e.preventDefault();e.stopPropagation();dropEl.classList.remove('drag')};
+    ['dragenter','dragover'].forEach(ev=>dropEl.addEventListener(ev,over));
+    ['dragleave','drop'].forEach(ev=>dropEl.addEventListener(ev,e=>{off(e);if(ev==='drop'&&e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files.length)reconcileHandleFiles(e.dataTransfer.files)}));
+  }
+}
+
 function init(){ensureIds();ensureIncomeOverrides();normalizePaymentData();const v=document.getElementById('setupVersionLabel');if(v)v.textContent=APP_VERSION;const addBtn=document.getElementById('setupAddIncomeBtn');if(addBtn&&!addBtn.dataset.bound){addBtn.dataset.bound='1';addBtn.addEventListener('click',()=>setupAddIncome());}const addPersonBtn=document.getElementById('setupAddPersonBtn');if(addPersonBtn&&!addPersonBtn.dataset.bound){addPersonBtn.dataset.bound='1';addPersonBtn.addEventListener('click',setupAddPerson);}if(!data.setupComplete){document.getElementById('setupScreen').classList.remove('hidden');restoreSetupDraft();showSetupWelcome();renderSetupPeople();renderSetupCategoryChoices();renderSetupCats();renderSetupBillChoices(collectSetupBillDraft());renderSetupBills()}else render()}
 init();
 initCloud();
